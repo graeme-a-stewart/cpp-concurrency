@@ -10,11 +10,15 @@ void hello2() {
 }
 
 int main() {
+  std::cout << "Starting threads" << std::endl;
+
   std::thread t1(hello1);
   std::thread t2(hello2);
 
   t1.join();
   t2.join();
+
+  std::cout << "Threads are joined" << std::endl;
 
   return 0;
 }
