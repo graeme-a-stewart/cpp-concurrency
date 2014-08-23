@@ -8,7 +8,7 @@ std::mutex io_mtx;
 
 void hello_n(int i) {
   std::lock_guard<std::mutex> io_lock (io_mtx);
-  std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
+  std::cout << "hello, world (from thread number " << i << "; thread id " << std::this_thread::get_id() << ")" << std::endl;
 }
 
 int main() {

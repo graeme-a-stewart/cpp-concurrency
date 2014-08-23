@@ -1,12 +1,12 @@
 CXX=g++
-CXXFLAGS=-pthread -std=c++11 -g
+CXXFLAGS=-pthread -std=c++11 -g -O2
 
-EXE=start_threads thread-arguments thread-arguments-mutex multithread-sum
+EXE=$(basename $(wildcard *.cc))
 
 all: $(EXE)
 
 start_threads: start_threads.cc
 
 clean:
-	rm -fr $(EXE)
+	rm -fr $(EXE) *.dSYM
 

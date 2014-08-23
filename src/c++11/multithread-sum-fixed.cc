@@ -1,11 +1,12 @@
 #include <thread>
+#include <atomic>
 #include <iostream>
 #include <random>
 #include <vector>
 
 int total_entries;
 float sum;
-size_t occupancy;
+std::atomic<size_t> occupancy;
 
 #define SIZE 10000
 #define THREAD_POOL 50
