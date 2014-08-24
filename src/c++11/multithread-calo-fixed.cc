@@ -17,7 +17,21 @@ class Calorimeter {
 private:
   std::vector<double> m_cells;
   size_t m_detector_size;
-  std::atomic<unsigned long> m_occupancy;
+  //std::atomic<unsigned long> m_occupancy;
+  size_t m_occupancy;
+
+  void partial_occupancy(size_t const begin, size_t const end) {
+    for (size_t i=begin; i<end; ++i)
+      if (is_occupied(m_cells[i]))
+	++m_occupancy;
+  }
+
+  inline bool is_occupied(double const value) {
+    if (value > 0.0)
+      return true;
+    return false;
+  }
+  
 
 public:
   void random_fill() {
@@ -36,10 +50,11 @@ public:
   size_t serial_occupancy() {
     // Calculate detector occupancy: the number of cells over the threshold of 0.0
     m_occupancy = 0;
-    for (auto& cell: m_cells) {
-      if (cell > 0.0)
-	++m_occupancy;
-    }
+    partial_occupancy(0, m_cells.size());
+    // for (auto& cell: m_cells) {
+    //   if (is_occupied(cell))
+    // 	++m_occupancy;
+    // }
 
     return m_occupancy;
   }
@@ -51,18 +66,9 @@ public:
     std::vector<std::thread> pool;
 
     for (size_t t=0; t<threads; ++t) {
-      // Here we use a lambda function to do the partial summation in each thread
-      pool.push_back(std::thread([&] {
-	    for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
-	      if (m_cells[i] > 0.0)
-		// THIS DOES NOT WORK - YOU CANNOT TAKE REFERENCES TO AN ATOMIC AND
-		// USE THEM WHILE MAINTAINING ATOMICITY!
-		++m_occupancy;
-	    }
-	  } 
-	  )
-	);
-	}
+      // Note how to call a class method when spawing an std::thread
+      pool.push_back(std::thread(&Calorimeter::partial_occupancy, this, t*chunk, (t+1)*chunk));
+    }
 
     for (auto& thrd: pool)
       thrd.join();
@@ -75,8 +81,6 @@ public:
   
 };
    
-
-
 
 int main() {
   Calorimeter calo(SIZE);
