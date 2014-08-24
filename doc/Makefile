@@ -4,7 +4,7 @@
 
 HTML=$(patsubst %.md,%.html,$(wildcard *.md))
 
-MARKDOWN=pandoc --from markdown_github-hard_line_breaks --to html --standalone --number-sections
+MARKDOWN=pandoc --from markdown_github-hard_line_breaks --to html --standalone
 
 %.html: %.md
 	$(MARKDOWN) -o $@ $<

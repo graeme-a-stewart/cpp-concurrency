@@ -30,7 +30,7 @@ begin we need to ensure we have this included:
 
 As expected, thread support is found in the `std` namespace. (In this
 documentation usually we'll give this namespace explicity, but it's
-quite common for tutorials to miss this assuming a 
+quite common for tutorials to omit this assuming a 
 `using namespace std;`.)
 
 To start a thread we need to give it something to do, so we pass the
@@ -52,16 +52,22 @@ to `std::thread`. e.g.,
 ```
 
 Note that the execution of `my_first_thread` happens immediately we
-create it. We then use the `std::thread.join()` method to ask the
+create it. We then use the `std::thread::join()` method to ask the
 program to wait for the thread to finish. Then we can exit.
 
 The alternative to using `join` when a thread is created to use `detach`,
-which will give control of the thread to the C++ runtime.
+which will give control of the thread to the C++ runtime (which will
+then clean up the thread when it exits).
 
-Note that if you do not use `join` or `detach` when you have created a
-thread and the creating function exits, then `std::terminate` is
-called -- so you have to explicitly state if you are keeping control
+Note that you must use `join` or `detach` when you have created a
+thread before the creating function exits, otherwise `std::terminate` is
+called - i.e., you have to explicitly state if you are keeping control
 of the thread or passing it to the runtime.
+
+It's also illegal to `join` or `detach` a thread which has already
+done one of these things. To avoid this use `std::thread::joinable()`,
+which will return `true` only if the thread can be joined (or detached
+- the condition is identical).
 
 ### Thread Arguments ###
 
@@ -93,21 +99,20 @@ Which should give:
 function with the arguments already bound to the parameters you want to use,
 i.e., `std::thread my_second_thread(std::bind(say_hello_msg, 1));`.)
 
-### Warning ###
+#### Things that can go wrong passing arguments ####
 
 :boom: You need to take a little care when passing arguments. `std::thread`
 will copy arguments before starting a thread and this can lead to some
 subtle problems.
 
-#### Copied data is not the original ####
+##### Copied data is not the original #####
 
 ```cpp
-	void update_widget(widget wdgt) {
+	void update_widget(widget& wdgt) {
 		...
     }
     
     void widget_updates(widget widget_list[]) {
-		widget real_wdgt;
 		std::vector<std::thread> widget_threads;
 		
 		// Intercept widget update requests
@@ -122,15 +127,15 @@ subtle problems.
 ```
 
 In this case `std::thread` copies `real_widget` before calling
-`update_widget`. So the side effects of calling `update_widget`
-are never seen in `real_widget`, but are lost in the empeheral 
-copy.
+`update_widget` (let's assume it has a copy constructor). So the side
+effects of calling `update_widget` are never seen in `real_widget`,
+but are lost in this empeheral copy.
 
 Overcome this problem by calling `std::ref` on `real_wdgt` to
 create a reference, which can be copied and still refer to the
 original object: `std::thread(update_widget, std::ref(real_wdgt)`.
 
-#### Data going out of scope ####
+##### Input data going out of scope #####
 
 
 ```cpp
@@ -143,7 +148,7 @@ original object: `std::thread(update_widget, std::ref(real_wdgt)`.
 		// Create various objects
 		....
 		
-		auto my_thread = std::thread(do_work, stuff);
+		auto my_thread = std::thread(do_work, std::ref(my_stuff));
 		my_thread.detach();
 	}
 ```
@@ -152,4 +157,42 @@ In this case `std::thread` will copy a reference to `my_stuff`
 and pass this in to the thread executing `do_work`. However, as
 the thread detaches and `thread_spawner` will very likely exit
 before `do_work`, the thread will be left with an invalid reference
-and _undefined behaviour_ will result.
+to `my_stuff` and _undefined behaviour_ will result.
+
+Note that a similar problem can occur when arguments need to be
+converted from one type to another as the conversion only happens in
+the context of the newly spawned thread, so beware of constructing
+objects from a pointer to local data.
+
+
+Thread Identity
+---------------
+
+Threads all have a unique identifier accessed via the `get_id()`
+method of `std::thread`. For a thread to access its own identity, one
+can use the `std::this_thread` namespace.
+
+```cpp
+    #include <thread>
+
+	void hello_n(int i) {
+		std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
+	}
+```
+
+Exercises
+=========
+
+1. Write a C++ program that spawns a thread and writes a message to
+   `stdout` from it.
+  1. Now spawn multiple threads and get them all to say hello.
+
+1. Write a C++ program that spawns multiple threads, where each one
+   executes a program with arguments.
+   1. Modify the program so that each thread states its thread id.
+
+1. Look at the programs `thread-arguments-problems.cc` and
+   `thread-arguments-problems2.cc`.
+   1. Try to understand why these programs are not working correctly.
+   1. Fix them.
+

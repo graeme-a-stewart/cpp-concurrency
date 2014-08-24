@@ -1,4 +1,4 @@
-CXX=g++
+CXX=g++-mp-4.9
 CXXFLAGS=-pthread -std=c++11 -g -O2
 
 EXE=$(basename $(wildcard *.cc))

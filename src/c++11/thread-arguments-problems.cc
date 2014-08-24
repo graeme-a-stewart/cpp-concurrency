@@ -37,8 +37,8 @@ int main() {
   
   std::cout << "Tea type: " << my_cuppa.tea() << std::endl;
 	
-  // Beware that copied reference does not refer to the 
-  // original Tea instance
+  // Beware that copied my_cuppa does not refer to the 
+  // original instance (so neither will its reference!)
   auto threaded_tea = std::thread(std::bind(tea_selector, my_cuppa, "black"));
   threaded_tea.join();
   
