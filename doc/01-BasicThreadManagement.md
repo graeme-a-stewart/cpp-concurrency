@@ -80,9 +80,16 @@ int main() {
 }
 ```
 
+Which should give:
+
+```
+$ ./my-second-thread
+Hello from thread number 1
+```
+
 ### Warning ###
 
-You need to take a little care when passing arguments. `std::thread`
+:boom: You need to take a little care when passing arguments. `std::thread`
 will copy arguments before starting a thread and this can lead to some
 subtle problems.
 
