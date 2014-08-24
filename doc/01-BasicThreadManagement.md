@@ -89,6 +89,10 @@ Which should give:
 	Hello from thread number 1
 ```
 
+(An alternative way is to use `std::bind` to create a temporary
+function with the arguments already bound to the parameters you want to use,
+i.e., `std::thread my_second_thread(std::bind(say_hello_msg, 1));`.)
+
 ### Warning ###
 
 :boom: You need to take a little care when passing arguments. `std::thread`
