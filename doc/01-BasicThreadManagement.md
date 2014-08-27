@@ -185,14 +185,14 @@ Exercises
 
 1. Write a C++ program that spawns a thread and writes a message to
    `stdout` from it.
-  1. Now spawn multiple threads and get them all to say hello.
+    1. Now spawn multiple threads and get them all to say hello.
 
 1. Write a C++ program that spawns multiple threads, where each one
    executes a program with arguments.
-   1. Modify the program so that each thread states its thread id.
+     1. Modify the program so that each thread states its thread id.
 
 1. Look at the programs `thread-arguments-problems.cc` and
    `thread-arguments-problems2.cc`.
-   1. Try to understand why these programs are not working correctly.
-   1. Fix them.
+     1. Try to understand why these programs are not working correctly.
+     1. Fix them.
 
