@@ -63,9 +63,10 @@ References
 * Baptiste Wicht has a nice tutorial on C++11 concurrency basics:
   http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
 * A great general introduction to the computer science of concurrency,
-  which discusses a lot of the generic problems in detail is *The
+  which discusses a lot of the generic synchronisation problems in detail is *The
   Little Book of Semaphones* by Allen B. Downie. It's available here:
-  http://greenteapress.com/semaphores/.
+  http://greenteapress.com/semaphores/. (Essential reading to know
+  what the *Sleeping Barber* problem is!)
 * Probably the best book on C++ concurrency is *C++ Concurrency in
   Action* by Anthony Williams, published by [Manning](http://www.manning.com/williams/).
 
@@ -75,4 +76,7 @@ References
 
 * The Intel website https://www.threadingbuildingblocks.org/ has much
   good reference and tutorial information.
-
+* James Reinders, one of the authors of TBB wrote the O'Reilly book
+  *Intel Threaded Building Blocks*. It is rather old now (2007)
+  and although it has good discussions of concurrency in general, its TBB
+  specific information is a bit out of date. 
