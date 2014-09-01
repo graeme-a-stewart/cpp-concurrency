@@ -180,6 +180,19 @@ can use the `std::this_thread` namespace.
 	}
 ```
 
+Hardware Concurrency
+-
+
+The `std::thread` library also has a method to get the number of
+available hardware threads on a machine,
+`std::thread::hardware_concurrency`. This returns an unsigned number
+that estimates the number of concurrent threads that the hardware
+supports. Note that there is no guarantee that this is exact, but it
+can provide a useful guide to how much work a hardware platform might
+be expected to do (note that on Intel chips each hyperthreaded core is
+counted, as well as each physical core).
+
+
 Exercises
 =========
 
@@ -195,4 +208,8 @@ Exercises
    `thread-arguments-problems2.cc`.
      1. Try to understand why these programs are not working correctly.
      1. Fix them.
+
+1. What's the hardware concurrency value on the test machine?
+    1. If you have a suitable setup on your laptop to run C++11,
+       what's the value there?
 

@@ -1,6 +1,7 @@
 #include <future>
 #include <iostream>
 #include <random>
+#include <thread>
 
 double pi_estimator(long trials) {
   std::default_random_engine generator;
@@ -19,21 +20,27 @@ double pi_estimator(long trials) {
 }
 
 int main() {
-  int const thread_pool = 8;
-  long const trials_per_thread = 100000000;
+  unsigned int const thread_pool = std::thread::hardware_concurrency();
+  long const trials_per_thread = 500000000;
 
-  auto thread_results = std::vector<std::future<double>>;
+  std::vector<std::future<double>> thread_results;
 
-  std::future<double> thread_pi = std::async(std::launch::async,
-					     pi_estimator, trials_per_thread);
-  std::cout << "Launched async" << std::endl;
+  std::cout << "Launching " << thread_pool << " calculations." << std::endl;
+
+  for (int i=0; i<thread_pool; ++i)
+    thread_results.push_back(std::async(std::launch::async,
+					pi_estimator, trials_per_thread));
+
+  std::cout << "Launched tasks" << std::endl;
 
   // I can work here
-  double my_pi = pi_estimator(trials_per_thread);
-  std::cout << "My work done" << std::endl;
-  
-  double final_pi = (my_pi + thread_pi.get())/2.0;
-  std::cout << "Averaged answer: " << final_pi << std::endl;
+  double my_pi_sum = 0.0;
+  for (auto& task_future: thread_results)
+    my_pi_sum += task_future.get();
+
+  double my_pi = my_pi_sum / thread_pool;
+
+  std::cout << "Answer: " << my_pi << std::endl;
 
   return 0;
 }
