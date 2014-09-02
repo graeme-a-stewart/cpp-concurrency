@@ -28,7 +28,7 @@ should be 4.8.2:
 
 To compile concurrent C++11 programs you'll need two flags for g++:
 
-* `-std=c++11` - Use the new C++11 standards
+* `-std=c++11` - Use the C++11 standard (`-std=c++1y` also works!)
 * `-pthread` - Enable posix thread support, which is the underlying
       thread library used by libstdc++ on linux platforms
 
@@ -49,6 +49,49 @@ but using the
 [Intel documentation](https://www.threadingbuildingblocks.org/) is
 probably more convenient.
 
+Tips
+===
+
+### Top and Threads
+
+If you run `top -H` will see all running threads - this is useful for
+a quick check that you have a multi-threaded program running! The `H`
+key will cycle threads on/off once top is running.
+
+So `top -H -u $USER` would probably be the most useful command to use.
+
+### Timing
+
+To measure any performance boost from threading you need to take
+accurate timing measurements. The easiest way to do this is with the
+`chrono` library (C++11).
+
+```cpp
+    #include <chrono>
+    #include <iostream>
+
+	int main() {
+	    // Prologue stuff
+
+	    auto start = std::chrono::high_resolution_clock::now();
+        // Do work here
+	    auto end = std::chrono::high_resolution_clock::now();
+
+        auto duration = end - start;
+
+	    std::cout << "That took: " << std::chrono::duration<float, milli> (duration).count() << "ms" << endl;
+
+	   // Epilogue stuff
+	}
+```
+
+Note that it's important to time the interesting bit of the program
+only (which is why `time ./my_prog` isn't so useful).
+
+**Caveat Emptor** As we are running VMs at the school, there is the
+  possibility of interference between different machines as we do the
+  tutorials. So, always take a few timing measurements, just to check
+  that things are stable.
 
 References
 ----------
@@ -63,7 +106,7 @@ References
 * Baptiste Wicht has a nice tutorial on C++11 concurrency basics:
   http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
 * A great general introduction to the computer science of concurrency,
-  which discusses a lot of the generic synchronisation problems in detail is *The
+  which discusses a lot of the classic synchronisation problems in detail is *The
   Little Book of Semaphones* by Allen B. Downie. It's available here:
   http://greenteapress.com/semaphores/. (Essential reading to know
   what the *Sleeping Barber* problem is!)

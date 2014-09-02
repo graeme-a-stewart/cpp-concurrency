@@ -210,4 +210,8 @@ the potential for concurrency, but in the last case the C++11 `mutex`
     1. Use a `mutex` to fix the program.
 	1. Can you use an `std::atomic` to fix the problem?
 
-
+3. Taking the two fixed versions of the `multithread-sum.cc` from the
+   previous exercise, investigate if there is a performance benefit to using
+   `atomic` over `mutex`.
+    1. In particular investigate the differences as you change the
+       number of active threads.
