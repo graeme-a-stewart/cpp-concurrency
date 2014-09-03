@@ -221,7 +221,7 @@ Note that because of the extra methods that are needed for
 Blocked Range and Grain Size
 -
 
-When we used the ``blocked_range`` above we only specified the start
+When we used the `blocked_range` above we only specified the start
 and end values of the iteration. TBB tries to discover itself what the
 optimal way to divide the problem is. This division is called the
 *grain size*. The automatic grain size determination is now pretty
@@ -235,6 +235,39 @@ might eke out some more performance:
 
 However, beware that the best grain size on one machine might not be
 the best on another, so use this option carefully.
+
+Different Blocked Range Templates
+-
+
+`blocked_range` is designed for 1-D structures. However, many times we
+need to deal with more complicated objects than that. So here we can
+use `blocked_range2d` or `blocked_range3d` to iterate.
+
+For a `blocked_range2d<T> r`, instead of using `r.begin()` we have
+`r.rows().begin()` and `r.cols().begin()` (likewise for `end()`).
+
+So a fragment of a matrix multiply would be something like:
+
+```cpp
+    void operator()( const blocked_range2d<size_t>& r ) const {
+        float (*a)[L] = my_a;
+        float (*b)[N] = my_b;
+        float (*c)[N] = my_c;
+        for( size_t i=r.rows().begin(); i!=r.rows().end(); ++i ){
+            for( size_t j=r.cols().begin(); j!=r.cols().end(); ++j ) {
+                float sum = 0;
+                for( size_t k=0; k<L; ++k )
+                    sum += a[i][k]*b[k][j];
+                c[i][j] = sum;
+            }
+        }
+    }
+```
+
+
+In `blocked_range3d`, the extra dimension is `pages`, i.e.,
+`r.pages().begin()`.
+
 
 TBB Timing Goodies
 ---------

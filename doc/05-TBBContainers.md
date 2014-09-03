@@ -66,6 +66,10 @@ There are a few things to be careful of with `concurrent_vector`, namely:
 * `size()` returns the size of all elements, even those being
   constructed, so accessing those elements might be problematic.
 
+* Unlike an `std::vector`, elements in a concurrent vector are *not*
+  guaranteed to be contiguous in memory.
+
+
 Other Concurrent Containers
 -
 
@@ -82,7 +86,7 @@ Exercises
        a normal `std::vector` and see what happens if you do that
        without a mutex.
 
-	*Tip* You can run multiple threads just using `std::thread` or you
+	*Tip* You can run multiple threads just using some `std::thread`s or you
      can use this simple trick to get TBB to run some threads for you:
 
 ```cpp
