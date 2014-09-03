@@ -1,11 +1,15 @@
 #include <thread>
+#include <mutex>
 #include <iostream>
 #include <random>
 #include <vector>
+#include <chrono>
 
 int total_entries;
 float sum;
 size_t occupancy;
+
+std::mutex mtx;
 
 #define SIZE 100000000
 #define THREAD_POOL 50
@@ -36,6 +40,7 @@ size_t serial_occupancy(std::vector<float> &det) {
 // using the global variable occupancy to allow the sum to happen 
 // across threads
 void partial_occupancy(std::vector<float> &det, size_t begin, size_t end) {
+  std::lock_guard<std::mutex> lck(mtx);
   for (size_t i=begin; i<end; ++i) {
     if (det[i] > 0.0f) {
       ++occupancy;
@@ -53,6 +58,7 @@ int main() {
   std::cout << "Occupancy is " << serial_occupancy(det) << std::endl;
 
   // Multithreaded calculation
+  auto start = std::chrono::high_resolution_clock::now();
   occupancy = 0;
   std::thread pool[THREAD_POOL];
   size_t chunk = SIZE/THREAD_POOL;
@@ -64,7 +70,10 @@ int main() {
   for (int t=0; t<THREAD_POOL; ++t)
     pool[t].join();
 
-  std::cout << "Multi-thread occupancy is " << occupancy << std::endl;
+  auto end = std::chrono::high_resolution_clock::now();
+  auto duration = end - start;
+
+  std::cout << "Multi-thread occupancy is " << occupancy << " (took " << std::chrono::duration<float, std::milli> (duration).count() << "ms)" << std::endl;
 
   return 0;
 }

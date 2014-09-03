@@ -309,14 +309,12 @@ Exercises
 	 2. Do you understand any differences from the first exercise?
 
 4. Using a `blocked_range2d`, write a `parallel_for` loop that
-   calculates the set of points in the Mandelbrot set in the `(x,y)`
-   range `[-2,+2]`.
+   calculates the set of points in the `(x,y)` range
+   `[-2,+2)` that are in the Mandelbrot set.
 
 	Recall that the Mandelbrot set is the set of points (r0) where:
-
+```
 	z_i = z_(i-1)^2 + r0; z0 = 0
-
+```
 	remains finite.
 	
-
-

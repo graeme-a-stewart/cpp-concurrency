@@ -2,7 +2,7 @@
 #include <thread>
 #include <mutex>
 
-#define THREAD_POOL 24
+#define THREAD_POOL 50
 
 std::mutex io_mtx;
 

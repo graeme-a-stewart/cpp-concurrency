@@ -79,7 +79,7 @@ accurate timing measurements. The easiest way to do this is with the
 
         auto duration = end - start;
 
-	    std::cout << "That took: " << std::chrono::duration<float, milli> (duration).count() << "ms" << endl;
+	    std::cout << "That took: " << std::chrono::duration<float, std::milli> (duration).count() << "ms" << endl;
 
 	   // Epilogue stuff
 	}
@@ -96,6 +96,14 @@ only (which is why `time ./my_prog` isn't so useful).
 References
 ----------
 
+### General
+* A great general introduction to the computer science of concurrency,
+  which discusses a lot of the classic synchronisation problems in detail is *The
+  Little Book of Semaphones* by Allen B. Downie. It's available here:
+  http://greenteapress.com/semaphores/. (Essential reading to know
+  what the *Sleeping Barber* problem is!)
+
+
 ### C++11 Concurrency
 
 * There are many good online C++ reference sites, e.g.,
@@ -105,11 +113,6 @@ References
   http://www.isocpp.org/.
 * Baptiste Wicht has a nice tutorial on C++11 concurrency basics:
   http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
-* A great general introduction to the computer science of concurrency,
-  which discusses a lot of the classic synchronisation problems in detail is *The
-  Little Book of Semaphones* by Allen B. Downie. It's available here:
-  http://greenteapress.com/semaphores/. (Essential reading to know
-  what the *Sleeping Barber* problem is!)
 * Probably the best book on C++ concurrency is *C++ Concurrency in
   Action* by Anthony Williams, published by [Manning](http://www.manning.com/williams/).
 

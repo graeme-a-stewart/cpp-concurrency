@@ -3,12 +3,13 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <chrono>
 
 int total_entries;
 float sum;
 std::atomic<size_t> occupancy;
 
-#define SIZE 10000
+#define SIZE 100000000
 #define THREAD_POOL 50
 
 void fill_detector(std::vector<float> &det, size_t n=SIZE) {
@@ -54,6 +55,7 @@ int main() {
   std::cout << "Occupancy is " << serial_occupancy(det) << std::endl;
 
   // Multithreaded calculation
+  auto start = std::chrono::high_resolution_clock::now();
   occupancy = 0;
   std::thread pool[THREAD_POOL];
   size_t chunk = SIZE/THREAD_POOL;
@@ -64,8 +66,10 @@ int main() {
 
   for (int t=0; t<THREAD_POOL; ++t)
     pool[t].join();
+  auto end = std::chrono::high_resolution_clock::now();
+  auto duration = end - start;
 
-  std::cout << "Multi-thread occupancy is " << occupancy << std::endl;
+  std::cout << "Multi-thread occupancy is " << occupancy << " (took " << std::chrono::duration<float, std::milli> (duration).count() << "ms)" << std::endl;
 
   return 0;
 }

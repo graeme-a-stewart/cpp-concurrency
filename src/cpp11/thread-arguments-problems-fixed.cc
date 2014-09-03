@@ -37,7 +37,7 @@ int main() {
   
   std::cout << "Tea type: " << my_cuppa.tea() << std::endl;
 	
-  auto threaded_tea = std::thread(std::bind(tea_selector, my_cuppa, "black"));
+  auto threaded_tea = std::thread(std::bind(tea_selector, std::ref(my_cuppa), "black"));
   threaded_tea.join();
   
   std::cout << "Updated tea type: " << my_cuppa.tea() << std::endl;

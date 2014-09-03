@@ -9,9 +9,10 @@ Multiple threads share the heap memory space of their process (they
 have separate stack memory which is what gives them their thread
 execution context). This can be an advantage as all threads can
 see the memory of common heap objects and operate on it without
-requiring inter-process communitcation or other overheads. However,
-this also leads to trouble, as now threads can easily interfere with
-each other by accessing objects simultaneously and interfereing 
+requiring inter-process communication or other overheads. However,
+this can also lead to trouble, as now threads can easily interfere with
+each other by accessing objects simultaneously or changing memory
+values they shouldn't.
 
 In general, simulteneous read access to resources is not a problem -
 as data is only read then there's no conflict in multiple threads
@@ -34,9 +35,9 @@ read and write threads as well.
 
 Control of access to critical parts of the code, where races can
 occur, is usually achieved with a *mutex*, which gives mutually
-exclusive access to some section of the code. The different threads
-share the mutex object, but only one of them can lock it at any one
-time.
+exclusive access to some section of the code (we'll touch on *lock
+free* designs later). The different threads share the mutex object,
+but only one of them can lock it at any one time.
 
 ```cpp
     #include <mutex>
@@ -106,7 +107,7 @@ would look something like this:
 	};
 ```
 
-In fact this pattern is so useful that it's supported directly in
+In fact this pattern is so useful that it is supported directly in
 C++11 as a `lock_guard` (also part of the `mutex` header). As there
 are a few different types of mutexes one can use, the `lock_guard` is
 a templated class. Converting the example above to this pattern:
@@ -189,19 +190,42 @@ There are a number of ways to avoid this situation:
 1. Acquire locks simultaneously.
 
 There are many subtitles to efficient use of locks without destroying
-the potential for concurrency, but in the last case the C++11 `mutex` 
+the potential for concurrency, but in the last case the C++11 `mutex`
+supports an *all or nothing* approach that can be very useful:
+
+```cpp
+	#include <mutex>
+
+	std::mutex m;
+	std::mutex n;
+
+	
+	void some_func() {
+        std::lock(m, n);
+		std::lock_guard<std::mutex> lock_m(m, std::adopt_lock);
+		std::lock_guard<std::mutex> lock_n(n, std::adopt_lock);
+
+	    // Now I can work safely with both mutexes
+```
+
+Calling `std::lock(m,n)` locks both mutexes at the same time. Then lock
+guards are constructed, where the special argument `std::adopt_lock`
+tells the lock guard the mutex is already locked and it should just
+take ownership of that lock.
+
 
 ### Some General Points on Locks and Lock-free designs
 
 Note that one of the main points of `atomic` data types is not just to
-prevent races on simple data types, but instead to build lock free
-thread safe objects.
+prevent races on simple data types, but to build lock free
+thread safe objects. (In fact you may be surprised if you measure the
+performance of `mutex` vs. `atomic` for some data types.)
 
 This topic is advanced and we don't have time to explore it here, but
 in general *lock free* programming is going to scale much better than
 programming with locks. If your contention is low, locking should work
 and it is simpler; but if you can use *lock free* (or at least high
-performance locking) data structures from another package then do
+performance locking) data structures then do
 that.
 
 
@@ -225,6 +249,5 @@ that.
 
 3. Taking the two fixed versions of the `multithread-sum.cc` from the
    previous exercise, investigate if there is a performance benefit to using
-   `atomic` over `mutex`.
-    1. In particular investigate the differences as you change the
-       number of active threads.
+   `atomic` over `mutex`. (Increase the number of iterations if needed.)
+

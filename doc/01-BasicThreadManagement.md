@@ -17,6 +17,10 @@ Windows the Win32 API will be used).
 As C++ develops we can expect that this concurrency support will
 become richer and more useful.
 
+The C++ threading libraries are also very useful for introducing some
+core concepts in concurrency, which is an additional reason for
+looking at them here.
+
 Starting Threads
 ----------------
 
@@ -53,7 +57,8 @@ to `std::thread`. e.g.,
 
 Note that the execution of `my_first_thread` happens immediately we
 create it. We then use the `std::thread::join()` method to ask the
-program to wait for the thread to finish. Then we can exit.
+current (main) thread to wait for the other thread to finish. Then we
+can exit.
 
 The alternative to using `join` when a thread is created to use `detach`,
 which will give control of the thread to the C++ runtime (which will
@@ -68,6 +73,11 @@ It's also illegal to `join` or `detach` a thread which has already
 done one of these things. To avoid this use `std::thread::joinable()`,
 which will return `true` only if the thread can be joined (or detached
 - the condition is identical).
+
+Note that to protect against exceptions, one can use a *thread guard*
+pattern, where the thread is a resource that is joined (if `joinable`)
+in its destructor (this is the Resource Acquisition Is Initialisation,
+RAII, pattern).
 
 ### Thread Arguments ###
 
@@ -101,7 +111,7 @@ i.e., `std::thread my_second_thread(std::bind(say_hello_msg, 1));`.)
 
 #### Things that can go wrong passing arguments ####
 
-:boom: You need to take a little care when passing arguments. `std::thread`
+You need to take a little care when passing arguments. `std::thread`
 will copy arguments before starting a thread and this can lead to some
 subtle problems.
 
@@ -120,7 +130,7 @@ subtle problems.
 			if (request_update(real_wdgt))
 				widget_threads.push_back(std::thread(update_widget, real_wdgt));
 		
-		// Do some other things
+		// Now wait for all widgets to be updated
 		for (auto& each_thread: widget_threads)
 			each_thread.join();
 	}
@@ -175,7 +185,7 @@ the first parameter to a class method has to be the magic pointer
     class foo {
 	    ....
 	public:
-        bar(double x) { ... }
+        void bar(double x) { ... }
 
 	    void spawn_bar_thread() {
 			auto my_thread = std::thread(&foo::bar, this, 0.0);
@@ -210,7 +220,7 @@ available hardware threads on a machine,
 that estimates the number of concurrent threads that the hardware
 supports. Note that there is no guarantee that this is exact, but it
 can provide a useful guide to how much work a hardware platform might
-be expected to do (note that on Intel chips each hyperthreaded core is
+be expected to do (e.g., on Intel chips each hyperthreaded core is
 counted, as well as each physical core).
 
 

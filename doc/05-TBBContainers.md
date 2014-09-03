@@ -85,10 +85,9 @@ Exercises
     1. You might want to use a `typedef` to be able to switch back to
        a normal `std::vector` and see what happens if you do that
        without a mutex.
-
-	*Tip* You can run multiple threads just using some `std::thread`s or you
+	
+	2. *Tip* You can run multiple threads just using some `std::thread`s or you
      can use this simple trick to get TBB to run some threads for you:
-
 ```cpp
     const int size = 10000;
     tbb::parallel_for(0, size, 1, [=](int i){add_element(i);});

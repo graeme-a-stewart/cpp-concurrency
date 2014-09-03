@@ -1,4 +1,4 @@
-# Async Tasks, Futures and Promises
+# Async Tasks and Futures
 
 ## Introduction
 
@@ -71,6 +71,21 @@ know there's no point in deferring execution. An advantage of
 `std::launch::deferred` is that if it turns out that the async task
 isn't needed then it just won't be run at all when the future goes out
 of scope. 
+
+Packaged Tasks and Promises
+--
+
+There are other ways to set the values associated with a `future`. One
+is to setup a `packaged_task` that allows a task to be tied to a
+`future` before it is sent off for dispatch - this is useful if you
+have a task queue, but want to make sure you can get a handle on the result of
+the function before it is sent to the queue.
+
+The other is to extract a `promise` from an already created `future`
+and send it as a parameter elsewhere in the program. When the
+`promise` is set the value of the `future` is came from becomes
+available.
+
 
 # Exercises
 
