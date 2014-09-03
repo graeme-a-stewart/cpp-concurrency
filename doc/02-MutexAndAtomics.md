@@ -191,6 +191,19 @@ There are a number of ways to avoid this situation:
 There are many subtitles to efficient use of locks without destroying
 the potential for concurrency, but in the last case the C++11 `mutex` 
 
+### Some General Points on Locks and Lock-free designs
+
+Note that one of the main points of `atomic` data types is not just to
+prevent races on simple data types, but instead to build lock free
+thread safe objects.
+
+This topic is advanced and we don't have time to explore it here, but
+in general *lock free* programming is going to scale much better than
+programming with locks. If your contention is low, locking should work
+and it is simpler; but if you can use *lock free* (or at least high
+performance locking) data structures from another package then do
+that.
+
 
 # Exercises
 

@@ -180,7 +180,7 @@ an array:
 	    }
 
         parallel_sum(parallel_sum& a, tbb::split):
-		  my_x{x}, the_answer{0.0} {};
+		  my_x{a.x}, the_answer{0.0} {};
 
         void join(const parallel_sum& b) {
 		    the_answer += b.the_answer;
@@ -218,6 +218,23 @@ Once the class is ready, we invoke the reduction by calling
 Note that because of the extra methods that are needed for
 `parallel_reduce` it's not possible to use a lambda.
 
+Blocked Range and Grain Size
+-
+
+When we used the ``blocked_range`` above we only specified the start
+and end values of the iteration. TBB tries to discover itself what the
+optimal way to divide the problem is. This division is called the
+*grain size*. The automatic grain size determination is now pretty
+good in TBB, but it is possible to pass a manual grain size that
+might eke out some more performance:
+
+```cpp
+	size_t grain_size = 8;
+    tbb::blocked_range<size_t>(0, n, grain_size);
+```
+
+However, beware that the best grain size on one machine might not be
+the best on another, so use this option carefully.
 
 TBB Timing Goodies
 ---------
@@ -258,6 +275,15 @@ Exercises
      1. Investigate the scaling properties as above.
 	 2. Do you understand any differences from the first exercise?
 
+4. Using a `blocked_range2d`, write a `parallel_for` loop that
+   calculates the set of points in the Mandelbrot set in the `(x,y)`
+   range `[-2,+2]`.
 
+	Recall that the Mandelbrot set is the set of points (r0) where:
+
+	z_i = z_(i-1)^2 + r0; z0 = 0
+
+	remains finite.
+	
 
 

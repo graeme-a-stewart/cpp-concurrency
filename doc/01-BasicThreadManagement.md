@@ -164,6 +164,27 @@ converted from one type to another as the conversion only happens in
 the context of the newly spawned thread, so beware of constructing
 objects from a pointer to local data.
 
+### Class Methods Called from Threads
+
+If you want to call a class method from a thread, then you need to
+give a function pointer using the `&class::method` syntax. In addition
+the first parameter to a class method has to be the magic pointer
+`this` (which always points to **this** instance).
+
+```cpp
+    class foo {
+	    ....
+	public:
+        bar(double x) { ... }
+
+	    void spawn_bar_thread() {
+			auto my_thread = std::thread(&foo::bar, this, 0.0);
+			...
+		}
+
+	};
+```
+
 
 Thread Identity
 ---------------
