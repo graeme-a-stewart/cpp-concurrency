@@ -318,3 +318,8 @@ Exercises
 ```
 	remains finite.
 	
+    *Tip:* A pointer to a 2D array of `Type` in C++ is
+```
+	Type (*p)[SIZE]
+```
+	where you *do* need to give the dimension of the last index explicitly.

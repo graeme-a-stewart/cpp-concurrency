@@ -9,16 +9,14 @@ directly by the TBB loop functions `parallel_for`, `parallel_reduce`
 and other
 [more sophisticated patterns](https://software.intel.com/en-us/node/506140).
 
-However, TBB also allows for parallelisation based on *graphs* of
-tasks, where tasks are nodes and data flows along edges between them.
-
-This is a very flexible way to execute in parallel...
+However, TBB also allows for parallelisation based on task
+workflows, which we will look at now.
 
 
 Pipelines
 -
 
-*Pipelines* are a simpler execution concept. Here the tasks to be
+*Pipelines* are a simple execution concept. Tasks to be
  executed come in a linear sequence, much like an assembly line. Each
  incoming piece of data is processed by the first element of the
  pipeline, then the second and so on. Obviously this is a serial
@@ -37,7 +35,7 @@ Pipelines
 	    |
 		\/
 	+---------+
-	| Stage 1 |
+	| Stage 2 |
 	+---------+
 	    |
 		\/
@@ -176,6 +174,39 @@ method of the `flow_control` object before returning.
 Note also that the first filter *must* provide a copy constructor,
 because it will be copied when defining and running the pipeline.
 
+Graphs
+-
+
+The most general of these task workflows is a graph, where tasks are
+nodes and edges are data that flows between the nodes.
+
+```
+    +---------+
+	|  Start  | <- data1, data2, data3, ..., dataN
+	+---------+
+	    |      \
+		\/       \
+	+---------+   \|
+	| Node 1  |    +--------+
+	+---------+    | Node 2 |
+	    |          +--------+
+		\/             |
+	+---------+        |
+	| Node 3  |        |
+	+---------+        |
+	    |       +------+ 
+		\/     |/
+	+---------+
+	|  Node 5 | -> out1, out2, out3, ..., outN
+	+---------+
+```
+
+This is a very flexible way to execute tasks in parallel, and TBB
+offers very good support for them (see
+https://software.intel.com/en-us/node/517340 as an introduction).
+
+
+
 Exercises
 =
 
@@ -191,3 +222,10 @@ Exercises
 You can use the `gen_input.cc` program to generate a suitable set of
 input values for the pipeline.
 
+2. Extend your pipeline with a few more steps.
+    1. You can try changing the data type along the pipeline, e.g.,
+	moving from double to float, or even moving from double to some
+	annotated `struct`.
+	1. Can you introduce a monitoring step in the pipeline, which
+       computes some aggregate property of the data (e.g.,
+       average). Can you make this step parallel and avoid data races?
