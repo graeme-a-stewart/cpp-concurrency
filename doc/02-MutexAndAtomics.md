@@ -95,7 +95,7 @@ would look something like this:
 		std::mutex *m_mtx;
 
 	public:
-		lock_guard(std::mutex mtx):
+		lock_guard(std::mutex& mtx):
 		{
 			m_mtx = &mtx;
 			m_mtx->lock();
