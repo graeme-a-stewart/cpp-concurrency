@@ -35,7 +35,8 @@ Mutexes and Atomics
 3. `multithread-sum-fixed-atomic.cc` and 
    `multithread-sum-fixed-mutex.cc`
 
-4. `deadlock-fixed.cc`
+4. `deadlock-fixed.cc` and
+   `deadlock-fixed-using-lock-adoption.cc`
 
 Async and Futures
 -
