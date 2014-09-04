@@ -251,3 +251,6 @@ that.
    previous exercise, investigate if there is a performance benefit to using
    `atomic` over `mutex`. (Increase the number of iterations if needed.)
 
+4. Run the program `deadlock.cc`.
+    1. Can you see why it hangs?
+	1. Fix it.
