@@ -69,10 +69,10 @@ thread before the creating function exits, otherwise `std::terminate` is
 called - i.e., you have to explicitly state if you are keeping control
 of the thread or passing it to the runtime.
 
-It's also illegal to `join` or `detach` a thread which has already
-done one of these things. To avoid this use `std::thread::joinable()`,
-which will return `true` only if the thread can be joined (or detached
-- the condition is identical).
+It's also illegal to `join` or `detach` a thread which has already done one of
+these things. To avoid this use `std::thread::joinable()`, which will return
+`true` only if the thread can be joined (or detached - the condition is
+identical).
 
 Note that to protect against exceptions, one can use a *thread guard*
 pattern, where the thread is a resource that is joined (if `joinable`)
