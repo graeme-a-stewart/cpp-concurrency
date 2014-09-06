@@ -17,13 +17,15 @@ class Calorimeter {
 private:
   std::vector<double> m_cells;
   size_t m_detector_size;
-  //std::atomic<unsigned long> m_occupancy;
-  size_t m_occupancy;
+  std::atomic<unsigned long> m_occupancy;
 
   void partial_occupancy(size_t const begin, size_t const end) {
+    size_t local_occupancy=0;
     for (size_t i=begin; i<end; ++i)
       if (is_occupied(m_cells[i]))
-	++m_occupancy;
+	++local_occupancy;
+    // Sync to the atomic as little as possible (it's expensive)
+    m_occupancy += local_occupancy;
   }
 
   inline bool is_occupied(double const value) {
@@ -51,11 +53,6 @@ public:
     // Calculate detector occupancy: the number of cells over the threshold of 0.0
     m_occupancy = 0;
     partial_occupancy(0, m_cells.size());
-    // for (auto& cell: m_cells) {
-    //   if (is_occupied(cell))
-    // 	++m_occupancy;
-    // }
-
     return m_occupancy;
   }
 
