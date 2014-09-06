@@ -133,7 +133,7 @@ input data that produces an aggregated result that depends on all the
 input data. If the computation can be broken down into pieces we can
 still parallelise this operation, which is a *reduction*.
 
-Here's a simple example: if I need to sum up 12 numbers I can do it
+Here's a simple example: if I need to sum up 10 numbers I can do it
 like this
 
 ```
