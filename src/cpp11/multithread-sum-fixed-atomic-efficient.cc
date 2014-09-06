@@ -37,10 +37,10 @@ size_t serial_occupancy(std::vector<float> &det) {
 // This function looks at the occupancy of an element in the detector
 // using the global variable occupancy to allow the sum to happen 
 // across threads
-// In this more efficient version we avoid touching the atomic until the
-// very end, so that the expensive sync (mfence) across all the cores
-// only needs done once
 void partial_occupancy(std::vector<float> &det, size_t begin, size_t end) {
+  // In this more efficient version we avoid touching the atomic until the
+  // very end, so that the expensive sync (mfence on x86) across all the cores
+  // only needs done once
   size_t my_sum=0;
   for (size_t i=begin; i<end; ++i) {
     if (det[i] > 0.0f) {
