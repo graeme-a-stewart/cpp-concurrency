@@ -218,7 +218,8 @@ can use the `std::this_thread` namespace.
     #include <thread>
 
 	void hello_n(int i) {
-		std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
+		std::cout << "hello, world (from thread number " << i
+			<< "; thread id" << std::this_thread::get_id() << ")" << std::endl;
 	}
 ```
 
