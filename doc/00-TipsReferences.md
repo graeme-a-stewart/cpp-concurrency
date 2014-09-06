@@ -6,10 +6,18 @@ Tips
 
 ### Setup
 
-It's important to setup the Redhat *devtoolset* to have access to a
-modern version of gcc for all of the tutorial exercises.
+This tutorial has been written and tested on *Scientific Linux 6*,
+although it also works on *Mac OS 10.9* using gcc4.9 and TBB installed
+from [MacPorts](https://www.macports.org/).
 
-To do this login and execute this command:
+However, any reasonably modern C++11 compiler (gcc4.7 and up,
+LLVM/Clang 3.3 and up) should be compatible, although you may need to
+modify the makefiles. 
+
+On SL6 it's important to setup the Redhat *devtoolset* to have access
+to a modern version of gcc for all of the tutorial exercises.
+
+To do this execute this command:
 
 ```bash
     $ scl enable devtoolset-2 bash
@@ -44,8 +52,8 @@ Intel Threaded Building Blocks has been compiled and installed into
 `/usr/local/lib64` for libraries). Thus you shouldn't need any special
 extra setup to use is during the school.
 
-Documentation for TBB is installed into `/usr/local/share/tbb/html`,
-but using the
+Doxygen documentation for TBB is installed into
+`/usr/local/share/tbb/html`, but using the
 [Intel documentation](https://www.threadingbuildingblocks.org/) is
 probably more convenient.
 
@@ -88,10 +96,10 @@ accurate timing measurements. The easiest way to do this is with the
 Note that it's important to time the interesting bit of the program
 only (which is why `time ./my_prog` isn't so useful).
 
-**Caveat Emptor** As we are running VMs at the school, there is the
-  possibility of interference between different machines as we do the
-  tutorials. So, always take a few timing measurements, just to check
-  that things are stable.
+**Caveat Emptor** If you run on *virtual machines* (e.g., GridKA
+  School machines and `lxplus` at CERN) there is the possibility of
+  interference and jitter. So, always take a few timing measurements,
+  just to check that things are stable.
 
 References
 ----------
