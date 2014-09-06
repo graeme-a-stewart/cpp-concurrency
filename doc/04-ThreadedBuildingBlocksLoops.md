@@ -83,7 +83,7 @@ copy constructor, so that TBB can make copies of it as needed; this is
 why the `()` operator is declared `const` as it may not change this
 body. Otherwise some local change might not be reflected in the
 original object. (However, what the body points to, i.e., the contents
-of `*my_x* can be changed.)
+of `my_x` can be changed.)
 
 Once this class is constructed, the `tbb::parallel_for` function is
 invoked, which will execute the operation in parallel:
