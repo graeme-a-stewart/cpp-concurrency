@@ -18,7 +18,7 @@ As C++ develops we can expect that this concurrency support will
 become richer and more useful.
 
 The C++ threading libraries are also very useful for introducing some
-core concepts in concurrency, which is an additional reason for
+core concepts in concurrency, which is one of the primary reasons for
 looking at them here.
 
 Starting Threads
@@ -34,10 +34,10 @@ begin we need to ensure we have this included:
 
 As expected, thread support is found in the `std` namespace. (In this
 documentation usually we'll give this namespace explicity, but it's
-quite common for tutorials to omit this assuming a 
+quite common for tutorials to omit this, assuming a 
 `using namespace std;`.)
 
-To start a thread we need to give it something to do, so we pass the
+To start a thread we should give it something to do[^1], so we pass the
 name of a function that we wish to call in the thread as the argument
 to `std::thread`. e.g.,
 
@@ -79,6 +79,11 @@ pattern, where the thread is a resource that is joined (if `joinable`)
 in its destructor (this is the Resource Acquisition Is Initialisation,
 RAII, pattern).
 
+[^1]: You can construct an `std::thread` object that doesn't represent
+an executing thread object by giving no arguments to the
+constructor (`std::thread th()`). This is useful if you want to move an existing thread to
+a new object.
+
 ### Thread Arguments ###
 
 To pass an argument to the thread when you start it, just add the
@@ -105,9 +110,14 @@ Which should give:
 	Hello from thread number 1
 ```
 
-(An alternative way is to use `std::bind` to create a temporary
+*Note* An alternative way is to use `std::bind` to create a temporary
 function with the arguments already bound to the parameters you want to use,
-i.e., `std::thread my_second_thread(std::bind(say_hello_msg, 1));`.)
+i.e.,
+
+```cpp
+	void hello_with_one = std::bind(say_hello_msg, 1);
+	std::thread my_second_thread(hello_with_one);
+```
 
 #### Things that can go wrong passing arguments ####
 
@@ -144,6 +154,7 @@ but are lost in this empeheral copy.
 Overcome this problem by calling `std::ref` on `real_wdgt` to
 create a reference, which can be copied and still refer to the
 original object: `std::thread(update_widget, std::ref(real_wdgt)`.
+
 
 ##### Input data going out of scope #####
 
