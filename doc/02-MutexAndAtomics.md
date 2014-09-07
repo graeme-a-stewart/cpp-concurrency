@@ -35,9 +35,9 @@ read and write threads as well.
 
 Control of access to critical parts of the code, where races can
 occur, is usually achieved with a *mutex*, which gives mutually
-exclusive access to some section of the code (we'll touch on *lock
-free* designs later). The different threads share the mutex object,
-but only one of them can lock it at any one time.
+exclusive access to some section of the code. The different threads
+share the mutex object, but only one of them can lock it at any one
+time.
 
 ```cpp
     #include <mutex>
@@ -159,7 +159,6 @@ The implementation of atomics varies from platform to platform, but
 will be lock free where the underlying hardware supports it (you can
 test this with `std::atomic::is_lock_free()`).
 
-
 ## Locks and Deadlocks
 
 The flip side of a *data race* is a *deadlock*. This happens when two
@@ -216,17 +215,24 @@ take ownership of that lock.
 
 ### Some General Points on Locks and Lock-free designs
 
-Note that one of the main points of `atomic` data types is not just to
-prevent races on simple data types, but to build lock free
-thread safe objects. (In fact you may be surprised if you measure the
-performance of `mutex` vs. `atomic` for some data types.)
+Generally, whenever you are thinking to introduce a mutex into your
+code, you should consider if it's possible to avoid this by having a
+lock free design. This topic is advanced and we don't have time to
+explore it here, but in general *lock free* programming is going to
+scale much better than programming with locks (see references for a
+few introductory articles). Mutexes will limit your parallel performance and atomic
+variables are expensive to use.
 
-This topic is advanced and we don't have time to explore it here, but
-in general *lock free* programming is going to scale much better than
-programming with locks. If your contention is low, locking should work
-and it is simpler; but if you can use *lock free* (or at least high
-performance locking) data structures then do
-that.
+If you do need to lock something in your program then try to hold the
+lock for the absolute minimum amount of time, i.e., accumulate some
+global change in local variables first, then acquire the lock to do an
+update and release the lock as quickly as possible. In this way many
+threads can calculate their "local" changes in parallel and then only
+contend for the lock briefly.
+
+Likewise, in compound data objects, try to lock at the minimum
+granularity (*fine grained locking*) to reduce contention and keep as
+many of your threads busy for as much of the time as possible.
 
 
 # Exercises
@@ -249,7 +255,11 @@ that.
 
 3. Taking the two fixed versions of the `multithread-sum.cc` from the
    previous exercise, investigate if there is a performance benefit to using
-   `atomic` over `mutex`. (Increase the number of iterations if needed.)
+   `atomic` over `mutex`. (Increase the number of iterations if
+   needed, to get good timing measurements.)
+	1. For both solutions consider how to reduce the contention
+       between threads to a minimum. (Try a few different strategies
+       and take timing measurements.)
 
 4. Run the program `deadlock.cc`.
     1. Can you see why it hangs?

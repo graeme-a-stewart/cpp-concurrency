@@ -104,7 +104,24 @@ only (which is why `time ./my_prog` isn't so useful).
 References
 ----------
 
-### General
+### Generally Useful C++ Resources
+
+* There are many good online C++ reference sites, e.g.,
+  http://www.cplusplus.com/, (use the reference section, under
+  multi-threading).
+* Also worth noting is the official C++ website,
+  http://www.isocpp.org/.
+
+### Concurrency and Parallel Programming
+
+* Baptiste Wicht has a nice tutorial on C++11 concurrency basics:
+  http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
+* Probably the best book on C++ concurrency is *C++ Concurrency in
+  Action* by Anthony Williams, published by
+  [Manning](http://www.manning.com/williams/). This book covers lock
+  free programming in some detail.
+* Jeff Pershing's
+  [Introduction to Lock Free Programming](http://preshing.com/20120612/an-introduction-to-lock-free-programming/). 
 * A great general introduction to the computer science of concurrency,
   which discusses a lot of the classic synchronisation problems in detail is *The
   Little Book of Semaphones* by Allen B. Downie. It's available here:
@@ -112,24 +129,14 @@ References
   what the *Sleeping Barber* problem is!)
 
 
-### C++11 Concurrency
-
-* There are many good online C++ reference sites, e.g.,
-  http://www.cplusplus.com/, (use the reference section, under
-  multi-threading).
-* Also worth noting is the official C++ website,
-  http://www.isocpp.org/.
-* Baptiste Wicht has a nice tutorial on C++11 concurrency basics:
-  http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
-* Probably the best book on C++ concurrency is *C++ Concurrency in
-  Action* by Anthony Williams, published by [Manning](http://www.manning.com/williams/).
-
 
 
 ### TBB
 
 * The Intel website https://www.threadingbuildingblocks.org/ has much
   good reference and tutorial information.
+* Intel's TBB
+  [YouTube Channel](https://www.youtube.com/playlist?list=PLzwFYM4Q6gANxJmQDYXtyh6uRHO8JSY15).
 * James Reinders, one of the authors of TBB wrote the O'Reilly book
   *Intel Threaded Building Blocks*. It is rather old now (2007)
   and although it has good discussions of concurrency in general, its TBB

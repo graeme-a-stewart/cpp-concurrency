@@ -6,9 +6,9 @@
 Running threads directly from `std::thread` does have some drawbacks,
 particularly because there's no direct way to get the return value of
 the function the thread executed (which in scientific computing it
-often what we really want). Using messages or shared objects isn't a
-great way of doing this. However, the standard library offers some
-more convenient ways to manage this.
+often what we really want). Using messages or shared objects may not
+be the safest or easiest way of doing this. However, the standard
+library offers some more convenient ways to manage this simple case.
 
 ## Async Tasks and Futures 
 
@@ -16,7 +16,7 @@ An `async` task is very like launching a thread - it has the same
 syntax, giving the name of the function to call and any arguments it
 should take. However, the return value from an `async` task is a
 special class template, a `future`, in which the return value will
-only be placed once the thread has executed and returned.
+only be placed once the task has executed and returned.
 
 So, we just launch a thread as an `std::async` object and assign the
 return value to the `std::future` templated class. E.g.,
@@ -78,12 +78,12 @@ Packaged Tasks and Promises
 There are other ways to set the values associated with a `future`. One
 is to setup a `packaged_task` that allows a task to be tied to a
 `future` before it is sent off for dispatch - this is useful if you
-have a task queue, but want to make sure you can get a handle on the result of
+have a task queue, but nee to make sure you can get a handle on the result of
 the function before it is sent to the queue.
 
 The other is to extract a `promise` from an already created `future`
 and send it as a parameter elsewhere in the program. When the
-`promise` is set the value of the `future` is came from becomes
+`promise` is set the value of the `future` it came from becomes
 available.
 
 
@@ -93,7 +93,7 @@ available.
    using an `std::async` task to return the value as an
    `std::future`. (You might use the classic monte-carlo determination
    of pi, picking a random `x` and `y` in
-   [0,1) and seeing if the point is within a circle of radius 1.0.
+   [0,1) and seeing if the point is within a circle of radius 1.
    The ratio of points in the circle to the total number of points is pi/4.)
     1. Does the task run asynchronously without an `std::launch` parameter?
 	1. Use the `std::launch` parameter to control execution and force the task to run asynchronously.
