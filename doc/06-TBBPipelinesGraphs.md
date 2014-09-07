@@ -218,6 +218,7 @@ Exercises
 	1. Output the transformed numbers to an output file.
 	1. See how the speed up you achieve varies with the number of
        tokens in the pipline.
+
     You can use the `gen_input.cc` program to generate a suitable set of
     input values for the pipeline.
 
