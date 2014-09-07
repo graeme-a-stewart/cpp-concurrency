@@ -52,10 +52,10 @@ e.g., appending `n` elements to a `concurrent_vector<double>` is done
 like this:
 
 ```cpp
-	add_to_concurrent_vector(concurrent_vector<double> v, double stuff[], size_t n) {
-	    auto start_iterator = v.grow_by(n);
-		for (size_t i=0; i<n; ++i)
-			v[start_iterator+i] = stuff[i];
+	add_to_concurrent_vector(concurrent_vector<double> v, double new_stuff[], size_t n) {
+	    auto my_iterator = v.grow_by(n);
+		for (size_t i=0; i<n; ++i) 
+			*my_iterator++ = new_stuff[i];
 	}
 ```
 
@@ -85,12 +85,11 @@ Exercises
     1. You might want to use a `typedef` to be able to switch back to
        a normal `std::vector` and see what happens if you do that
        without a mutex.
-	
 	2. *Tip* You can run multiple threads just using some `std::thread`s or you
      can use this simple trick to get TBB to run some threads for you:
 ```cpp
     const int size = 10000;
-    tbb::parallel_for(0, size, 1, [=](int i){add_element(i);});
+    tbb::parallel_for(0, size, 1, [=](int i){my_function(i);});
 ```
 
 2. Based on the previous example, write a *filler* that selects random

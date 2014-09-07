@@ -40,7 +40,7 @@ Pipelines
 	    |
 		\/
 	+---------+
-	|  Stop   | -> out1, out2, out3, ..., outN
+	|  Stop   | -> outN, ... , out3, out2, out1
 	+---------+
 ```
 
@@ -75,9 +75,9 @@ filter's input data is `void`, as is the last filter's output data.
     }
 ```
 
-In the above case the first filter is `InputFunc`, which is
+In the above case the first filter is `DataReader`, which is
 instantiated with an input file pointer. The next filter is
-`TransformationFunc` and then finally the last filter is `OutputFunc`,
+`Transform` and then finally the last filter is `DaraWriter`,
 which is also instantiated with a file pointer.
 
 Note that we read the input file serially and in order, doing the same
@@ -92,7 +92,7 @@ same as the input data for the next.
 The very first parameter we passed to `tbb::parallel_pipeline` is
 `ntoken`, which specifies the maximum number of pieces of data that
 can be processed. It's necessary to have such a limit or data will
-pile up at the choke point of the filter and consume resources
+pile up at the choke point of the pipeline and consume resources
 needlessly.
 
 
@@ -218,9 +218,8 @@ Exercises
 	1. Output the transformed numbers to an output file.
 	1. See how the speed up you achieve varies with the number of
        tokens in the pipline.
-
-You can use the `gen_input.cc` program to generate a suitable set of
-input values for the pipeline.
+    You can use the `gen_input.cc` program to generate a suitable set of
+    input values for the pipeline.
 
 2. Extend your pipeline with a few more steps.
     1. You can try changing the data type along the pipeline, e.g.,

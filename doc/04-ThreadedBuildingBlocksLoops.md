@@ -316,13 +316,13 @@ Exercises
 
 4. Using a `blocked_range2d`, write a `parallel_for` loop that
    calculates the set of points in the `(x,y)` range
-   `[-2,+2)` that are in the Mandelbrot set.
+   `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
 
-	Recall that the Mandelbrot set is the set of points (r0) where:
+	Recall that the Mandelbrot set is the set of points (`c`) where:
 ```
-	z_i = z_(i-1)^2 + r0; z0 = 0
+	z_i+1 = z_i^2 + c; z0 = 0
 ```
-	remains finite.
+	remains bounded for all `i`.
 	
     *Tip:* A pointer to a 2D array of `Type` in C++ is
 ```

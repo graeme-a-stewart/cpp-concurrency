@@ -9,7 +9,7 @@ You'll find the programs in
 https://github.com/graeme-a-stewart/cpp-concurrency/tree/master/src,
 under `cpp11` for 01-03 and `tbb` for 04-06.
 
-Basic Thread Management
+01 Basic Thread Management
 -
 
 1. `start_threads.cc`
@@ -24,21 +24,22 @@ Basic Thread Management
 1. `hw-concurrency.cc`
 
 
-Mutexes and Atomics
+02 Mutexes and Atomics
 -
 
 1. `thread-arguments-mutex.cc`
 
 2. `multithread-sum-fixed-atomic.cc` and 
-   `multithread-sum-fixed-mutex.cc`
+   `multithread-sum-fixed-mutex.cc`. 
 
-3. `multithread-sum-fixed-atomic.cc` and 
-   `multithread-sum-fixed-mutex.cc`
-
+3. See `multithread-sum-fixed-atomic-efficient.cc` and
+   `multithread-sum-fixed-mutex-efficient.cc` and compare with the
+   versions above.
+   
 4. `deadlock-fixed.cc` and
    `deadlock-fixed-using-lock-adoption.cc`
 
-Async and Futures
+03 Async and Futures
 -
 
 1. `async_tasks.cc`
@@ -46,7 +47,7 @@ Async and Futures
 1. `async_tasks_multi.cc`
 
 
-TBB Loops
+04 TBB Loops
 -
 
 1. `parallel_for_basic.cc`
@@ -58,14 +59,14 @@ TBB Loops
 1. `parallel_mandel.cc`
 
 
-TBB Containers
+05 TBB Containers
 -
 
 1. `concurrent_vector.cc` and `concurrent_vector_stdthread.cc`
 
 1. TODO
 
-TBB Pipelines
+06 TBB Pipelines
 -
 
 1. `maths_pipeline.cc`
