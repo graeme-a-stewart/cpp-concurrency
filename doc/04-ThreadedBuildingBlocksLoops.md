@@ -12,9 +12,11 @@ it's almost certainly a better choice.
 TBB supports common programming patterns for loops: `parallel_for` for
 independent computations on arrays and containers, `parallel_reduce`
 for a series of computations across an array and `parallel_scan` for
-more general parallel prefix calculations.
+more general parallel prefix calculations. (See
+[the documentation](https://software.intel.com/en-us/node/506140) for
+a complete list.)
 
-However, TBB also includes additional support for multi-threaded
+TBB also includes additional support for multi-threaded
 programming, including thread safe containers, a performant thread
 safe memory allocator and timing primitives.
 
@@ -31,7 +33,8 @@ With most installations of TBB the only include file needed is
 of TBB there may be a more specific header file that can be used.)
 
 As TBB uses libraries, the `-ltbb` option to the linker is needed. On
-linux `-lrt` is also required (POSIX real time extensions).
+linux `-lrt` is also required (POSIX real time extensions). You might
+need a linker option to find these libraries.
 
 TBB objects live in the `tbb` namespace, which here we will give
 explicitly. 
@@ -76,9 +79,10 @@ supporting the `operator()` to do this:
 
 Here the `()` operator will take the `tbb::blocked_range` reference,
 which TBB uses to instruct a thread to operate on a certain chunk of
-the `x` array. Note that using the class member variable `my_x` and
-the local variable `x` is done simply for clarity and to make
-comparison with the serial case easier. The body object must support a
+the `my_x` array. Note that using the class member variable `my_x` and
+the local variable `x` is done mainly for clarity and to make
+comparison with the serial case easier (it might also help the
+compiler to optimise). The body object must support a
 copy constructor, so that TBB can make copies of it as needed; this is
 why the `()` operator is declared `const` as it may not change this
 body. Otherwise some local change might not be reflected in the
@@ -122,7 +126,7 @@ in place of writing a whole class. e.g.,
 	}
 ```
 
-Using the lamba which copies by value `[=]` satisfies all the criteria
+Using the lambda which copies by value `[=]` satisfies all the criteria
 needed by `parallel_for` and makes for a very succinct declaration.
 
 ### Parallel Reduce
@@ -179,9 +183,11 @@ an array:
 			    the_answer += x[i];
 	    }
 
+	    // This is the constructor used to split the task
         parallel_sum(parallel_sum& a, tbb::split):
 		  my_x{a.x}, the_answer{0.0} {};
 
+	    // This method joins (or merges) the results of two subtasks
         void join(const parallel_sum& b) {
 		    the_answer += b.the_answer;
 		}
@@ -216,7 +222,7 @@ Once the class is ready, we invoke the reduction by calling
 ```
 
 Note that because of the extra methods that are needed for
-`parallel_reduce` it's not possible to use a lambda.
+`parallel_reduce` it's not possible to use a lambda here.
 
 Blocked Range and Grain Size
 -
