@@ -129,8 +129,6 @@ References
   what the *Sleeping Barber* problem is!)
 
 
-
-
 ### TBB
 
 * The Intel website https://www.threadingbuildingblocks.org/ has much
