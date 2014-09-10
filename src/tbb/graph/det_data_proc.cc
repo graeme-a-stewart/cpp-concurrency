@@ -1,105 +1,54 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <memory>
 
-class det_cell {
+#include "strip_det.hpp"
+
+#include "tbb/tbb.h"
+#include "tbb/flow_graph.h"
+
+using std::shared_ptr;
+using std::make_shared;
+
+using std::cout;
+using std::endl;
+
+class strip_loader {
 private:
-  bool m_alive;
-  float m_sensor;
-  float m_noise;
-
+  std::ifstream* m_input_stream_p;
 public:
-  det_cell():
-    m_alive{true}, m_sensor{0.0f}, m_noise{0.0f}
-  {};
-
-  det_cell(bool alive, float sensor, float noise):
-    m_alive{alive}, m_sensor{sensor}, m_noise{noise}
-  {};
-
-  bool alive() {
-    return m_alive;
-  }
-
-  float sensor() {
-    return m_sensor;
-  }
-
-  float noise() {
-    return m_noise;
-  }
-
-  // Is this cell ok?
-  bool good_cell() {
-    if (!m_alive || m_noise > m_sensor)
-      return false;
-    return true;
-  }
-
-  // If the cell is alive but the measurement is less than the noise
-  // mark this cell as dead
-  void suppress_noise() {
-    if (!good_cell())
-      m_alive = false;
-  }
-
-  // Fill the cell randomly (used for testing)
-  void fill_random() {
-    // % chance cell is dead
-    if (std::rand()/float(RAND_MAX) < 0.02) {
-      m_alive = false;
-      m_sensor = 0.0f;
-      m_noise = 0.0f;
-    } else {
-      m_alive = true;
-      // noise is in range 0-10; sensor is in range 0-100
-      m_noise = std::rand() * 10.0 / RAND_MAX;
-      m_sensor = std::rand() * 10.0 / RAND_MAX;
-    }
-  }
-
-  void dump_cell() {
-    std::cout << m_alive << " " << m_sensor << " " << m_noise;
+  strip_loader(std::ifstream* ifs_p):
+    m_input_stream_p(ifs_p) {};
+  bool operator() (shared_ptr<det_strip>& ds_p) {
+    cout << ds_p << endl;
+    ds_p = make_shared<det_strip> ();
+    bool rc = ds_p->load_strip(*m_input_stream_p);
+    ds_p->dump_strip(cout);
+    cout << rc << " " << ds_p << endl;
+    return rc;
   }
 };
 
 
-class det_strip {
-private:
-  unsigned int m_n_cells;
-  std::vector<det_cell> m_cells;
-
-public:
-  det_strip():
-    m_n_cells{100}
-  {
-    m_cells.reserve(m_n_cells);
-    for (size_t i=0; i<m_n_cells; ++i)
-      m_cells.push_back(det_cell());
-  };
-
-  void fill_random() {
-    for (auto& cell: m_cells)
-      cell.fill_random();
-  }
-
-  void dump_strip() {
-    for (auto& cell: m_cells) {
-      cell.dump_cell();
-      std::cout << std::endl;
-    }
-  } 
-};  
-    
-
 int main() {
-  std::srand(std::time(nullptr));
+  tbb::flow::graph g;
 
-  det_strip test_strip;
-  test_strip.fill_random();
-  test_strip.dump_strip();
+  std::ifstream det_input("detector.txt", std::ofstream::out);
+
+  tbb::flow::source_node<shared_ptr<det_strip>> loader(g, strip_loader(&det_input), false);
+  tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> dumper(g, 1, [](const shared_ptr<det_strip>& ds_p) {
+      cout << "dumper " << ds_p << endl;
+      cout << "dumper " << ds_p->n_cells();
+      ds_p->dump_strip(std::cout); 
+      return ds_p;
+    });
+
+  tbb::flow::make_edge(loader, dumper);
+
+  loader.activate();
+  g.wait_for_all();
 
   return 0;
 }
