@@ -30,7 +30,7 @@ are nodes and edges are data that flows between the nodes.
 
 This is a very flexible way to execute tasks in parallel and TBB has
 many node types the allow for processing, splitting, joining, queueing
-etc. Note also that allow the ASCII art example there is a DAG
+etc. Note also that although the ASCII art example there is a DAG
 (*Directed Acyclic Graph*), TBB can implement graphs with cycles as well.
 
 
@@ -153,17 +153,18 @@ through a simple graph.
         } );
 
 
-	tbb::flow::make_edge(n, m);
-	for (int i=0; i<10; ++i) {
-		if (!n.try_put(i)) {
-		    std::cerr << "Failed to put " << i << std::endl;
-		}
-	}
+	    tbb::flow::make_edge(n, m);
+	    for (int i=0; i<10; ++i) {
+		    if (!n.try_put(i)) {
+		        std::cerr << "Failed to put " << i << std::endl;
+		    }
+	    }
 
-    g.wait_for_all();
+        g.wait_for_all();
 
-    return 0;
-}
+        return 0;
+    }
+```
 
 Note that although we check the return code of `try_put` here, if a
 node's parallelism has been exhausted then by default TBB will buffer
@@ -179,8 +180,11 @@ as nothing reads this it's just discarded.
 Note that all messages passed between graph nodes are *copied*. So,
 they must be copiable objects and it's best that they are not large
 objects. If large pieces of data need to be passed between nodes then
-we can use a pointer (`unique_ptr` will not work (it's not copiable),
-but `shared_ptr` should work).
+we can use a pointer - `unique_ptr` will not work (it's not copiable),
+but `shared_ptr` does work.
+
+If you don't actually require to pass data in your message, but just
+tell a node to *go*, then you can use the lightweight message `tbb::flow::continue_msg`.
 
 ### Further Node Types
 
