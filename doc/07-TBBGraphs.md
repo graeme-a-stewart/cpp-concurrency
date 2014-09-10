@@ -265,7 +265,21 @@ managed between all types of parallelism in an efficient way. This
 means that you can (and *should*) use parallelism within a TBB graph
 node, if that's possible.
 
-**EXAMPLE HERE**
+In this example a node that processes an array of doubles into another
+array of doubles uses `parallel_for` to exploit the concurrency
+available in this operation.
+
+```cpp
+    function_node< double *, double * > n1( g, unlimited, [&]( double *a ) -> double * {
+      double *b = new double[N];
+      parallel_for( 0, N, [&](int i) {
+        b[i] = f1(a[i]);
+      } );
+      return b;
+    } );
+```
+
+(As you can see, lambdas can be nested!)
 
 Exercises
 =========
@@ -280,8 +294,9 @@ Exercises
 	3. Instead of using `try_put` to inject data, write a simple
        `source_node` that injects some numbers.
 
-2. In file `write_me.cc` you'll find a small data object class, which
-   stores the input data for a small strip detector. This exercise is
+2. In file `write_me_now.cc` you'll find a small data object class, which
+   stores the input data for a small strip detector, consisting of a
+   few 100 cells. This exercise is
    to build up a TBB graph that will process the data in the following way:
     1. Read input data for OBJECTS from FILE.
 	2. Calculate a data quality measure for each strip. (N.B. this
@@ -289,8 +304,8 @@ Exercises
            it with TBB?)
    	3. Apply the noise reduction method of the class to normalise
            the data.
-	4. Apply data processing steps `A` and `B`.
-	5. Pass the data through a monitor that calculates the
+	4. Apply data processing steps `foo` and `bar`, but ensure the
+	graph does these in parallel.
+	5. Pass the final data through a monitor that calculates the
            detector occupancy.
 	6. Re-serialise the output data to a file.
-	
