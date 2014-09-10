@@ -6,7 +6,7 @@
 int main() {
   tbb::flow::graph g;
 
-  tbb::flow::function_node<int, int> n(g, tbb::flow::unlimited, []( int v ) -> int { 
+  tbb::flow::function_node<int, int, tbb::flow::rejecting> n(g, 5, []( int v ) -> int { 
       tbb::this_tbb_thread::sleep(tbb::tick_count::interval_t(0.1*v));
       std::cout << "node n " << v << std::endl;
       return v;
