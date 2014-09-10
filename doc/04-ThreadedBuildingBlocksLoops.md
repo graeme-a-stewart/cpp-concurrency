@@ -319,13 +319,16 @@ Exercises
    `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
 
 	Recall that the Mandelbrot set is the set of points (`c`) where:
+	
 ```
 	z_i+1 = z_i^2 + c; z0 = 0
 ```
 	remains bounded for all `i`.
 	
     *Tip:* A pointer to a 2D array of `Type` in C++ is
+	
 ```
 	Type (*p)[SIZE]
 ```
+
 	where you *do* need to give the dimension of the last index explicitly.
