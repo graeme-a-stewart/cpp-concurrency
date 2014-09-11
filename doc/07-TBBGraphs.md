@@ -180,13 +180,23 @@ as nothing reads this it's just discarded.
 Note that all messages passed between graph nodes are *copied*. So,
 they must be copiable objects and it's best that they are not large
 objects. If large pieces of data need to be passed between nodes then
-we can use a pointer - `unique_ptr` will not work (it's not copiable),
+we can use a pointer - `unique_ptr` will not work (it's not copyable),
 but `shared_ptr` does work.
 
+If you do use a shared pointer as an input to a `function_node` then
+it should be a `const`, e.g.,
 
+```cpp
+	tbb::flow::function_node< shared_ptr<T>, shared_ptr<T> >
+	    generator( g, tbb::flow::unlimited, [](const shared_ptr<T> v) {
+		    shared_ptr<T> v2 = make_shared<T> (some_function(*v));
+		    return v2;
+    } );
+```
 
 If you don't actually require to pass data in your message, but just
-tell a node to *go*, then you can use the lightweight message `tbb::flow::continue_msg()`.
+tell a node to *go*, then you can use the lightweight message
+`tbb::flow::continue_msg()`.
 
 ### Further Node Types
 
@@ -211,9 +221,9 @@ T pipe.)
 
 A source node takes no input, but generates output internally, passing
 it out to its connected nodes. A source node needs to provide a
-callable that accepts a reference to it's data type and sets the value
+callable that accepts a reference to its data type and sets the value
 of the reference to the data to be passed to other nodes. The call
-interface itself returns a boolean: `true` if more messages are
+interface itself returns a boolean: `true` if more data might be
 available, `false` if not.
 
 This source node provides the lines from a file as messages, one by
