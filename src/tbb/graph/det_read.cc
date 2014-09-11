@@ -6,7 +6,7 @@
 #include "strip_det.hpp"
 
 int main() {
-  std::ifstream ifs("detector.txt", std::ifstream::in);
+  std::ifstream ifs("fooble.txt", std::ifstream::in);
 
   det_strip test_strip{};
   for (bool read_ok=true; read_ok; ) {
