@@ -16,7 +16,7 @@ public:
   src_body(int l) : 
     my_limit(l), my_next_value(1) {}
 
-  bool operator()( shared_ptr<int>& v ) {
+  bool operator()(shared_ptr<int>& v) {
     if ( my_next_value <= my_limit ) {
       v = make_shared<int>(my_next_value++);
       std::cout << "Source produces " << *v << std::endl;
@@ -34,13 +34,13 @@ int main() {
   tbb::flow::graph g;
 
   tbb::flow::source_node< shared_ptr<int> > src( g, src_body(10), false );
-  tbb::flow::function_node< shared_ptr<int>, shared_ptr<int> > squarer( g, tbb::flow::unlimited, [](const shared_ptr<int>& v) { 
+  tbb::flow::function_node< shared_ptr<int>, shared_ptr<int> > squarer( g, tbb::flow::unlimited, [](const shared_ptr<int> v) {
       std::cout << "Sq got " << *v << std::endl;
       shared_ptr<int> v2 = make_shared<int> ((*v) * (*v));
       std::cout << "Sq said " << *v2 << std::endl;
       return v2; 
     } );
-  tbb::flow::function_node< shared_ptr<int>, shared_ptr<int> > cuber( g, tbb::flow::unlimited, [](const shared_ptr<int>& v) { 
+  tbb::flow::function_node< shared_ptr<int>, shared_ptr<int> > cuber( g, tbb::flow::unlimited, [](const shared_ptr<int> v) {
       std::cout << "Cu got " << *v << std::endl;
       shared_ptr<int> v3 = make_shared<int> ((*v) * (*v) * (*v));
       std::cout << "Cu said " << *v3 << std::endl;
