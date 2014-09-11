@@ -4,8 +4,8 @@
 #include <cstdlib>
 #include <cmath>
 
-#ifndef INCLUDE_STRIP_DET
-#define INCLUDE_STRIP_DET 1
+#ifndef STRIP_DET_H
+#define STRIP_DET_H 1
 
 class det_cell {
 private:
@@ -15,7 +15,7 @@ private:
 
 public:
   det_cell():
-    m_alive{true}, m_sensor{0.0f}, m_noise{0.0f}
+    det_cell(true, 0.0f, 0.0f)
   {};
 
   det_cell(bool alive, float sensor, float noise):
@@ -34,21 +34,14 @@ public:
     return m_noise;
   }
 
-  // Is this cell ok?
+  // Cell is ok if it was alive and low noise
   bool good_cell() {
     if (!m_alive || m_noise > m_sensor)
       return false;
     return true;
   }
 
-  // If the cell is alive but the measurement is less than the noise
-  // mark this cell as dead
-  void suppress_noise() {
-    if (!good_cell())
-      m_alive = false;
-  }
-
-  // Fill the cell randomly (used for testing)
+  // Fill the cell randomly (used for testing and data generation)
   void fill_random(float signal) {
     // % chance cell is dead
     if (std::rand()/float(RAND_MAX) < 0.03) {
@@ -108,6 +101,7 @@ public:
     return m_position;
   }
 
+  // Data quality can be cached in the m_data_quality member
   float data_quality() {
     if (m_done_dq)
       return m_data_quality;
@@ -139,20 +133,20 @@ public:
     return std::sqrt(sq_sum/live_cells);
   } 
 
+  // This is the silly fooble detction calculation
   bool fooble() {
     if (!m_done_dq)
       return false;
-    // Here we see if the strip saw a fooble
     float fooble_trigger = 0.0;
     for (auto& cell: m_cells) {
       if (cell.good_cell() && cell.sensor() > cell.noise() * 3.0) {
 	float answer=cell.sensor() - cell.noise();
+	// Time wasting ;-)
 	for (int i=0; i<1000; ++i)
 	  answer += log(pow(answer+1.0, 2.5));
 	fooble_trigger += answer;
       }
     }
-    //    std::cout << "fooble: " << fooble_trigger << " " << std::endl;
     if (fooble_trigger > 3.0e+6)
       return true;
     return false;
@@ -189,4 +183,4 @@ public:
 };  
     
 
-#endif  // INCLUDE_STRIP_DET
+#endif  // STRIP_DET_H
