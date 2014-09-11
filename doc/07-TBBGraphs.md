@@ -30,7 +30,7 @@ are nodes and edges are data that flows between the nodes.
 
 This is a very flexible way to execute tasks in parallel and TBB has
 many node types the allow for processing, splitting, joining, queueing
-etc. Note also that allow the ASCII art example there is a DAG
+etc. Note also that although the ASCII art example there is a DAG
 (*Directed Acyclic Graph*), TBB can implement graphs with cycles as well.
 
 
@@ -153,17 +153,18 @@ through a simple graph.
         } );
 
 
-	tbb::flow::make_edge(n, m);
-	for (int i=0; i<10; ++i) {
-		if (!n.try_put(i)) {
-		    std::cerr << "Failed to put " << i << std::endl;
-		}
-	}
+	    tbb::flow::make_edge(n, m);
+	    for (int i=0; i<10; ++i) {
+		    if (!n.try_put(i)) {
+		        std::cerr << "Failed to put " << i << std::endl;
+		    }
+	    }
 
-    g.wait_for_all();
+        g.wait_for_all();
 
-    return 0;
-}
+        return 0;
+    }
+```
 
 Note that although we check the return code of `try_put` here, if a
 node's parallelism has been exhausted then by default TBB will buffer
@@ -179,8 +180,11 @@ as nothing reads this it's just discarded.
 Note that all messages passed between graph nodes are *copied*. So,
 they must be copiable objects and it's best that they are not large
 objects. If large pieces of data need to be passed between nodes then
-we can use a pointer (`unique_ptr` will not work (it's not copiable),
-but `shared_ptr` should work).
+we can use a pointer - `unique_ptr` will not work (it's not copiable),
+but `shared_ptr` does work.
+
+If you don't actually require to pass data in your message, but just
+tell a node to *go*, then you can use the lightweight message `tbb::flow::continue_msg`.
 
 ### Further Node Types
 
@@ -261,7 +265,21 @@ managed between all types of parallelism in an efficient way. This
 means that you can (and *should*) use parallelism within a TBB graph
 node, if that's possible.
 
-**EXAMPLE HERE**
+In this example a node that processes an array of doubles into another
+array of doubles uses `parallel_for` to exploit the concurrency
+available in this operation.
+
+```cpp
+    function_node< double *, double * > n1( g, unlimited, [&]( double *a ) -> double * {
+      double *b = new double[N];
+      parallel_for( 0, N, [&](int i) {
+        b[i] = f1(a[i]);
+      } );
+      return b;
+    } );
+```
+
+(As you can see, lambdas can be nested!)
 
 Exercises
 =========
@@ -276,8 +294,9 @@ Exercises
 	3. Instead of using `try_put` to inject data, write a simple
        `source_node` that injects some numbers.
 
-2. In file `write_me.cc` you'll find a small data object class, which
-   stores the input data for a small strip detector. This exercise is
+2. In file `write_me_now.cc` you'll find a small data object class, which
+   stores the input data for a small strip detector, consisting of a
+   few 100 cells. This exercise is
    to build up a TBB graph that will process the data in the following way:
     1. Read input data for OBJECTS from FILE.
 	2. Calculate a data quality measure for each strip. (N.B. this
@@ -285,8 +304,8 @@ Exercises
            it with TBB?)
    	3. Apply the noise reduction method of the class to normalise
            the data.
-	4. Apply data processing steps `A` and `B`.
-	5. Pass the data through a monitor that calculates the
+	4. Apply data processing steps `foo` and `bar`, but ensure the
+	graph does these in parallel.
+	5. Pass the final data through a monitor that calculates the
            detector occupancy.
 	6. Re-serialise the output data to a file.
-	

@@ -153,7 +153,7 @@ but are lost in this empeheral copy.
 
 Overcome this problem by calling `std::ref` on `real_wdgt` to
 create a reference, which can be copied and still refer to the
-original object: `std::thread(update_widget, std::ref(real_wdgt)`.
+original object: `std::thread(update_widget, std::ref(real_wdgt))`.
 
 
 ##### Input data going out of scope #####
