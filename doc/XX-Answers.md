@@ -71,3 +71,10 @@ under `cpp11` for 01-03 and `tbb` for 04-06.
 
 1. `maths_pipeline.cc`
 
+
+07 TBB Graphs
+-
+
+1. `data_flow.cc` and `data_flow_ptr.cc` (which uses `shared_ptr`).
+
+2. `det_data_proc.cc`.
