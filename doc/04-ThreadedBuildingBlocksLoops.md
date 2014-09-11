@@ -96,7 +96,7 @@ invoked, which will execute the operation in parallel:
     #include "tbb/tbb.h"
 
     void ParallelApplyFunc(double x[], size_t n) {
-	    tbb::parallel_for(blocked_range<size_t>(0, n), ApplyFunc(x));
+	    tbb::parallel_for(tbb::blocked_range<size_t>(0, n), ApplyFunc(x));
 	}
 ```
 
@@ -118,7 +118,7 @@ in place of writing a whole class. e.g.,
     #include "tbb/tbb.h"
 
     void ParallelApplyFunc(double x[], size_t n) {
-	    tbb::parallel_for(blocked_range<size_t>(0, n),
+	    tbb::parallel_for(tbb::blocked_range<size_t>(0, n),
 		                  [=](const blocked_range<size_t>& r) {
 						      for(size_t i=r.begin(); i!=r.end(); ++i)
 			                    my_func(x[i]);
@@ -255,7 +255,7 @@ For a `blocked_range2d<T> r`, instead of using `r.begin()` we have
 So a fragment of a matrix multiply would be something like:
 
 ```cpp
-    void operator()( const blocked_range2d<size_t>& r ) const {
+    void operator()( const tbb::blocked_range2d<size_t>& r ) const {
         float (*a)[L] = my_a;
         float (*b)[N] = my_b;
         float (*c)[N] = my_c;
