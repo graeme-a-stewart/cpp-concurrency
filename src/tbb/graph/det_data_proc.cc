@@ -29,6 +29,7 @@ private:
 public:
   strip_loader(std::ifstream* ifs_p, size_t& strip_counter):
     m_strip_counter{strip_counter}, m_input_stream_p(ifs_p) {};
+
   bool operator() (shared_ptr<det_strip>& ds_p) {
     ds_p = make_shared<det_strip> ();
     bool rc = ds_p->load_strip(*m_input_stream_p);
@@ -137,15 +138,15 @@ int main() {
 
   tbb::flow::source_node<shared_ptr<det_strip>> loader(g, strip_loader(&det_input, total_strips), false);
   tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> 
-    calculate_dq(g, tbb::flow::unlimited, [](const shared_ptr<det_strip>& ds_p) {
+    calculate_dq(g, tbb::flow::unlimited, [](const shared_ptr<det_strip> ds_p) {
       float dq = ds_p->data_quality();
       return ds_p;
     });
-  tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> get_signal(g, tbb::flow::unlimited, [](const shared_ptr<det_strip>& ds_p) {
+  tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> get_signal(g, tbb::flow::unlimited, [](const shared_ptr<det_strip> ds_p) {
       float signal = ds_p->signal();
       return ds_p;
     });
-  tbb::flow::function_node<shared_ptr<det_strip>, bool> get_fooble(g, tbb::flow::unlimited, [](const shared_ptr<det_strip>& ds_p) {
+  tbb::flow::function_node<shared_ptr<det_strip>, bool> get_fooble(g, tbb::flow::unlimited, [](const shared_ptr<det_strip> ds_p) {
       bool saw_fooble = ds_p->fooble();
       if (saw_fooble && ds_p->data_quality() > 0.9) {
 	cout << "Fooble: " << saw_fooble << " at " << ds_p->position() << endl;
@@ -157,7 +158,7 @@ int main() {
   tbb::flow::function_node<shared_ptr<det_strip>> dq_hist(g, tbb::flow::unlimited, std::ref(my_dq)); // N.B. DQ filling protected by mutex
 
   // Test node - don't connect this node in production ;-)
-  tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> dumper(g, 1, [](const shared_ptr<det_strip>& ds_p) {
+  tbb::flow::function_node<shared_ptr<det_strip>, shared_ptr<det_strip>> dumper(g, 1, [](const shared_ptr<det_strip> ds_p) {
       ds_p->dump_strip(std::cout); 
       return ds_p;
     });
