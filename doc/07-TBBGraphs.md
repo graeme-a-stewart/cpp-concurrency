@@ -183,8 +183,10 @@ objects. If large pieces of data need to be passed between nodes then
 we can use a pointer - `unique_ptr` will not work (it's not copiable),
 but `shared_ptr` does work.
 
+
+
 If you don't actually require to pass data in your message, but just
-tell a node to *go*, then you can use the lightweight message `tbb::flow::continue_msg`.
+tell a node to *go*, then you can use the lightweight message `tbb::flow::continue_msg()`.
 
 ### Further Node Types
 
@@ -218,24 +220,24 @@ This source node provides the lines from a file as messages, one by
 one:
 
 ```cpp
-	class file_cat {
-	private:
-	    std::ifstream* m_input_stream_p;
-	public:
+    class file_cat {
+    private:
+        std::ifstream* m_input_stream_p;
+    public:
        file_cat(std::ifstream* input_stream_p):
          m_input_stream_p(input_stream_p) {};
 
-	     bool operator() (std::string& msg) {
-		     *m_input_stream_p >> msg;
-		     if (m_input_stream_p->good())
+         bool operator() (std::string& msg) {
+             *m_input_stream_p >> msg;
+             if (m_input_stream_p->good())
                  return true;
              return false;
          }
      };
 
-	...
+    ...
 
-	tbb::flow::source_node<std::string> input_node(g, my_stream, false);
+    tbb::flow::source_node<std::string> input_node(g, my_stream, false);
 
     ...
 
@@ -289,23 +291,39 @@ Exercises
    prints that. Use `try_put()` to inject numbers into the graph.
     1. Now add a third node, which takes the output of the first node
        and cubes it. Run this node in parallel with the `n^2` node.
-	2. Add a fourth node that takes the inputs from the `n^2` and
+    2. Add a fourth node that takes the inputs from the `n^2` and
        `n^3` nodes and sums them up.
-	3. Instead of using `try_put` to inject data, write a simple
+    3. Instead of using `try_put` to inject data, write a simple
        `source_node` that injects some numbers.
 
-2. In file `write_me_now.cc` you'll find a small data object class, which
-   stores the input data for a small strip detector, consisting of a
-   few 100 cells. This exercise is
-   to build up a TBB graph that will process the data in the following way:
-    1. Read input data for OBJECTS from FILE.
-	2. Calculate a data quality measure for each strip. (N.B. this
-           is a method already in the class, but can you parallelise
-           it with TBB?)
-   	3. Apply the noise reduction method of the class to normalise
-           the data.
-	4. Apply data processing steps `foo` and `bar`, but ensure the
-	graph does these in parallel.
-	5. Pass the final data through a monitor that calculates the
-           detector occupancy.
-	6. Re-serialise the output data to a file.
+2. In file `strip_det.hpp` you'll find a class for a small *fooble* strip
+detector (`det_strip`) consisting of a vector of cells (`det_cell`).
+Various methods are defined to do noise suppression, calculate data
+quality, extract the signal and detect foobles. There is also a method
+to serialise the strip data from a file. In this exercise we'll
+use a TBB graph to do data preparation and see if we have found a fooble.
+    1. Write a `source_node` that will load the detector data from a
+    file. (In `/afs/cern.ch/work/g/graemes/devtut/fooble.txt` you'll find
+    some input data, or you can use, or you can use the
+    `det_rand_dump.cc` in github to generate your own input file.)
+        1. Just to test that the data is loaded correctly, attach a
+        node to the source that prints some basic information on the
+        strip, e.g., the number of cells.
+    2. Now, for each strip calculate the data quality value
+        (`det_strip.data_quality()`) in a graph node (note the class
+        caches this value internally).
+    3. Use a node to calculate the signal (`det_strip.signal()`).
+    4. In parallel, look for foobles (`det_strip.fooble_signal()`).
+        1. To see if you have found a fooble - make a DQ cut (`dq >
+        0.9`) and see if the strip has `fooble_signal()` true.
+        1. You need a way to count the total number of foobles
+        detected, for a later step.
+    5. After the graph has run, if you find more than 20% of the
+        detector saw a fooble then you have a real fooble.
+    6. Add a data quality histogrammer, that makes a simple histogram
+        of the data quality and signal values for the detector (*hint*
+        all the strips are positioned in `[0, 1)`).
+    7. Write that histogram to a stdout.
+	    1. Is it possible to do that as part of the graph?
+	8. Is it possible to parallelise any of the graph steps themselves?
+	    1. If you find some, then try to do this.
