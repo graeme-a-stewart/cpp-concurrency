@@ -179,7 +179,7 @@ an array:
 		double the_answer;
 		void operator()(const tbb::blocked_range<size_t>& r) {
 		    double *x=my_x;
-			for(i=r.begin(); i!=r.end(); ++i)
+			for(size_t i=r.begin(); i!=r.end(); ++i)
 			    the_answer += x[i];
 	    }
 
