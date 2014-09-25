@@ -6,6 +6,8 @@
 const unsigned int max_iter=256;
 const size_t default_resolution=150;
 
+// Function that returns true/false if a starting point is considered to be
+// inside the Mandelbrot set (at least still inside after max_iter iterations)
 bool inside_mandel(std::complex<float> c) {
   unsigned int iter=0;
   std::complex<float> z(0.0, 0.0);
@@ -17,6 +19,7 @@ bool inside_mandel(std::complex<float> c) {
   return true;
 }
 
+// Class definition for TBB parallelised Mandelbrot set calculation
 class parallel_mandel {
 private:
   std::vector<std::vector<bool>>* my_set;
@@ -43,6 +46,7 @@ public:
     my_set{set}, resolution{set->size()} {};
 };
 
+// Simple serial implementation of Mandelbrot set finder
 void serial_mandel(std::vector<std::vector<bool>>* set) {
   size_t resolution=set->size();
   for (size_t i=0; i<set->size(); ++i) {
@@ -82,7 +86,7 @@ int main(int argc, char* argv[]) {
   std::cout << "TBB Parallel speed-up: " << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
       << "s" << std::endl;
 
-  // Now print the map of points
+  // Now print the map of points (if it's reasonable!)
   if (res <= 150) {
     for (size_t i=0; i<res; ++i) {
       for (size_t j=0; j<res; ++j) {
@@ -94,7 +98,6 @@ int main(int argc, char* argv[]) {
       std::cout << std::endl;
     }
   }
-
 
   return 0;
 }
