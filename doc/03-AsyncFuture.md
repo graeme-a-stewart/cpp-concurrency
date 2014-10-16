@@ -78,7 +78,7 @@ Packaged Tasks and Promises
 There are other ways to set the values associated with a `future`. One
 is to setup a `packaged_task` that allows a task to be tied to a
 `future` before it is sent off for dispatch - this is useful if you
-have a task queue, but nee to make sure you can get a handle on the result of
+have a task queue, but need to make sure you can get a handle on the result of
 the function before it is sent to the queue.
 
 The other is to extract a `promise` from an already created `future`
