@@ -185,7 +185,7 @@ an array:
 
 	    // This is the constructor used to split the task
         parallel_sum(parallel_sum& a, tbb::split):
-		  my_x{a.x}, the_answer{0.0} {};
+		  my_x{a.my_x}, the_answer{0.0} {};
 
 	    // This method joins (or merges) the results of two subtasks
         void join(const parallel_sum& b) {
