@@ -221,8 +221,25 @@ Once the class is ready, we invoke the reduction by calling
 	}
 ```
 
-Note that because of the extra methods that are needed for
-`parallel_reduce` it's not possible to use a lambda here.
+As `parallel_reduce` needs two methods to accumulate and to reduce, 
+in order to use lambdas, two lambdas need to be passed. Note that the 
+vector iterator used here could easily be replaced by the array just
+as before):
+
+```cpp
+    double ParallelVectorSum(std::vector<double> vec){
+      return tbb::parallel_reduce(tbb::blocked_range<std::vector<double>::iterator >(vec.begin(), vec.end()),0.,
+                               [](const tbb::blocked_range<std::vector<double>::iterator >& r, double init)->double {
+                                   for(std::vector<double>::iterator a = r.begin(); a != r.end(); ++a)
+                                     init += *a; 
+                                   return init;
+                                 },  
+                               [](const double a, double b){ 
+                                   return a+b;
+                                 }   
+                        	);  
+    }
+```
 
 Blocked Range and Grain Size
 -
