@@ -90,7 +90,8 @@ before. Load will be distributed automatically, the nesting has no side
 effects. 
 
 
-Side note A :I'm unable to create a memory leak when using auto_ptr!
+Side note A: I'm unable to create a memory leak when using auto_ptr!
+
 Side note B: The (single threaded) destruction of the 75 million space
 points takes longer than the algorithm. Try this at home but don't
 try this in production code!
