@@ -4,9 +4,8 @@ parallelization of independent tasks without requiring a loop.
 As usual, with more control comes more power, with more power 
 comes more responsibility (i.e. if you make lots of tiny tasks, 
 TBB will abide and performance will suffer, ref parallel_for_each). 
-A rule of thumb is that a task should have at least 10000 micro 
-operations such as multiplications or a similar load, e.g. 200 sin()
-calls. 
+A rule of thumb is that a task should take at least 10000 cpu-cycles 
+e.g. 200 sin() calls. 
 
 ```
     #include "tbb/task_group.h"
