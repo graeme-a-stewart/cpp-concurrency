@@ -25,6 +25,15 @@ between different parts of a program's execution and the TBB scheduler
 can exploit concurrency where different parts of the workflow are
 independent.
 
+Many parameters can safely be left to TBB to decide, in fact this can make
+your code more portable. During compile time and during runtime TBB 
+tries to choose optimal parameters wherever no value has been chosen. These parameters 
+include grain size and number of threads. Grain size is chosen to minimize
+the overhead of having too many separate chunks while preventing threads from taking 
+more time than others in case of large grain sizese. The automatically
+chosen number of threads is always the number of hardware threads (i.e. 
+number of logical processors) reported by the OS.
+
 ### Using TBB
 
 With most installations of TBB the only include file needed is
