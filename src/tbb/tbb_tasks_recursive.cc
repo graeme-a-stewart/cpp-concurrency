@@ -1,5 +1,6 @@
 #include "tbb/task_group.h"
 #include <iostream>
+#include <chrono>
 
 int serialFib(int n){ 
   if (n< 2) {
@@ -11,8 +12,8 @@ int serialFib(int n){
 }
 
 int Fib(int n) {
-  if( n<2 ) { 
-    return n;
+  if( n<20){
+    return serialFib(n);
   } else {
     int x, y;
     tbb::task_group g;
@@ -23,7 +24,20 @@ int Fib(int n) {
   }
 }
 int main (){ 
-  std::cout << "serialFib: " << serialFib(40) << std::endl;
-  std::cout << "parallelFib: " << Fib(40)<< std::endl;;
+
+  std::chrono::time_point<std::chrono::system_clock> start, end;
+
+  start = std::chrono::system_clock::now();
+  int serial = serialFib(40);
+  end = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = end-start;
+
+  std::cout << "serialFib result in " << elapsed_seconds.count() << " seconds: " << serial << std::endl;
+  
+  start = std::chrono::system_clock::now();
+  int parallelFib = Fib(40);
+  end = std::chrono::system_clock::now();
+  elapsed_seconds = end-start;
+  std::cout << "parallelFib result in " << elapsed_seconds.count() << " seconds: " << parallelFib<< std::endl;;
   return 0;
 }
