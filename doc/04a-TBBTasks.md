@@ -12,7 +12,7 @@ e.g. 200 sin() calls.
 
 ```
     #include "tbb/task_group.h"
-    int fib(int n) {
+    int tbbFib(int n) {
         if( n<2 ) {
             return n;
         } else {
@@ -41,7 +41,7 @@ int serialFib(int n){
   }
 }
 
-int Fib(int n) {
+int tbbFib(int n) {
   if( n<20){
     return serialFib(n);
   }
@@ -57,9 +57,9 @@ loop:
 
 int main(){
  
-  double result1;
-  double result2;
-  double result3;
+  ReturnType1 result1;
+  ReturnType2 result2;
+  ReturnType3 result3;
   
   tbb::task_group g;
   g.run([&]{result1 = hardwork1();});
