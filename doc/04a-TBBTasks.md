@@ -4,7 +4,10 @@ parallelization of independent tasks without requiring a loop.
 As usual, with more control comes more power, with more power 
 comes more responsibility (i.e. if you make lots of tiny tasks, 
 TBB will abide and performance will suffer, ref parallel_for_each). 
-A rule of thumb is that a task should take at least 10000 cpu-cycles 
+The documentation states:
+
+"A rule of thumb is that grainsize iterations of operator() should take at least 10,000-100,000 instructions to execute."
+
 e.g. 200 sin() calls. 
 
 ```
