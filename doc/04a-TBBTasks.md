@@ -30,8 +30,26 @@ This is already an advanced example as it recursively starts dependent
 tasks that have to wait on each other. It also uses tasks nested in other 
 tasks which doesn't require brain work on the developer's side. But 
 performance wise it's a bad example: a single addition is not really an 
-appropriate task size. I use tasks for heavy independent problems 
-that do not come in a loop:
+appropriate task size. Changing this to doing more work per task leads to significantly improved performance:
+```
+int serialFib(int n){ 
+  if (n< 2) {
+    return n;
+  }
+  else {
+    return serialFib(n-1)+serialFib(n-2);
+  }
+}
+
+int Fib(int n) {
+  if( n<20){
+    return serialFib(n);
+  }
+  ...
+```
+
+Normally I use tasks for heavy independent problems that do not come in a 
+loop:
 
 ```
 #include "tbb/task_group.h"
