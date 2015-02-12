@@ -1,10 +1,10 @@
-Threaded Building Blocks
+Threading Building Blocks
 ========================
 
 Introduction
 ------------
 
-Intel Threaded Building Blocks (TBB) is an open source toolkit for
+Intel Threading Building Blocks (TBB) is an open source toolkit for
 supporting scalable parallel programming in C++. It is a higher level
 toolkit than C++11 threads and, if it's suitable for your problem,
 it's almost certainly a better choice.
