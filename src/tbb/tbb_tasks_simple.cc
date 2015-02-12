@@ -34,9 +34,9 @@ std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > >
 
 int main(){
 
-  std::vector<SpacePoint> pixelLayer0(5000);
-  std::vector<SpacePoint> pixelLayer1(5000);
-  std::vector<SpacePoint> pixelLayer2(5000);
+  std::vector<SpacePoint> pixelLayer0(500);
+  std::vector<SpacePoint> pixelLayer1(500);
+  std::vector<SpacePoint> pixelLayer2(500);
 
   tbb::task_group g;
   std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > verticesL0L1;
