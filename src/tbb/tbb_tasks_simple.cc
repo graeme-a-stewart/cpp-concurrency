@@ -12,18 +12,18 @@ class SpacePoint{
 
 // dynamic memory allocation is memory bound, not cpu bound. 
 // But it's easy to imagine something useful and probably cpu bound could be done here
-std::auto_ptr<SpacePoint> extrapolate(SpacePoint a, SpacePoint b){ 
-  std::auto_ptr<SpacePoint> c( new SpacePoint());
+std::unique_ptr<SpacePoint> extrapolate(SpacePoint a, SpacePoint b){ 
+  std::unique_ptr<SpacePoint> c( new SpacePoint());
   //extrapolate a and b to c here
   return c;
 }
 
 
 // do try this at home but DO NOT create 75 million new'ed elements in production code :)
-std::auto_ptr< std::vector< std::auto_ptr<SpacePoint> > > 
+std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > 
                  findSeedVertices(std::vector<SpacePoint>& layer1, std::vector<SpacePoint>& layer2){
 
-  std::auto_ptr< std::vector< std::auto_ptr<SpacePoint> > > vertices( new std::vector< std::auto_ptr<SpacePoint> >());
+  std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > vertices( new std::vector< std::unique_ptr<SpacePoint> >());
   for (auto sp1 : layer1){
     for (auto sp2 : layer2){
       vertices->push_back(extrapolate(sp1,sp2));
@@ -39,13 +39,13 @@ int main(){
   std::vector<SpacePoint> pixelLayer2(5000);
 
   tbb::task_group g;
-  std::auto_ptr< std::vector< std::auto_ptr<SpacePoint> > > verticesL0L1;
+  std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > verticesL0L1;
   g.run([&]{verticesL0L1 = findSeedVertices(pixelLayer0, pixelLayer1);});
 
-  std::auto_ptr< std::vector< std::auto_ptr<SpacePoint> > > verticesL0L2;
+  std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > verticesL0L2;
   g.run([&]{verticesL0L2 = findSeedVertices(pixelLayer0, pixelLayer2);});
 
-  std::auto_ptr< std::vector< std::auto_ptr<SpacePoint> > > verticesL1L2;
+  std::unique_ptr< std::vector< std::unique_ptr<SpacePoint> > > verticesL1L2;
   g.run([&]{verticesL1L2 = findSeedVertices(pixelLayer1, pixelLayer2);});
 
   g.wait();
