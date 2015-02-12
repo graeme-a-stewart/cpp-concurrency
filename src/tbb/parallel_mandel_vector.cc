@@ -63,6 +63,7 @@ int main(int argc, char* argv[]) {
   if (argc==2) {
     res = std::stoul(argv[1]);
   }
+  std::cout << "Starting mandel on a grid of " << res << std::endl;
 
   std::vector<std::vector<bool>> set;
   set.reserve(res);

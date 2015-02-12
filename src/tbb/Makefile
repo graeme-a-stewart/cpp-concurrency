@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -g -O2
-LDFLAGS=-lrt -ltbb
+LDFLAGS=-ltbb
 
 EXE=$(basename $(wildcard *.cc))
 

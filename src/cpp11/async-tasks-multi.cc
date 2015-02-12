@@ -4,7 +4,9 @@
 #include <thread>
 
 double pi_estimator(long trials) {
-  std::default_random_engine generator;
+  // Ensure that each thread uses a separate seed
+  unsigned long seed = std::hash<std::thread::id>()(std::this_thread::get_id());
+  std::default_random_engine generator(seed);
   std::uniform_real_distribution<double> distribution(0.0,1.0);
 
   double x, y;
