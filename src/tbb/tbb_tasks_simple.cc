@@ -52,8 +52,8 @@ int main(){
 
   std::cout << "found Combinations: " << verticesL0L1->size()+verticesL1L2->size()+verticesL0L2->size() << std::endl;
 
-  //side note: The auto pointers are destructed here. 
-  //I cannot create a memory leak with auto pointers. 
-  //Use auto pointers when passing pointers to somewhere outside of your control.
+  //side note: The unique pointers are destructed here. 
+  //I cannot create a memory leak with unique pointers. 
+  //Use unique pointers when passing pointers to somewhere outside of your control
   return 0;
 }
