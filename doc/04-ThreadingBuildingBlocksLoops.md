@@ -36,6 +36,8 @@ number of logical processors) reported by the OS.
 
 ### Using TBB
 
+If you don't have TBB on your system, you can download it here: https://www.threadingbuildingblocks.org/download
+
 With most installations of TBB the only include file needed is
 `tbb/tbb.h`. Depending on where TBB is installed you may need a
 `-I/path/to/tbb/include` option to the compiler. (If you use only part
