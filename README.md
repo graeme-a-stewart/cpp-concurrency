@@ -1,4 +1,3 @@
-cpp-concurrency
-===============
+# cpp-concurrency
 
 C++ Concurrency Training Material
