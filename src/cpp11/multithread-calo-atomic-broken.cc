@@ -38,7 +38,7 @@ public:
     m_occupancy = 0;
     for (auto& cell: m_cells) {
       if (cell > 0.0)
-	++m_occupancy;
+    ++m_occupancy;
     }
 
     return m_occupancy;
@@ -53,16 +53,16 @@ public:
     for (size_t t=0; t<threads; ++t) {
       // Here we use a lambda function to do the partial summation in each thread
       pool.push_back(std::thread([&] {
-	    for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
-	      if (m_cells[i] > 0.0)
-		// THIS DOES NOT WORK - YOU CANNOT TAKE REFERENCES TO AN ATOMIC AND
-		// USE THEM WHILE MAINTAINING ATOMICITY!
-		++m_occupancy;
-	    }
-	  } 
-	  )
-	);
-	}
+        for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
+          if (m_cells[i] > 0.0)
+            // THIS DOES NOT WORK - YOU CANNOT TAKE REFERENCES TO AN ATOMIC AND
+            // USE THEM WHILE MAINTAINING ATOMICITY!
+            ++m_occupancy;
+        }
+      } 
+      )
+    );
+    }
 
     for (auto& thrd: pool)
       thrd.join();
@@ -74,9 +74,6 @@ public:
     m_detector_size{size}, m_occupancy{0} {}
   
 };
-   
-
-
 
 int main() {
   Calorimeter calo(SIZE);

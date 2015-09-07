@@ -28,7 +28,6 @@ void tap_kettle() {
   std::cout << "Filling kettle in " << std::this_thread::get_id() << std::endl;
 }
 
-
 int main() {
   std::thread pool[THREAD_POOL];
 

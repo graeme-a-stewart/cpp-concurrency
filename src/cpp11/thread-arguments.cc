@@ -4,22 +4,21 @@
 #define THREAD_POOL 5
 
 void hello_n(int i) {
-  std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
+    std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
 }
 
 int main() {
-  std::cout << "Starting threads" << std::endl;
+    std::cout << "Starting threads" << std::endl;
 
-  std::thread pool[THREAD_POOL];
+    std::thread pool[THREAD_POOL];
 
-  for (int t=0; t<THREAD_POOL; ++t)
-    pool[t] = std::thread(hello_n, t);
+    for (int t=0; t<THREAD_POOL; ++t)
+      pool[t] = std::thread(hello_n, t);
 
-  for (int t=0; t<THREAD_POOL; ++t)
-    pool[t].join();
+    for (int t=0; t<THREAD_POOL; ++t)
+        pool[t].join();
 
-  std::cout << "Threads are joined" << std::endl;
+    std::cout << "Threads are joined" << std::endl;
 
-  return 0;
+    return 0;
 }
-

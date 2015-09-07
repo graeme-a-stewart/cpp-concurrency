@@ -27,7 +27,13 @@ int main(){
     }
     std::cout << std::endl;
 
-    std::cout << "Counted " << elements << " elements (size is " << myList.size() << ")" << std::endl;
+    std::cout
+        << "Counted "
+        << elements
+        << " elements (size is "
+        << myList.size()
+        << ")"
+        << std::endl;
 
     return 0;
 

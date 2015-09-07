@@ -36,7 +36,7 @@ public:
     m_occupancy = 0;
     for (auto& cell: m_cells) {
       if (cell > 0.0)
-	++m_occupancy;
+    ++m_occupancy;
     }
 
     return m_occupancy;
@@ -51,11 +51,11 @@ public:
     for (size_t t=0; t<threads; ++t) {
       // Here we use a lambda function to do the partial summation in each thread
       pool[t] = std::thread([&] {
-	  for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
-	    if (m_cells[i] > 0.0)
-	      ++m_occupancy;
-	  }
-	} );
+      for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
+        if (m_cells[i] > 0.0)
+          ++m_occupancy;
+      }
+    } );
     }
 
     for (int t=0; t<threads; ++t)
@@ -68,9 +68,6 @@ public:
     m_detector_size{size}, m_occupancy{0} {}
   
 };
-   
-
-
 
 int main() {
   Calorimeter calo(SIZE);

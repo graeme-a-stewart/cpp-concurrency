@@ -22,6 +22,7 @@ void kettle_tap(){
     std::cout << "Locked tap in " << std::this_thread::get_id() << std::endl;
 
     std::cout << "Filling kettle in " << std::this_thread::get_id() << std::endl;
+
 }
 
 void tap_kettle(){
