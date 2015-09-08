@@ -4,7 +4,7 @@
 
 ### Setup
 
-This tutorial has been written and tested on *Scientific Linux 6*, although it also works on *Mac OS 10.9* using gcc4.9 and TBB installed from [MacPorts](https://www.macports.org/).
+This tutorial has been written and tested on *Scientific Linux 6*, although it also works on Ubuntu 15.04 using g++ 4.9 with TBB installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.9 using gcc4.9 and TBB installed ([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
 
 However, any reasonably modern C++11 compiler (gcc4.7 and up, LLVM/Clang 3.3 and up) should be compatible, although you may need to modify the makefiles. 
 
