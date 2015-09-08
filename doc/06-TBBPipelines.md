@@ -258,6 +258,7 @@ g.wait_for_all();
 
 return 0;
 }
+```
 
 Note that although we check the return code of `try_put` here, if a node's parallelism has been exhausted then by default TBB will buffer input messages until the node is ready to receive another input. (Nodes can be set to reject messages that they cannot process immediately, which allows you to have graphs that manage a *now or never* workflow.)
 
