@@ -4,9 +4,15 @@
 
 ### Setup
 
-This tutorial has been written and tested on *Scientific Linux 6*, although it also works on Ubuntu 15.04 using g++ 4.9 with TBB installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.9 using gcc4.9 and TBB installed ([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
+This tutorial was written and originally tested on *Scientific Linux
+6*, although it also works on Ubuntu 15.04 using g++ 4.9 with TBB
+installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.9
+and 10.10 using gcc4.9 or gcc5.2 and TBB installed
+([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
 
-However, any reasonably modern C++11 compiler (gcc4.7 and up, LLVM/Clang 3.3 and up) should be compatible, although you may need to modify the makefiles. 
+However, any reasonably modern C++11 comilant compiler (gcc4.7 and up,
+LLVM/Clang 3.3 and up) should be compatible, although you may need to
+modify the makefiles.
 
 On SL6 it's important to setup the Redhat *devtoolset* to have access to a modern version of gcc for all of the tutorial exercises.
 
@@ -24,14 +30,19 @@ g++ (GCC) 4.8.2 20140120 (Red Hat 4.8.2-15)
 ...
 ```
 
+On Redhat 7 based systems (including CentOS 7), the system compiler is
+gcc4.8.3, so the devtoolset isn't needed.
+
+
 ### C++11 in General
 
 To compile concurrent C++11 programs you'll need two flags for g++:
 
-* `-std=c++11` - Use the C++11 standard (`-std=c++1y` also works!)
+* `-std=c++11` - Use the C++11 standard (`-std=c++1y` or `-std=c++14`
+  also work - later comilers support the `c++14` version of the flag)
 * `-pthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
-You might well find the `Makefile`[here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
+You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
 useful. It will compile any `.cc` file into an executable with the correct compiler flags.
 
 #### TBB
