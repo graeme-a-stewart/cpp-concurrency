@@ -39,7 +39,7 @@ gcc4.8.3, so the devtoolset isn't needed.
 To compile concurrent C++11 programs you'll need two flags for g++:
 
 * `-std=c++11` - Use the C++11 standard (`-std=c++1y` or `-std=c++14`
-  also work - later comilers support the `c++14` version of the flag)
+  also work - later compilers support the `c++14` version of the flag)
 * `-pthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
 You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
@@ -48,9 +48,12 @@ useful. It will compile any `.cc` file into an executable with the correct compi
 #### TBB
 
 Intel Threaded Building Blocks has been compiled and installed into `/usr/local` (specifically `/usr/local/include` for header files and
-`/usr/local/lib64` for libraries). Thus you shouldn't need any special extra setup to use is during the school.
+`/usr/local/lib64` for libraries). Thus you shouldn't need any special extra setup to use it during the school.
 
-Doxygen documentation for TBB is installed into `/usr/local/share/tbb/html`, but using the [Intel documentation](https://www.threadingbuildingblocks.org/) is probably more convenient.
+Doxygen documentation for TBB is installed into
+`/usr/local/share/tbb/html`, but using the
+[Intel documentation](https://www.threadingbuildingblocks.org/) is
+probably more convenient.
 
 ## Tips
 
@@ -98,12 +101,23 @@ Note that it's important to time the interesting bit of the program only (which 
 ### Concurrency and Parallel Programming
 
 * Baptiste Wicht has a nice tutorial on C++11 concurrency basics: http://baptiste-wicht.com/posts/2012/03/cpp11-concurrency-part1-start-threads.html
-* Probably the best book on C++ concurrency is *C++ Concurrency in Action* by Anthony Williams, published by [Manning](http://www.manning.com/williams/). This book covers lock free programming in some detail.
+* Probably the best book on C++ concurrency is *C++ Concurrency in
+  Action* by Anthony Williams, published by
+  [Manning](http://www.manning.com/williams/). This book covers lock
+  free programming in some detail.
 * Jeff Pershing's [Introduction to Lock Free Programming](http://preshing.com/20120612/an-introduction-to-lock-free-programming/). 
-* A great general introduction to the computer science of concurrency, which discusses a lot of the classic synchronisation problems in detail is *The Little Book of Semaphones* by Allen B. Downie. It's available here: http://greenteapress.com/semaphores/. (Essential reading to know what the *Sleeping Barber* problem is!)
+* A great general introduction to the computer science of concurrency,
+  which discusses a lot of the classic synchronisation problems in
+  detail is *The Little Book of Semaphones* by Allen B. Downie. It's
+  available here: http://greenteapress.com/semaphores/. (Essential
+  reading to know what the *Sleeping Barber* problem is!)
 
 ### TBB
 
-* The Intel website https://www.threadingbuildingblocks.org/ has much good reference and tutorial information.
+* The Intel website https://www.threadingbuildingblocks.org/ has much
+  good reference and tutorial information.
 * Intel's TBB [YouTube Channel](https://www.youtube.com/playlist?list=PLzwFYM4Q6gANxJmQDYXtyh6uRHO8JSY15).
-* James Reinders, one of the authors of TBB wrote the O'Reilly book *Intel Threaded Building Blocks*. It is rather old now (2007) and although it has good discussions of concurrency in general, its TBB specific information is a bit out of date.
+* James Reinders, one of the authors of TBB, wrote the O'Reilly book
+  *Intel Threaded Building Blocks*. It is rather old now (2007) and
+  although it has good discussions of concurrency in general, its TBB
+  specific information is a bit out of date.

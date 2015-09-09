@@ -52,7 +52,7 @@ A much better technique is to use the RAII paradigm (*Resource Acquisition Is In
 
 ```cpp
 class raii_lock {
-private:j
+private:
     std::mutex *m_mtx;
 
 public:
