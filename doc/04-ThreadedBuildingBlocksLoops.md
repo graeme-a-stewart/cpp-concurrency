@@ -29,12 +29,12 @@ TBB objects live in the `tbb` namespace, which here we will give explicitly.
 
 ### Parallel For
 
-One of the simplest parallel construct is one where we perform the same operation on an array of values and there is no dependencies between the operations. As a serial loop such an operation is just
+One of the simplest parallel constructs is one where we perform the same operation on an array of values and there is no dependencies between the operations. As a serial loop such an operation is just
 
 ```cpp
-    for (size_t i=0; i<array_size; ++i) {
-        my_func(x[i]);
-    }
+for (size_t i=0; i<array_size; ++i) {
+    my_func(x[i]);
+}
 ```
 
 The way that TBB turns such a serial loop into a parallel loop is to
@@ -63,11 +63,11 @@ Here the `()` operator will take the `tbb::blocked_range` reference, which TBB u
 Once this class is constructed, the `tbb::parallel_for` function is invoked, which will execute the operation in parallel:
 
 ```cpp
-    #include "tbb/tbb.h"
+#include "tbb/tbb.h"
 
-    void ParallelApplyFunc(double x[], size_t n) {
-        tbb::parallel_for(tbb::blocked_range<size_t>(0, n), ApplyFunc(x));
-    }
+void ParallelApplyFunc(double x[], size_t n) {
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, n), ApplyFunc(x));
+}
 ```
 
 In this case `parallel_for` is instructed to run over the range `[0,n)` on the `ApplyFunc(x)` class instance.
