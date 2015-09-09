@@ -11,7 +11,7 @@ class Tea {
     public:
         const char* tea() {
             return m_tea.c_str();
-    }
+        }
 
     void set_tea(const char new_tea[]) {
         m_tea = new_tea;
@@ -40,7 +40,8 @@ int main() {
     auto threaded_tea = std::thread(
         std::bind(
             tea_selector,
-            std::ref(my_cuppa), "black"
+            std::ref(my_cuppa),
+            "black"
         )
     );
     threaded_tea.join();
