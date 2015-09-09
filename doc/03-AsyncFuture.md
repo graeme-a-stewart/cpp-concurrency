@@ -21,7 +21,8 @@ double some_expensive_operation(std::vector<thing>& stuff) {
     return result;
 }
 
-int main() { auto my_stuff = initialise_stuff();
+int main() {
+	auto my_stuff = initialise_stuff();
 
     std::future<double> res = std::async(some_expensive_operation, std::ref(my_stuff));
 
@@ -37,7 +38,7 @@ A future also has the `wait()` method, which will block the calling thread until
 
 ### Launch Parameter
 
-If you run an `async` task, you might be surprised that it doesn't run in the background -- it might well run only when the future's get method is called. This is because the implementation can define whenit runs an asynchronous task, either immediately or deferred. However, if the first parameter passed to the invocation of the task is an `std::launch` parameter, this can be controlled manually.
+If you run an `async` task, you might be surprised that it doesn't run in the background -- it might well run only when the future's get method is called. This is because the implementation can define when it runs an asynchronous task, either immediately or deferred. However, if the first parameter passed to the invocation of the task is an `std::launch` parameter, this can be controlled manually.
 
 In particular `std::launch::async` says that the asynchronous thread should execute immediately, where as `std::launch::deferred` will delay execution until either `wait()` or `get()` is called on the future. The default value is `std::launch::async | std::launch::deferred`, which is why the implementation can choose what happens.
 
@@ -51,7 +52,7 @@ The other is to extract a `promise` from an already created `future` and send it
 
 # Exercises
 
-1. Write a small program that executes some numerical calculation using an `std::async` task to return the value as an `std::future`. (You might use the classic monte-carlo determination of pi, picking a random `x` and `y` in [0, 1] and seeing if the point is within a circle of radius 1. (The ratio of points in the circle to the total number of points is pi/4.)
+1. Write a small program that executes some numerical calculation using an `std::async` task to return the value as an `std::future`. (You might use the classic monte-carlo determination of pi, picking a random `x` and `y` in [0, 1] and seeing if the point is within a circle of radius 1. The ratio of points in the circle to the total number of points is pi/4.)
     1. Does the task run asynchronously without an `std::launch` parameter?
     2. Use the `std::launch` parameter to control execution and force the task to run asynchronously.
     3. Can you demonstrate that a task launched with `deferred` where the future is not interrogated actually never runs?

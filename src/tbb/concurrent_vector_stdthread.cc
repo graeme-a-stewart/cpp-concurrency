@@ -3,8 +3,8 @@
 #include <vector>
 #include <tbb/tbb.h>
 
-typedef tbb::concurrent_vector<long> my_long_vector;
-//typedef std::vector<long> my_long_vector;
+//typedef tbb::concurrent_vector<long> my_long_vector;
+typedef std::vector<long> my_long_vector;
 
 void filler(my_long_vector& v, long offset, long n) {
     for (long i=offset; i<offset+n; ++i) {

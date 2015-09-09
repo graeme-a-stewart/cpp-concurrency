@@ -1,6 +1,7 @@
-CXX=g++
-CXXFLAGS=-std=c++11 -g -O2
-LDLIBS=-lpthread -ltbb
+# Allow CXX and CXXFLAGS to be overridden from the environment
+CXX ?= g++
+CXXFLAGS ?= -std=c++11 -g -O2
+LDLIBS ?= -lpthread -ltbb
 
 EXE=$(basename $(wildcard *.cc))
 

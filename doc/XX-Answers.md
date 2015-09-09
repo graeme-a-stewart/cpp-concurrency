@@ -2,7 +2,7 @@
 
 Listed here are programs that are solutions to the exercises posed in the other tutorial documents. You can compare your solution to them and also use them if you get stuck.
 
-You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency/tree/master/src, under `cpp11` for 01-03 and `tbb` for 04-06.
+You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency, under `src/cpp11` for 01-03 and `src/tbb` for 04-07.
 
 ## 01 Basic Thread Management
 
@@ -52,7 +52,7 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency/
 
 1. `concurrent_vector.cc` and `concurrent_vector_stdthread.cc`
 
-2. TODO
+2. `generate_and_filter.cc`
 
 ## 06 TBB Pipelines
 
