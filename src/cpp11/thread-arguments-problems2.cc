@@ -34,7 +34,7 @@ int thread_spawn() {
 }
 
 int main() {
-    int code=thread_spawn();
+    int code = thread_spawn();
     std::cout << "Spawner is done" << std::endl;
   
     // Sleep here to ensure the worker thread is not terminated early
