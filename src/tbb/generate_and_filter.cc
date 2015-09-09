@@ -5,7 +5,8 @@
 
 #include "tbb/tbb.h"
 
-#define SIZE 100000
+static size_t default_size = 1000000;
+static size_t default_grain_size = 100;
 
 tbb::concurrent_vector<float> data_vector, filtered_vector;
 
@@ -52,13 +53,32 @@ void print_vec(tbb::concurrent_vector<float> vec, bool detailed) {
   std::cout << "There were " << vec.size() << " elements" << std::endl;
 }
 
-int main() {
-  tbb::parallel_for(tbb::blocked_range<size_t>(0, SIZE, 100), filler());
+int main(int argc, char *argv[]) {
+  size_t my_size = default_size;
+  size_t my_grain_size = default_grain_size;
+  if (argc >= 2) {
+    my_size = atoi(argv[1]);
+  }
+  if (argc >= 3) {
+    my_grain_size = atoi(argv[2]);
+  }
 
+  std::cout << "Target data array size is " << my_size << "; Grain size is " << my_grain_size << std::endl;
+
+  tbb::tick_count t0 = tbb::tick_count::now();
+  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filler());
+  tbb::tick_count t1 = tbb::tick_count::now();
+  auto tick_interval = t1-t0;
+
+  std::cout << "Filler took " << tick_interval.seconds() << "s" << std::endl;
   print_vec(data_vector, false);
 
-  tbb::parallel_for(tbb::blocked_range<size_t>(0, SIZE, 100), filter());
+  t0 = tbb::tick_count::now();
+  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filter());
+  t1 = tbb::tick_count::now();
+  tick_interval = t1-t0;
   
+  std::cout << "Filter took " << tick_interval.seconds() << "s" << std::endl;  
   print_vec(filtered_vector, false);
 
   return 0;
