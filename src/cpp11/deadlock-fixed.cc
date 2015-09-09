@@ -4,7 +4,7 @@
 
 std::mutex kettle, tap;
 
-#define THREAD_POOL 8
+#define THREAD_POOL 80
 
 void kettle_tap() {
   std::cout << "Locking kettle and tap in " << std::this_thread::get_id() << std::endl;
