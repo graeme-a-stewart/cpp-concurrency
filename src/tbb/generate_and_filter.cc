@@ -5,12 +5,13 @@
 
 #include "tbb/tbb.h"
 
-static size_t default_size = 1000000;
-static size_t default_grain_size = 100;
-
-tbb::concurrent_vector<float> data_vector, filtered_vector;
+static size_t default_size = 100000000;
+static size_t default_grain_size = 0;
 
 class filler {
+private:
+  tbb::concurrent_vector<float> *const my_vector;
+  
 public:
   void operator() (tbb::blocked_range<size_t>& r) const {
     // This monster hashes the thread id with a high resolution epoch time to
@@ -21,26 +22,34 @@ public:
     std::default_random_engine generator(seed);
     std::uniform_real_distribution<float> distribution(-100.0, 1.0);
     
-    auto insert_range_iterator = data_vector.grow_by(r.size());
+    auto insert_range_iterator = (*my_vector).grow_by(r.size());
     for (size_t count=0; count<r.size(); ++count) {
       *insert_range_iterator++ = distribution(generator);
     }
   }
 
-  filler() {};
+  filler(tbb::concurrent_vector<float> *input_data_vector):
+    my_vector{input_data_vector}
+  {}
+  
 };
 
 class filter {
+private:
+  tbb::concurrent_vector<float> *const my_input_vector, *const my_filtered_vector;
+  
 public:
   void operator() (tbb::blocked_range<size_t>& r) const {
     for(size_t i=r.begin(); i!=r.end(); ++i) {
-      if (data_vector[i] > 0.0) {
-	filtered_vector.push_back(data_vector[i]);
+      if ((*my_input_vector)[i] > 0.0) {
+	(*my_filtered_vector).push_back((*my_input_vector)[i]);
       }
     }
   }
 
-  filter() {};
+  filter(tbb::concurrent_vector<float> *input_data_vector, tbb::concurrent_vector<float> *output_filtered_vector):
+    my_input_vector{input_data_vector}, my_filtered_vector{output_filtered_vector}
+  {}
 };
 
 
@@ -63,10 +72,12 @@ int main(int argc, char *argv[]) {
     my_grain_size = atoi(argv[2]);
   }
 
+  tbb::concurrent_vector<float> data_vector, filtered_vector;
+  
   std::cout << "Target data array size is " << my_size << "; Grain size is " << my_grain_size << std::endl;
 
   tbb::tick_count t0 = tbb::tick_count::now();
-  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filler());
+  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filler(&data_vector));
   tbb::tick_count t1 = tbb::tick_count::now();
   auto tick_interval = t1-t0;
 
@@ -74,7 +85,7 @@ int main(int argc, char *argv[]) {
   print_vec(data_vector, false);
 
   t0 = tbb::tick_count::now();
-  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filter());
+  tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size, my_grain_size), filter(&data_vector, &filtered_vector));
   t1 = tbb::tick_count::now();
   tick_interval = t1-t0;
   
