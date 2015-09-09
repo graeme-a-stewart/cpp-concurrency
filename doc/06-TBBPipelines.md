@@ -8,7 +8,7 @@ However, TBB also allows for parallelisation based on task workflows, which we w
 
 ## Pipelines
 
-*Pipelines* are a simple execution concept. Tasks to be executed come in a linear sequence, much like an assembly line. Each incoming piece of data is processed by the first element of the pipeline, then the second and so on. Obviously this is a serial process for any data element. Parallelism arises because we can have many pieces of data moving through the pipeline at the one time.
+*Pipelines* are a simple execution concept. Tasks to be executed come in a linear sequence, much like an assembly line. Each incoming piece of data is processed by the first element of the pipeline, then the second and so on. Obviously this is a serial process for any data element. Parallelism arises because we can have many pieces of data moving through the pipeline at one time.
 
 ```
 +---------+

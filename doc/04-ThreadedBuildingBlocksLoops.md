@@ -29,7 +29,7 @@ TBB objects live in the `tbb` namespace, which here we will give explicitly.
 
 ### Parallel For
 
-One of the simplest parallel construct is one where we perform the same operation on an array of values and there is no dependencies between the operations. As a serial loop such an operation is just
+One of the simplest parallel constructs is where we perform the same operation on an array of values and with no dependencies between the operations. As a serial loop such an operation is just
 
 ```cpp
     for (size_t i=0; i<array_size; ++i) {
