@@ -18,7 +18,7 @@ Not all is sweetness and light, however. Because of the extra protections needed
 
 You won't be surprised that a `concurrent_vector<T>` is a template class that allows dynamic growth of an array of type `T`, just like its STL counterpart. What's nice about the concurrent vector is that it can be grown safely while other threads are accessing it, including growing it themselves.
 
-As sometimes we want to make sure that a group of elements added by a thread are contiguous in the vector, as well as the usual `push_back()` method there are the methods `grow_by(n)` that adds `n` elements and `grow_to_at_least(n)` that ensures that the vector has space for at least `n` elements. New elements are initialised with `T()`. `grow_by` return an iterator to the first element that was
+As sometimes we want to make sure that a group of elements added by a thread are contiguous in the vector, as well as the usual `push_back()` method there are the methods `grow_by(n)` that adds `n` elements and `grow_to_at_least(n)` that ensures that the vector has space for at least `n` elements. New elements can then be initialised properly as `T()`. `grow_by` has returned an iterator to the first element that was
 added.
 
 e.g., appending `n` elements to a `concurrent_vector<double>` is done like this:

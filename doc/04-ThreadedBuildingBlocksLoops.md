@@ -8,7 +8,14 @@ TBB supports common programming patterns for loops: `parallel_for` for independe
 
 TBB also includes additional support for multi-threaded programming, including thread safe containers, a performant thread safe memory allocator and timing primitives.
 
-TBB also allows the construction of graphs describing the relationship between different parts of a program's execution and the TBB scheduler can exploit concurrency where different parts of the workflow are independent.
+TBB also allows the construction of graphs describing the relationship
+between different parts of a program's execution and the TBB scheduler
+can exploit concurrency where different parts of the workflow are
+independent.
+
+Further, for task based workflows, TBB allows lower level interaction
+with its task scheduler, enabling it to be used as an execution engine
+for a higher level workflow generator.
 
 ### Using TBB
 
@@ -30,7 +37,9 @@ One of the simplest parallel construct is one where we perform the same operatio
     }
 ```
 
-The way that TBB turns such a serial loop into a parallel loop is to express the operation as a *callable* object, which can take a special TBB template class as an argument. e.g., we can write a classsupporting the `operator()` to do this:
+The way that TBB turns such a serial loop into a parallel loop is to
+express the operation as a *callable* object, which can take a special
+TBB template class as an argument. e.g., we can write a class supporting the `operator()` to do this:
 
 ```cpp
 #include "tbb/tbb.h"
@@ -87,14 +96,14 @@ Using the lambda which copies by value `[=]` satisfies all the criteria needed b
 
 A `parallel_for` is great when operations really are independent. However, sometimes we need to do some computation on the input data that produces an aggregated result that depends on all the input data. If the computation can be broken down into pieces we can still parallelise this operation, which is a *reduction*.
 
-Here's a simple example: if I need to sum up 10 numbers I can do it
+Here's a simple example: if one needs to sum up 10 numbers one can do it
 like this
 
 ```
 (((((((((1+2)+3)+4)+5)+6)+7)+8)+9)+10)
 ```
 
-which is sequential. But I could also do it like this:
+which is sequential. But one could also do it like this:
 
 ```
 ((1+2) + (3+4)) + ((5+6) + ((7+8) + (9+10)))
@@ -160,7 +169,9 @@ double Apply_parallel_sum(const double x[], size_t n) {
 }
 ```
 
-Note that because of the extra methods that are needed for `parallel_reduce` it's not possible to use a lambda here.
+Note that because of the extra methods that are needed for
+`parallel_reduce` it's less easy to use a lambda
+here.
 
 ## Blocked Range and Grain Size
 
