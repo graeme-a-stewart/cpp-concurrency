@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 
-#define THREAD_POOL 5
+#define THREAD_POOL 50
 
 void hello_n(int i) {
     std::cout << "hello, world (from thread number " << i << "; thread id" << std::this_thread::get_id() << ")" << std::endl;
