@@ -5,8 +5,9 @@ project(CppConcurrency-C++11)
 # Enable c++11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-if(${PROJECT_BINARY_DIR} EQUAL ${CMAKE_SOURCE_DIR})
-  message(FATAL_ERROR "This project cannot build in the source directory. Use \"cmake some/path/to/src/cpp11\"")
+if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+  message(FATAL_ERROR "This project cannot build in the source directory. "
+  "Use an out of source build area: \"cmake the/path/to/cpp-concurrency/src/cpp11\"")
 endif()
 
 ## This method automatically adds a binary for each source file in the source directory...
