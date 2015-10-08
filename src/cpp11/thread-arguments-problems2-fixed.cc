@@ -12,7 +12,7 @@ void work_hard(std::vector<double>& d) {
 
     double sum=0.0;
     for (auto& el: d) {
-        sum += sin(cos(log(abs(el)+1.0)));
+      sum += sin(cos(log(std::abs(el)+1.0)));
     }
     std::cout << "Hard work is done: " << sum << std::endl;
 }

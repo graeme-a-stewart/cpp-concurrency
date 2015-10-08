@@ -46,16 +46,17 @@ public:
     m_occupancy = 0;
     unsigned int const chunk = m_cells.size() / threads;  // This needs to divide with no remainder!
 
-    std::thread pool[threads];
+    std::vector<std::thread> pool;
 
     for (size_t t=0; t<threads; ++t) {
       // Here we use a lambda function to do the partial summation in each thread
-      pool[t] = std::thread([&] {
-      for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
-        if (m_cells[i] > 0.0)
-          ++m_occupancy;
-      }
-    } );
+      pool.push_back(std::thread([&] {
+	    for (size_t i=chunk*t; i<chunk*(t+1); ++i) {
+	      if (m_cells[i] > 0.0)
+		++m_occupancy;
+	    }
+	  }
+	  ));
     }
 
     for (int t=0; t<threads; ++t)
