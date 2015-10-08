@@ -78,7 +78,7 @@ private:
   std::vector<size_t> m_signal;
 
   size_t get_bin(float x) {
-    size_t bin = ((x - m_start) / (m_end - m_start)) * m_bins;
+    long bin = ((x - m_start) / (m_end - m_start)) * m_bins;
     if (bin < 0)
       return 0;
     if (bin >= m_bins)

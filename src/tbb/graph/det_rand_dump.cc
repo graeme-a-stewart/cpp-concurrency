@@ -18,12 +18,12 @@ int main(int argc, char* argv[]) {
   std::uniform_real_distribution<float> flat_dist(0.0, 1.0);
 
   // Pick a random place for the fooble
-  unsigned int fooble_centre = (0.1 + flat_dist(generator) * 0.8) * strips;
+  long fooble_centre = (0.1 + flat_dist(generator) * 0.8) * strips;
 
   std::ofstream ofs("fooble.txt", std::ofstream::out);
 
   for (size_t i=0; i<strips; ++i) {
-    float my_signal = 20.0 + 100.0 / (1.0 + std::pow(std::abs(i - fooble_centre)/20.0, 2));
+    float my_signal = 20.0 + 100.0 / (1.0 + std::pow(std::abs(long(i) - fooble_centre)/20.0, 2));
     float my_x = float(i) / strips;
     det_strip test_strip{cells, my_x};
     test_strip.fill_random(my_signal);
