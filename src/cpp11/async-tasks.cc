@@ -2,6 +2,9 @@
 #include <iostream>
 #include <random>
 
+// Launch a second thread for estimating pi via an async that
+// returns a future
+
 double pi_estimator(long trials) {
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -22,7 +25,7 @@ int main() {
     long trials_per_thread = 100000000;
 
     std::future<double> thread_pi = std::async(
-        std::launch::async,
+        std::launch::async, // Here we force an async lanuch in the background
         pi_estimator,
         trials_per_thread
     );
