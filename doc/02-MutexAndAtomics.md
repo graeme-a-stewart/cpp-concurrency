@@ -5,7 +5,7 @@ Author: Graeme A Stewart
 
 ## Introduction
 
-Multiple threads share the heap memory space of their process (they have separate stack memory which is what gives them their thread execution context). This can be an advantage as all threads can see the memory of common heap objects and operate on it without requiring inter-process communication or other overheads. However, this can also lead to trouble, as now threads can easily interfere with each other by accessing objects simultaneously or changing memory values they shouldn't.
+Multiple threads all have separate stack memory, which is what gives them their thread execution context. However, they all share the heap memory space of their process. This can be an advantage as all threads can see the memory of common heap objects and operate on it without requiring inter-process communication or other overheads. However, this can also lead to trouble, as now threads can easily interfere with each other by accessing objects simultaneously or changing memory values they shouldn't.
 
 In general, simultaneous read access to resources is not a problem - as data is only read then there's no conflict in multiple threads retrieving a value at once. However, write access is an issue. If two threads write to a value in an uncontrolled way we have a *data race*, where the final value will depend on the timing of the execution of the two threads (this is usually undesirable behaviour, though there are exceptions). Worse, if the object being written to is more complex than a simple type, then the state of the object may be left invalid by the race condition between the two threads. e.g., a linked list consists of some data object and pointers to the previous data item and the next data item; simultaneous insertion of two elements can easily lead to corruption of the list. This problem with data being left in a partially updated state means that write access to data can also lead to problems when reading the object while it's in an invalid intermediate state. So, we need to be careful of data races between read and write threads as well.
 
@@ -19,7 +19,7 @@ Control of access to critical parts of the code, where races can occur, is usual
 std::mutex mtx;
 
 void some_thread () {
-    mtx.lock();
+    mtx.lock();  // <- This call blocks if another thread holds the lock
     // some work while we have exclusive access
     ...
     mtx.unlock()

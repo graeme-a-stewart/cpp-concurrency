@@ -8,9 +8,11 @@ Author: Graeme A Stewart
 C++11 introduced support in the core C++ language for concurrency. This makes it one of the most useful toolkits for
 concurrency and multi-threading as any compliant compiler will support its constructs, independent of the underlying platform (e.g., on unix systems `pthreads` is used to manage the threads, whereas on Windows the Win32 API will be used).
 
-As C++ develops we can expect that this concurrency support will become richer and more useful.
+As C++ develops we can expect that this concurrency support will become richer and more useful, e.g., task
+based parallelism is under discussion for C++17.
 
-The C++ threading libraries are also very useful for introducing some core concepts in concurrency, which is one of the primary reasons for looking at them here.
+The C++ threading libraries are also very useful for introducing some core concepts in concurrency, 
+which is one of the primary reasons for looking at them here.
 
 ## Starting Threads
 
@@ -77,8 +79,10 @@ Which should give:
     Hello from thread number 1
 ```
 
-*Note* An alternative way is to use `std::bind` to create a temporary function with the arguments already bound to the parameters you want to use,
-i.e.,
+So, the _callable_ first argument is invoked with the second and subsequent arguments passed to it.
+
+An alternative way is to use `std::bind` to create a temporary function with the arguments already bound to the parameters you want to use,
+e.g.,
 
 ```cpp
 void hello_with_one = std::bind(say_hello_msg, 1);
@@ -88,7 +92,7 @@ std::thread my_second_thread(hello_with_one);
 #### Things that can go wrong passing arguments
 
 You need to take a little care when passing arguments. `std::thread`
-will copy arguments before starting a thread and this can lead to some
+will _copy_ arguments before starting a thread and this can lead to some
 subtle problems.
 
 ##### Copied data is not the original
@@ -180,7 +184,7 @@ Threads all have a unique identifier accessed via the `get_id()` method of `std:
 
 ## Hardware Concurrency
 
-The `std::thread` library also has a method to get the number of available hardware threads on a machine, `std::thread::hardware_concurrency`. This returns an unsigned number that estimates the number of concurrent threads that the hardware supports. Note that there is no guarantee that this is exact, but it can provide a useful guide to how much work a hardware platform might be expected to do (e.g., on Intel chips each hyperthreaded core is counted, as well as each physical core).
+The `std::thread` library also has a method to get the number of available hardware threads on a machine, `std::thread::hardware_concurrency`. This returns an unsigned number that estimates the number of concurrent threads that the hardware supports. Note that there is no guarantee that this is exact, but it can provide a useful guide to how much work a hardware platform might be expected to do (e.g., on Intel chips with hyperthreading, each hyperthreaded core is counted, as well as each physical core).
 
 # Exercises
 

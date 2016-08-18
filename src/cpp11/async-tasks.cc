@@ -1,6 +1,7 @@
 #include <future>
 #include <iostream>
 #include <random>
+#include <exception>
 
 // Launch a second thread for estimating pi via an async that
 // returns a future
@@ -23,12 +24,20 @@ double pi_estimator(long trials) {
 
 int main() {
     long trials_per_thread = 100000000;
+    std::future<double> thread_pi;
 
-    std::future<double> thread_pi = std::async(
-        std::launch::async, // Here we force an async lanuch in the background
-        pi_estimator,
-        trials_per_thread
-    );
+    try {
+		thread_pi = std::async(
+			std::launch::async, // Here we force an async lanuch in the background,
+			                    // which can cause an exception to be thrown
+			pi_estimator,
+			trials_per_thread
+		);
+    }
+    catch (const std::exception& e) {
+    	std::cerr << "async threw an exception: " << e.what() << std::endl;
+    	exit(1);
+    }
     std::cout << "Launched async" << std::endl;
 
     // I can work here

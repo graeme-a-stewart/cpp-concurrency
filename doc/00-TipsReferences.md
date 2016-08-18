@@ -4,42 +4,22 @@
 
 ### Setup
 
-This tutorial was written and originally tested on *Scientific Linux
-6*, although it also works on Ubuntu 15.04 using g++ 4.9 with TBB
-installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.9
-and 10.10 using gcc4.9 or gcc5.2 and TBB installed
+This tutorial was written and originally tested on *CentOS 7*, 
+although it also works on Ubuntu with TBB
+installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.11
+with TBB installed
 ([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
 
-However, any reasonably modern C++11 comilant compiler (gcc4.7 and up,
+However, any reasonably modern C++11 compliant compiler (gcc4.7 and up,
 LLVM/Clang 3.3 and up) should be compatible, although you may need to
 modify the makefiles.
-
-On SL6 it's important to setup the Redhat *devtoolset* to have access to a modern version of gcc for all of the tutorial exercises.
-
-To do this, execute this command:
-
-```bash
-$ scl enable devtoolset-2 bash
-```
-
-You can verify that all is well by asking for the gcc version, which should be 4.8.2:
-
-```bash
-$ g++ --version
-g++ (GCC) 4.8.2 20140120 (Red Hat 4.8.2-15)
-...
-```
-
-On Redhat 7 based systems (including CentOS 7), the system compiler is
-gcc4.8.3, so the devtoolset isn't needed.
-
 
 ### C++11 in General
 
 To compile concurrent C++11 programs you'll need two flags for g++:
 
-* `-std=c++11` - Use the C++11 standard (`-std=c++1y` or `-std=c++14`
-  also work - later compilers support the `c++14` version of the flag)
+* `-std=c++11` - Use the C++11 standard (`-std=c++14`
+  also works)
 * `-pthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
 You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
@@ -47,13 +27,16 @@ useful. It will compile any `.cc` file into an executable with the correct compi
 
 #### TBB
 
-Intel Threaded Building Blocks has been compiled and installed into `/usr/local` (specifically `/usr/local/include` for header files and
-`/usr/local/lib64` for libraries). Thus you shouldn't need any special extra setup to use it during the school.
+Depending on how TBB has been installed in your environment you make need to add
+correct include paths and link options to your compiler command.
 
-Doxygen documentation for TBB is installed into
-`/usr/local/share/tbb/html`, but using the
-[Intel documentation](https://www.threadingbuildingblocks.org/) is
-probably more convenient.
+[Intel documentation](https://www.threadingbuildingblocks.org/) for TBB is
+very convenient.
+
+### CMake
+
+If you know and like CMake, there is a `CMakeLists.txt` file provided that will
+compile all of the tutorial examples and solutions. 
 
 ## Tips
 
@@ -65,7 +48,7 @@ So `top -H -u $USER` would probably be the most useful command to use.
 
 ### Timing
 
-To measure any performance boost from threading you need to take accurate timing measurements. The easiest way to do this is with the `chrono` library (C++11).
+To measure any performance boost from threading you need to take accurate timing measurements. The easiest way to do this is with the `chrono` library from C++11.
 
 ```cpp
 #include <chrono>
@@ -95,7 +78,7 @@ Note that it's important to time the interesting bit of the program only (which 
 ### Generally Useful C++ Resources
 
 * There are many good online C++ reference sites, e.g., http://www.cplusplus.com/, (use the reference section, under
-  multi-threading).
+  multi-threading) and http://en.cppreference.com/ (Thread Support Library section).
 * Also worth noting is the official C++ website, http://www.isocpp.org/.
 
 ### Concurrency and Parallel Programming
@@ -105,7 +88,9 @@ Note that it's important to time the interesting bit of the program only (which 
   Action* by Anthony Williams, published by
   [Manning](http://www.manning.com/williams/). This book covers lock
   free programming in some detail.
-* Jeff Pershing's [Introduction to Lock Free Programming](http://preshing.com/20120612/an-introduction-to-lock-free-programming/). 
+* CHECK ME Nicholas Josittis *The C++ Standard Library: A Tutorial and Reference, Second Edition*
+  has a good chapter on C++11 concurrency. 
+* Jeff Pershing's [Introduction to Lock Free Programming](http://preshing.com/20120612/an-introduction-to-lock-free-programming/).
 * A great general introduction to the computer science of concurrency,
   which discusses a lot of the classic synchronisation problems in
   detail is *The Little Book of Semaphones* by Allen B. Downie. It's

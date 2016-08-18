@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <thread>
+#include <string>
 
 double pi_estimator(long trials) {
     // Ensure that each thread uses a separate seed.
@@ -21,18 +22,25 @@ double pi_estimator(long trials) {
     return double(success)*4.0/trials;
 }
 
-int main() {
-    unsigned int const thread_pool = std::thread::hardware_concurrency();
-    long const trials_per_thread = 500000000;
+int main(int argc, char *argv[]) {
+    unsigned int thread_pool = std::thread::hardware_concurrency();
+    long const trials_per_thread = 100000000;
 
     std::vector<std::future<double>> thread_results;
+
+    // If we are given a number on the command line, launch that number of tasks
+    if (argc > 2) {
+    	std::cerr << "Usage: async-tasks-multi [task_count]" << std::endl;
+    	exit(1);
+    } else if (argc == 2) {
+    	thread_pool = std::stoi(argv[1]);
+    }
 
     std::cout << "Launching " << thread_pool << " calculations." << std::endl;
 
     for (int i=0; i<thread_pool; ++i)
         thread_results.push_back(
             std::async(
-                std::launch::async,
                 pi_estimator,
                 trials_per_thread
             )
