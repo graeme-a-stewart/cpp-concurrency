@@ -27,6 +27,5 @@ simple_tbb_exe(parallel_mandel)
 simple_tbb_exe(parallel_mandel_vector)
 simple_tbb_exe(parallel_reduce)
 simple_tbb_exe(parallel_reduce_pi_estimation)
-simple_tbb_exe(parallel_reduce_sum)
 simple_tbb_exe(version)
 
