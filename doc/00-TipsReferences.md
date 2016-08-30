@@ -19,7 +19,7 @@ modify the makefiles.
 To compile concurrent C++11 programs you'll need two flags for g++:
 
 * `-std=c++11` - Use the C++11 standard (`-std=c++14`
-  also works)
+  also works, if your compiler supports that)
 * `-pthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
 You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
@@ -36,7 +36,9 @@ very convenient.
 ### CMake
 
 If you know and like CMake, there is a `CMakeLists.txt` file provided that will
-compile all of the tutorial examples and solutions. 
+compile all of the tutorial examples and solutions. As there is a pre-existing `Makefile` 
+in the source directory you must do an out of source build (which is best practice anyway).
+ 
 
 ## Tips
 
@@ -71,7 +73,7 @@ int main() {
 
 Note that it's important to time the interesting bit of the program only (which is why `time ./my_prog` isn't so useful).
 
-**Caveat Emptor** If you run on *virtual machines* (e.g., GridKA School machines and `lxplus` at CERN) there is the possibility of interference and jitter. So, always take a few timing measurements, just to check that things are stable.
+**Caveat Emptor** If you run on *virtual machines* (e.g., GridKA School machines or `lxplus` at CERN) there is the possibility of interference and jitter. So, always take a few timing measurements, just to check that things are stable.
 
 ## References
 

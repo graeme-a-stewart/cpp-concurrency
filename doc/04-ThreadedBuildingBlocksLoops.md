@@ -182,7 +182,7 @@ size_t grain_size = 8;
 tbb::blocked_range<size_t>(0, n, grain_size);
 ```
 
-However, beware that the best grain size on one machine might not be the best on another, so use this option carefully.
+However, beware that the best grain size on one machine might not be the best on another, so use this option cautiously.
 
 ## Different Blocked Range Templates
 
