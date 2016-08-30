@@ -4,26 +4,26 @@
 
 ### Setup
 
-This tutorial was written and originally tested on *CentOS 7*, 
-although it also works on Ubuntu with TBB
-installed (`sudo apt-get -y install libtbb-dev`) and Mac OS 10.11
-with TBB installed
+This tutorial was written and originally tested on *CentOS 7* with
+gcc4.8. It works for on Mac OS 10.11
+using Apple's clang and with TBB installed
 ([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
 
-However, any reasonably modern C++11 compliant compiler (gcc4.7 and up,
-LLVM/Clang 3.3 and up) should be compatible, although you may need to
-modify the makefiles.
+In the past it has been tested on Ubuntu (use `apt-get -y install libtbb-dev`)
+and actually any modern Linux distribution should be functional as long
+as you have a reasonably modern C++11 compliant compiler (gcc4.7 and up,
+LLVM/Clang 3.3 and up).
 
 ### C++11 in General
 
-To compile concurrent C++11 programs you'll need two flags for g++:
+To compile concurrent C++11 programs you'll need some compiler and linker flags:
 
 * `-std=c++11` - Use the C++11 standard (`-std=c++14`
   also works, if your compiler supports that)
-* `-pthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
+* `-lpthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
-You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
-useful. It will compile any `.cc` file into an executable with the correct compiler flags.
+You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/gridka16/src/cpp11/Makefile)
+useful. It will compile any `.cc` file into a like named executable with the correct compiler flags.
 
 #### TBB
 
@@ -38,7 +38,13 @@ very convenient.
 If you know and like CMake, there is a `CMakeLists.txt` file provided that will
 compile all of the tutorial examples and solutions. As there is a pre-existing `Makefile` 
 in the source directory you must do an out of source build (which is best practice anyway).
+
+Using CMake is very easy:
+
+1. Run `cmake ../path/to/the/source` in the place you want to build the examples
+2. Then just use `make` as normal
  
+If you add your own programs you'll need to change the `CMakeLists.txt` file.
 
 ## Tips
 

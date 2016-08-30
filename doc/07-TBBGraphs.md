@@ -233,7 +233,7 @@ function_node< double *, double * > n1( g, unlimited, [&]( double *a ) -> double
     3. Instead of using `try_put` to inject data, write a simple `source_node` that injects some numbers.
 
 2. In file `strip_det.hpp` you'll find a class for a small *fooble* strip detector (`det_strip`) consisting of a vector of cells (`det_cell`). Various methods are defined to do noise suppression, calculate data quality, extract the signal and detect foobles. There is also a method to serialise the strip data from a file. In this exercise we'll use a TBB graph to do data preparation and see if we have found a fooble.
-    1. Write a `source_node` that will load the detector data from a file. (In `/afs/cern.ch/work/g/graemes/devtut/fooble.txt` you'll find some input data, or you can use, or you can use the `det_rand_dump.cc` in github to generate your own input file.)
+    1. Write a `source_node` that will load the detector data from a file. (At https://cernbox.cern.ch/index.php/s/MNqHFqlxkKjpaBu you'll find some input data, or you can use the `det_rand_dump.cc` in github to generate your own input file.)
         1. Just to test that the data is loaded correctly, attach a node to the source that prints some basic information on the strip, e.g., the number of cells.
     2. Now, for each strip calculate the data quality value (`det_strip.data_quality()`) in a graph node (note the class caches this value internally).
     3. Use a node to calculate the signal (`det_strip.signal()`).

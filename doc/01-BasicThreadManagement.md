@@ -9,7 +9,7 @@ C++11 introduced support in the core C++ language for concurrency. This makes it
 concurrency and multi-threading as any compliant compiler will support its constructs, independent of the underlying platform (e.g., on unix systems `pthreads` is used to manage the threads, whereas on Windows the Win32 API will be used).
 
 As C++ develops we can expect that this concurrency support will become richer and more useful, e.g., task
-based parallelism is under discussion for C++17.
+based parallelism and vectorisation support are actively being considered for later versions of C++. 
 
 The C++ threading libraries are also very useful for introducing some core concepts in concurrency, 
 which is one of the primary reasons for looking at them here.
@@ -184,7 +184,7 @@ Threads all have a unique identifier accessed via the `get_id()` method of `std:
 
 ## Hardware Concurrency
 
-The `std::thread` library also has a method to get the number of available hardware threads on a machine, `std::thread::hardware_concurrency`. This returns an unsigned number that estimates the number of concurrent threads that the hardware supports. Note that there is no guarantee that this is exact, but it can provide a useful guide to how much work a hardware platform might be expected to do (e.g., on Intel chips with hyperthreading, each hyperthreaded core is counted, as well as each physical core).
+The `std::thread` library also has a method to get the number of available hardware threads on a machine, `std::thread::hardware_concurrency`. This returns an unsigned number that estimates the number of concurrent threads that the hardware supports. Note that there is no guarantee that this is exact, but it can provide a useful guide to how much work a hardware platform might be expected to do (e.g., on Intel chips with hyperthreading, each hyperthreaded core can be counted, as well as each physical core).
 
 # Exercises
 

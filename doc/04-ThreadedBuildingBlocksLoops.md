@@ -21,7 +21,7 @@ for a higher level workflow generator.
 
 With most installations of TBB the only include file needed is `tbb/tbb.h`. Depending on where TBB is installed you may need a `-I/path/to/tbb/include` option to the compiler. (If you use only part of TBB there may be a more specific header file that can be used.)
 
-As TBB uses libraries, the `-ltbb` option to the linker is needed. On linux `-lrt` is also required (POSIX real time extensions). You might need a linker option to find these libraries.
+As TBB uses libraries, the `-ltbb` option to the linker is needed and you might need a linker path option to find these libraries.
 
 TBB objects live in the `tbb` namespace, which here we will give explicitly. 
 
