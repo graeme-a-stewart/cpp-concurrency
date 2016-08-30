@@ -9,7 +9,7 @@ C++11 introduced support in the core C++ language for concurrency. This makes it
 concurrency and multi-threading as any compliant compiler will support its constructs, independent of the underlying platform (e.g., on unix systems `pthreads` is used to manage the threads, whereas on Windows the Win32 API will be used).
 
 As C++ develops we can expect that this concurrency support will become richer and more useful, e.g., task
-based parallelism and vectorisation support are actively being considered for later versions of C++. 
+based parallelism and vectorisation support are actively being considered for forthcoming versions of C++. 
 
 The C++ threading libraries are also very useful for introducing some core concepts in concurrency, 
 which is one of the primary reasons for looking at them here.

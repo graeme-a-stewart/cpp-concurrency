@@ -19,7 +19,7 @@ void kettle_tap() {
 
 void tap_kettle() {
   std::cout << "Locking tap and kettle in " << std::this_thread::get_id() << std::endl;
-  std::lock(kettle, tap);
+  std::lock(tap, kettle);
   std::lock_guard<std::mutex> tap_lock(tap, std::adopt_lock);
   std::lock_guard<std::mutex> kettle_lock(kettle, std::adopt_lock);
 

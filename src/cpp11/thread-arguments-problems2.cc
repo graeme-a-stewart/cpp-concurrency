@@ -27,9 +27,6 @@ int thread_spawn() {
     std::cout << "Worker thread spawned" << std::endl;
     worker.detach();
 
-    // d is now going to go out of scope, probably
-    // before the worker thread has finished with
-    // catastrophic results
     return 0;
 }
 
