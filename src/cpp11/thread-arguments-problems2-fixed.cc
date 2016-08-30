@@ -25,11 +25,8 @@ int thread_spawn() {
 
     auto worker = std::thread(work_hard, std::ref(d));
     std::cout << "Worker thread spawned" << std::endl;
-    worker.join();
+    worker.join();		// Use join() not detatch() to ensure that d stays in scope
 
-    // d is now going to go out of scope, probably
-    // before the worker thread has finished with
-    // catastrophic results
     return 0;
 }
 

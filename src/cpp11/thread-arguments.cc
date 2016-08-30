@@ -1,3 +1,6 @@
+// Simple example showing how to pass arguments to a thread
+// function
+
 #include <iostream>
 #include <thread>
 
@@ -13,7 +16,7 @@ int main() {
     std::thread pool[THREAD_POOL];
 
     for (int t=0; t<THREAD_POOL; ++t)
-      pool[t] = std::thread(hello_n, t);
+    	pool[t] = std::thread(hello_n, t);
 
     for (int t=0; t<THREAD_POOL; ++t)
         pool[t].join();

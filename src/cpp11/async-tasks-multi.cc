@@ -23,19 +23,21 @@ double pi_estimator(long trials) {
 }
 
 int main(int argc, char *argv[]) {
-    unsigned int thread_pool = std::thread::hardware_concurrency();
+    unsigned int thread_pool = 1;
     long const trials_per_thread = 100000000;
 
     std::vector<std::future<double>> thread_results;
 
     // If we are given a number on the command line, launch that number of tasks
-    if (argc > 2) {
-    	std::cerr << "Usage: async-tasks-multi [task_count]" << std::endl;
-    	exit(1);
+    // If not launch hardware_concurrency() tasks
+    if (argc == 1) {
+    	thread_pool = std::thread::hardware_concurrency();
     } else if (argc == 2) {
     	thread_pool = std::stoi(argv[1]);
+    } else {
+    	std::cerr << "Usage: async-tasks-multi [task_count]" << std::endl;
+    	exit(1);
     }
-
     std::cout << "Launching " << thread_pool << " calculations." << std::endl;
 
     for (int i=0; i<thread_pool; ++i)

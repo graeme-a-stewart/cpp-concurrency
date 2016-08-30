@@ -1,3 +1,7 @@
+// Basic threading example showing how to start up
+// two threads, do some trivial operation and have
+// the main thread wait until this is complete.
+
 #include <iostream>
 #include <thread>
 

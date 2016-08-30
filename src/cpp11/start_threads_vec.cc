@@ -1,3 +1,6 @@
+// Extended simple example, showing how to use a vector
+// to hold thread objects
+
 #include <iostream>
 #include <thread>
 #include <vector>
