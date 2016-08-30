@@ -96,7 +96,7 @@ Note that it's important to time the interesting bit of the program only (which 
   Action* by Anthony Williams, published by
   [Manning](http://www.manning.com/williams/). This book covers lock
   free programming in some detail.
-* CHECK ME Nicholas Josittis *The C++ Standard Library: A Tutorial and Reference, Second Edition*
+* Nicolai M. Josuttis' *The C++ Standard Library: A Tutorial and Reference, Second Edition*
   has a good chapter on C++11 concurrency. 
 * Jeff Pershing's [Introduction to Lock Free Programming](http://preshing.com/20120612/an-introduction-to-lock-free-programming/).
 * A great general introduction to the computer science of concurrency,
