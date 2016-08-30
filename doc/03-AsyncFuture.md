@@ -34,7 +34,9 @@ int main() {
 
 You can see that the value of the variable is accessed with the `get()` method of the `future`.
 
-A future also has the `wait()` method, which will block the calling thread until the result of the asynchronous execution is available, but it doesn't read the result.
+A future also has the `wait()` method, which will block the calling thread until the result of the asynchronous execution is available, but it doesn't read the result. (There are also `wait_for()` and `wait_until()` which will wait until the result is ready, but not wait indefinitely).
+
+Note that after a future's result has been retrieved further calls to `get()` or `wait()` will thrown an `std::future_error`. If your program could potentially retrieve the future result like this then use the `valid()` method to test before you do so.
 
 ### Launch Parameter
 
@@ -42,7 +44,11 @@ If you run an `async` task, you might be surprised that it doesn't run in the ba
 
 In particular `std::launch::async` says that the asynchronous thread should execute immediately, where as `std::launch::deferred` will delay execution until either `wait()` or `get()` is called on the future. The default value is `std::launch::async | std::launch::deferred`, which is why the implementation can choose what happens.
 
-Obviously using `std::launch::async` is what should be done if you know there's no point in deferring execution. An advantage of `std::launch::deferred` is that if it turns out that the async task isn't needed then it just won't be run at all when the future goes out of scope.
+Obviously using `std::launch::async` could always be used if you know there's no point in deferring execution, however, you should beware of breaking programs in a single threaded environment, so use that option with caution. An advantage of `std::launch::deferred` is that if it turns out that the async task isn't needed then it just won't be run at all when the future goes out of scope.
+
+### Exceptions
+
+If the async task results in an unhandled exception then the call to `get()` or `wait()` will raise that exception again in the thread owning the future. Thus exception handling for async tasks should be identical to sychronous execution.
 
 ## Packaged Tasks and Promises
 

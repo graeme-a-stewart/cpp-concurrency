@@ -56,13 +56,13 @@ private:
     std::mutex *m_mtx;
 
 public:
-    lock_guard(std::mutex& mtx):
+    raii_lock(std::mutex& mtx):
     {
         m_mtx = &mtx;
         m_mtx->lock();
     }
 
-    ~lock_guard() {
+    ~raii_lock() {
         m_mtx->unlock();
     }
 };
