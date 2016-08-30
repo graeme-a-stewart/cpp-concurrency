@@ -1,29 +1,26 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.6)
 
 project(CppConcurrency-TBB)
 
-# Enable c++11. This is not very nice - more up to date CMake would use 
-# target_compile_features, but we need to ensure this works with the old
-# CMake supplied by CentOS7, 2.8.11.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
 if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   message(FATAL_ERROR "This project cannot build in the source directory. "
-  "Use an out of source build area: \"cmake the/path/to/cpp-concurrency/src/cpp11\"")
+  "Use an out of source build area: \"cmake the/path/to/cpp-concurrency/src/tbb\"")
 endif()
 
 # Find the system's threading libraries
 find_package(Threads REQUIRED)
 
+# Find TBB (use the git submodule we have)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
+find_package(TBB REQUIRED)
+
 # Define the function used to build a simple TBB executable,
 # adding the correct thread and TBB libraries 
 function(simple_tbb_exe TARGET)
+	set(CXX_STANDARD_REQUIRED ON)
 	add_executable(${TARGET} "${TARGET}.cc")
-
-	# Would be much better to use an up to date CMake with a proper find_tbb 
-    # module, but this does the job for now...
-	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT} "tbb")
-
+	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT} tbb)
+	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 11)
 endfunction(simple_tbb_exe)
 
 # Add a CMake target for each of our examples

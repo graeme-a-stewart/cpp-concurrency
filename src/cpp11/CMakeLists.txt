@@ -1,11 +1,6 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.6)
 
 project(CppConcurrency-C++11)
-
-# Enable c++11. This is not very nice - more up to date CMake would use 
-# target_compile_features, but we need to ensure this works with the old
-# CMake supplied by CentOS7, 2.8.11.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   message(FATAL_ERROR "This project cannot build in the source directory. "
@@ -16,10 +11,12 @@ endif()
 find_package(Threads REQUIRED)
 
 # Define the function used to build a simple C++11 threaded executable,
-# adding the correct thread library 
+# adding the correct thread library
 function(simple_thread_exe TARGET)
+	set(CXX_STANDARD_REQUIRED ON)
 	add_executable(${TARGET} "${TARGET}.cc")
 	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT})
+	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 11)
 endfunction(simple_thread_exe)
 
 # Add each executable we build
