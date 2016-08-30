@@ -1,27 +1,33 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.6)
 
 project(CppConcurrency-TBBgraph)
 
-# Enable c++11
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lpthread -ltbb")
+# Setup our necessary module path
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../../cmake/modules;${CMAKE_SOURCE_DIR}/../../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
+
+include(cpp-concurrency)
 
 find_package(Boost)
+find_package(TBB)
+find_package(Threads)
 
-if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
-  message(FATAL_ERROR "This project cannot build in the source directory. "
-  "Use an out of source build area: \"cmake ${CMAKE_SOURCE_DIR}\"")
-endif()
+# Simple TBB stand alone graph examples
+simple_tbb_exe(data_flow)
+simple_tbb_exe(data_flow_basic)
+simple_tbb_exe(data_flow_ptr)
+simple_tbb_exe(data_flow_sharedptr)
 
-## This method automatically adds a binary for each source file in the source directory...
-file(GLOB simple_sources RELATIVE ${CMAKE_SOURCE_DIR} *.cc)
+simple_tbb_exe(single_node)
 
-foreach(source ${simple_sources})
-  string(REPLACE ".cc" "" binary ${source})
-  message(STATUS "Will compile ${source} to ${binary}")
-  add_executable(${binary} ${source})
-endforeach()
+simple_tbb_exe(multi_node)
+simple_tbb_exe(multi_node_reject)
 
-## ...alternatively, add executables by hand for each source file
-#add_executable(start_threads start_threads.cc) 
-#add_executable(start_threads_vec start_threads_vec.cc) 
+simple_tbb_exe(dep_graph)
+simple_tbb_exe(file_process)
+
+# Utility program to generate simulated fooble data
+add_executable(det_rand_dump det_rand_dump.cc)
+set_property(TARGET det_rand_dump PROPERTY CXX_STANDARD 11)
+
+# Fooble detector code
+simple_tbb_exe(det_data_proc)
