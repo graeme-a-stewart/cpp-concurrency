@@ -11,7 +11,7 @@ are nodes and edges are data that flows between the nodes.
 +---------+---------------
     |      \              \
     \/       \             \
-+---------+   \|            \
++---------+   \|            \|
 | Node 1  |    +--------+    +--------+
 +---------+    | Node 2 |    | Node 4 |
     |          +--------+    +--------+
@@ -57,7 +57,7 @@ tbb::flow::function_node< float, float > squarer( g, tbb::flow::unlimited, [](co
     } );
 ```
 
-The template function needs to know the input and output data types for this node -- these are the template parameters. Then the constructor takes as parameters:
+The template function needs to know the input and output data types for this node - these are the template parameters. Then the constructor takes as parameters:
 
 1. A reference to the graph where this node is going to be created (here, `g`).
 

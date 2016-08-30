@@ -1,3 +1,7 @@
+// Mandelbrot set generator using 2D TBB blocked range
+// Internally use a vector of bools for the result map, which allows
+// for easier setting of a dynamic resolution
+
 #include <iostream>
 #include <vector>
 #include <complex>

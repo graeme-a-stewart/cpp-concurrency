@@ -239,4 +239,4 @@ std::cout << "Work took " << time_interval.seconds() << "s" << std::endl;
 
 4. Using a `blocked_range2d`, write a `parallel_for` loop that calculates the set of points in the `(x,y)` range `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
 
-Recall that the Mandelbrot set is the set of points (`c`) where `z_i+1 = z_i^2 + c; z0 = 0` remains bounded for all `i`. *Tip:* A pointer to a 2D array of `Type` in C++ is `Type (*p)[SIZE]` where you *do* need to give the dimension of the last index explicitly.
+Recall that the Mandelbrot set is the set of points (`c`) where `z_i+1 = z_i^2 + c; z0 = 0` remains bounded for all `i`. *Tip:* A pointer to a 2D array of `Type` in C++ is `Type (*p)[SIZE]` where you *do* need to give the dimension of the last index explicitly (or you can use a `vector<vector<bool>>`).

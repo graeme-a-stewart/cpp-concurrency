@@ -1,3 +1,5 @@
+// Simple TBB parallel reduction example
+
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -18,7 +20,7 @@ void set_x(double x[], size_t const n) {
 double serial_sum(double x[], size_t n) {
     double answer=0.0;
     for (size_t i=0; i<n; ++i)
-        answer+=x[i];
+        answer+=log10(x[i]);
     return answer;
 }
 
@@ -30,7 +32,7 @@ class parallel_sum {
     void operator() (tbb::blocked_range<size_t>& r) {
         double *x = my_x;
         for(size_t i=r.begin(); i!=r.end(); ++i) {
-            answer+=x[i];
+            answer+=log10(x[i]);
         }
     }
 
@@ -91,6 +93,8 @@ int main(int argc, char *argv[]) {
         << "Parallel speedup: "
         << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
         << "x" << std::endl;
+
+    delete[] x;
 
     return 0;
 }
