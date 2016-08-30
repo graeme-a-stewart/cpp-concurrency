@@ -1,4 +1,6 @@
 // illustration of pi estimation using TBB parallel_reduce
+// Uses the Gregory & Leibniz series for PI:
+// 4 * (1 - 1/3 + 1/5 - 1/7 + 1/9 - ...)
 
 #include <iostream>
 #include <tbb/tbb.h>

@@ -22,7 +22,8 @@ function(simple_tbb_exe TARGET)
 
 	# Would be much better to use an up to date CMake with a proper find_tbb 
     # module, but this does the job for now...
-	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT} "tbb")
+    # (Also add maths library)
+	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT} tbb m)
 
 endfunction(simple_tbb_exe)
 
@@ -40,6 +41,5 @@ simple_tbb_exe(parallel_mandel)
 simple_tbb_exe(parallel_mandel_vector)
 simple_tbb_exe(parallel_reduce)
 simple_tbb_exe(parallel_reduce_pi_estimation)
-simple_tbb_exe(parallel_reduce_sum)
 simple_tbb_exe(version)
 

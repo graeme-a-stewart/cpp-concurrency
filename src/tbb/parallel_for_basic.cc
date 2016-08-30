@@ -1,3 +1,5 @@
+// Simple TBB parallel_for example, allowing for some scaling timing tests
+
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -76,33 +78,8 @@ int main(int argc, char *argv[]) {
         << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
         << "x"
         << std::endl;
-
-    // Optional - Do the parallel loop with a lambda
-    // This gives some interesting results as the lambda is usually
-    // inlined and this gives a noticable performance increase when
-    // the problem size is small.
-    /* 
-    t0 = tbb::tick_count::now();
-    // Here we just pass a lambda function that captures local variables by value: [=]
-    tbb::parallel_for(
-        tbb::blocked_range<size_t>(0, my_size),
-        [=](tbb::blocked_range<size_t>& r) {
-        for(size_t i=r.begin(); i!=r.end(); ++i)
-            x[i] = log(x[i]);
-    });
-    t1 = tbb::tick_count::now();
-    parallel_tick_interval = t1-t0;
-    std::cout
-        << "Parallel lambda loop took "
-        << parallel_tick_interval.seconds()
-        << "s"
-        << std::endl;
-    std::cout
-        << "Parallel lambda speedup: "
-        << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
-        << "x"
-        << std::endl;
-    */
     
+    delete[] x;
+
     return 0;
 }

@@ -1,3 +1,5 @@
+// Mandelbrot set generator using 2D TBB blocked range
+
 #include <iostream>
 #include <vector>
 #include <complex>

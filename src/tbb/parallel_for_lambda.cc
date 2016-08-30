@@ -1,3 +1,5 @@
+// Simple TBB parallel for using a lambda
+
 #include <iostream>
 #include <cmath>
 #include <chrono>
@@ -63,6 +65,8 @@ int main(int argc, char *argv[]) {
         << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
         << "x"
         << std::endl;
+
+    delete[] x;
 
     return 0;
 }
