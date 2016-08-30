@@ -7,21 +7,11 @@ if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   "Use an out of source build area: \"cmake the/path/to/cpp-concurrency/src/tbb\"")
 endif()
 
-# Find the system's threading libraries
-find_package(Threads REQUIRED)
-
-# Find TBB (use the git submodule we have)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
+# Add our CMake module paths and find the modules we need
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/modules;${CMAKE_SOURCE_DIR}/../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
+include(cpp-concurrency)
 find_package(TBB REQUIRED)
-
-# Define the function used to build a simple TBB executable,
-# adding the correct thread and TBB libraries 
-function(simple_tbb_exe TARGET)
-	set(CXX_STANDARD_REQUIRED ON)
-	add_executable(${TARGET} "${TARGET}.cc")
-	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT} tbb)
-	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 11)
-endfunction(simple_tbb_exe)
+find_package(Threads REQUIRED)
 
 # Add a CMake target for each of our examples
 simple_tbb_exe(concurrent_vector)

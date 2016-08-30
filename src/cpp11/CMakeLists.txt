@@ -7,17 +7,12 @@ if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   "Use an out of source build area: \"cmake the/path/to/cpp-concurrency/src/cpp11\"")
 endif()
 
+# Add our CMake module paths and find the modules we need
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/modules;${CMAKE_MODULE_PATH}")
+include(cpp-concurrency)
+
 # Find the system's threading libraries
 find_package(Threads REQUIRED)
-
-# Define the function used to build a simple C++11 threaded executable,
-# adding the correct thread library
-function(simple_thread_exe TARGET)
-	set(CXX_STANDARD_REQUIRED ON)
-	add_executable(${TARGET} "${TARGET}.cc")
-	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT})
-	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 11)
-endfunction(simple_thread_exe)
 
 # Add each executable we build
 # If you add a new source file and executable target, then add it to this list
