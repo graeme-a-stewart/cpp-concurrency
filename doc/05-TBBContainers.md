@@ -4,7 +4,7 @@
 
 One of the problems faced by programmers in a parallel environment is that Standard Template Library containers are not generally thread safe. Concurrent writes to STL containers will often corrupt them. So, usually, access to such containers has to be protected by a mutex. However, this makes the container a bottleneck and may slow down a threaded application.
 
-Threaded Building Blocks offers another way, which is to introduce concurrency friendly containers. These containers support as much as possible of the STL interface, but not all STL operations are present as some of these are inherently difficult to make safely concurrent.
+Threaded Building Blocks offers another way, which is to introduce concurrency friendly containers. These containers support as much as possible of the STL interface; however, not all STL operations are present as some of these are inherently difficult to make safely concurrent.
 
 There are two strategies to make such containers:
 
@@ -18,8 +18,7 @@ Not all is sweetness and light, however. Because of the extra protections needed
 
 You won't be surprised that a `concurrent_vector<T>` is a template class that allows dynamic growth of an array of type `T`, just like its STL counterpart. What's nice about the concurrent vector is that it can be grown safely while other threads are accessing it, including growing it themselves.
 
-As sometimes we want to make sure that a group of elements added by a thread are contiguous in the vector, as well as the usual `push_back()` method there are the methods `grow_by(n)` that adds `n` elements and `grow_to_at_least(n)` that ensures that the vector has space for at least `n` elements. New elements can then be initialised properly as `T()`. `grow_by` has returned an iterator to the first element that was
-added.
+As sometimes we want to make sure that a group of elements added by a thread are contiguous in the vector, as well as the usual `push_back()` method there are the methods `grow_by(n)` that adds `n` elements and `grow_to_at_least(n)` that ensures that the vector has space for at least `n` elements. New elements can then be initialised properly as `T()`. Note `grow_by` returns an iterator to the first element that was added.
 
 e.g., appending `n` elements to a `concurrent_vector<double>` is done like this:
 
@@ -46,12 +45,10 @@ TBB supports many other concurrent containers, including hash maps and queues. W
 # Exercises
 
 1. Write a piece of code that appends multiple elements to a `concurrent_vector` in different threads at the same time.
-    1. You might want to use a `typedef` to be able to switch back to a normal `std::vector` and see what happens if you do that without a mutex.
-    2. *Tip* You can run multiple threads just using some `std::thread`s or you can use this simple trick to get TBB to run some threads for you:
-
+    * You might want to use a `typedef` to be able to switch back to a normal `std::vector` and see what happens if you do that without a mutex.
+    * *Tip* You can run multiple threads just using some `std::thread`s or you can use this simple trick to get TBB to run some threads for you:
 ```cpp
 const int size = 10000;
 tbb::parallel_for(0, size, 1, [=](int i){my_function(i);});
 ```
-
 2. Based on the previous example, write a *filler* that selects random numbers and writes them concurrently into a `concurrent_vector`. Then write a *filter* that only selects some of the random numbers and puts them into an output `concurrent_vector`.
