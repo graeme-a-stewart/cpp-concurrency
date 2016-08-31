@@ -64,4 +64,6 @@ N.B. These examples are in the `graph` subdirectory
 
 1. `data_flow.cc` and `data_flow_ptr.cc` (which uses `shared_ptr`).
 
+    * See `dep_graph.cc` and `dep_graph_broadcast.cc` for multiple data paths a la tee
+
 2. `det_data_proc.cc`.
