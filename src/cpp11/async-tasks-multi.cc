@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     for (int i=0; i<thread_pool; ++i)
         thread_results.push_back(
             std::async(
+            	std::launch::async,
                 pi_estimator,
                 trials_per_thread
             )
