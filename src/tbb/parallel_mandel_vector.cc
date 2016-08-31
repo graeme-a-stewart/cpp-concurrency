@@ -1,6 +1,8 @@
 // Mandelbrot set generator using 2D TBB blocked range
 // Internally use a vector of bools for the result map, which allows
 // for easier setting of a dynamic resolution
+//
+// parallel_mandel_vector [GRID SIZE] [RUN_SERIAL]
 
 #include <iostream>
 #include <vector>
@@ -73,9 +75,13 @@ void serial_mandel(std::vector<std::vector<bool>>* set) {
 }
 
 int main(int argc, char* argv[]) {
+	bool do_serial = true;
     size_t res = default_resolution;
-    if (argc==2) {
+    if (argc>=2) {
         res = std::stoul(argv[1]);
+    }
+    if (argc==3 and argv[2][0] == 'n') {
+    	do_serial = false;
     }
     std::cout << "Starting mandel on a grid of " << res << std::endl;
 
@@ -86,15 +92,21 @@ int main(int argc, char* argv[]) {
         set.push_back(a);
     }
 
-    tbb::tick_count t0 = tbb::tick_count::now();
-    serial_mandel(&set);
-    tbb::tick_count t1 = tbb::tick_count::now();
-    auto serial_tick_interval = t1-t0;
-    std::cout
-        << "Serial mandel took "
-        << serial_tick_interval.seconds()
-        << "s"
-        << std::endl;
+    tbb::tick_count t0, t1;
+    tbb::tick_count::interval_t serial_tick_interval, parallel_tick_interval;
+    if (do_serial) {
+		t0 = tbb::tick_count::now();
+		serial_mandel(&set);
+		t1 = tbb::tick_count::now();
+		serial_tick_interval = t1-t0;
+		std::cout
+			<< "Serial mandel took "
+			<< serial_tick_interval.seconds()
+			<< "s"
+			<< std::endl;
+    } else {
+    	std::cout << "Skipping serial calculation" << std::endl;
+    }
 
     t0 = tbb::tick_count::now();
     tbb::parallel_for(
@@ -102,16 +114,18 @@ int main(int argc, char* argv[]) {
         parallel_mandel(&set)
     );
     t1 = tbb::tick_count::now();
-    auto parallel_tick_interval = t1-t0;
+    parallel_tick_interval = t1-t0;
     std::cout
         << "Parallel mandel took "
         << parallel_tick_interval.seconds()
         << "s" << std::endl;
 
-    std::cout
-        << "TBB Parallel speed-up: "
-        << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
-        << "s" << std::endl;
+    if (do_serial) {
+		std::cout
+			<< "TBB Parallel speed-up: "
+			<< serial_tick_interval.seconds()/parallel_tick_interval.seconds()
+			<< "s" << std::endl;
+    }
 
   // Now print the map of points (if it's reasonable!)
   if (res <= 150) {
