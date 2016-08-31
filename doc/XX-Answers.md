@@ -60,6 +60,8 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency,
 
 ## 07 TBB Graphs
 
+N.B. These examples are in the `graph` subdirectory
+
 1. `data_flow.cc` and `data_flow_ptr.cc` (which uses `shared_ptr`).
 
 2. `det_data_proc.cc`.
