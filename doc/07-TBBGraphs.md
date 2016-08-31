@@ -231,6 +231,7 @@ function_node< double *, double * > n1( g, unlimited, [&]( double *a ) -> double
     1. Now add a third node, which takes the output of the first node and cubes it. Run this node in parallel with the `n^2` node.
     2. Add a fourth node that takes the inputs from the `n^2` and `n^3` nodes and sums them up.
     3. Instead of using `try_put` to inject data, write a simple `source_node` that injects some numbers.
+    4. You might extend the example by adding multiple paths through the DAG (multiple output edges from a node).
 
 2. In file `strip_det.hpp` you'll find a class for a small *fooble* strip detector (`det_strip`) consisting of a vector of cells (`det_cell`). Various methods are defined to do noise suppression, calculate data quality, extract the signal and detect foobles. There is also a method to serialise the strip data from a file. In this exercise we'll use a TBB graph to do data preparation and see if we have found a fooble.
     1. Write a `source_node` that will load the detector data from a file. (At https://cernbox.cern.ch/index.php/s/MNqHFqlxkKjpaBu you'll find some input data, or you can use the `det_rand_dump.cc` in github to generate your own input file.)
