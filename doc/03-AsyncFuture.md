@@ -42,7 +42,7 @@ Note that after a future's result has been retrieved further calls to `get()` or
 
 If you run an `async` task, you might be surprised that it doesn't run in the background -- it might well run only when the future's get method is called. This is because the implementation can define when it runs an asynchronous task, either immediately or deferred. However, if the first parameter passed to the invocation of the task is an `std::launch` parameter, this can be controlled manually.
 
-In particular `std::launch::async` says that the asynchronous thread should execute immediately, where as `std::launch::deferred` will delay execution until either `wait()` or `get()` is called on the future. The default value is `std::launch::async | std::launch::deferred`, which is why the implementation can choose what happens.
+In particular `std::launch::async` says that the asynchronous thread should execute immediately, where as `std::launch::deferred` will delay execution until either `wait()` or `get()` is called on the future. The default value is `std::launch::async | std::launch::deferred`, which is why the implementation can choose what happens. In particular, gcc4.8 and earlier will not run a task asychronously unless explicitly asked too - later versions of gcc behave more sensibly.
 
 Obviously using `std::launch::async` could always be used if you know there's no point in deferring execution, however, you should beware of breaking programs in a single threaded environment, so use that option with caution. An advantage of `std::launch::deferred` is that if it turns out that the async task isn't needed then it just won't be run at all when the future goes out of scope.
 
