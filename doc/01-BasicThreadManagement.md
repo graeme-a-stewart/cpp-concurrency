@@ -85,7 +85,7 @@ An alternative way is to use `std::bind` to create a temporary function with the
 e.g.,
 
 ```cpp
-void hello_with_one = std::bind(say_hello_msg, 1);
+auto hello_with_one = std::bind(say_hello_msg, 1);
 std::thread my_second_thread(hello_with_one);
 ```
 
