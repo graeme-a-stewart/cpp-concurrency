@@ -1,0 +1,24 @@
+project(CppConcurrency-DOC NONE)
+
+cmake_minimum_required(VERSION 3.0)
+
+function(md2html MD)
+	string(REPLACE ".md" ".html" HTML ${MD})
+	set(MD_SRC "${CMAKE_SOURCE_DIR}/${MD}")
+	message(STATUS "Make ${HTML} from ${MD_SRC}")
+	add_custom_target(
+		${HTML} ALL
+		COMMAND pandoc --from markdown_github-hard_line_breaks --to html --standalone -o ${HTML} ${MD_SRC}
+		VERBATIM
+	)
+endfunction(md2html)
+
+md2html("00-TipsReferences.md")
+md2html("01-BasicThreadManagement.md")
+md2html("02-MutexAndAtomics.md")
+md2html("03-AsyncFuture.md")
+md2html("04-ThreadedBuildingBlocksLoops.md")
+md2html("05-TBBContainers.md")
+md2html("06-TBBPipelines.md")
+md2html("07-TBBGraphs.md")
+md2html("XX-Answers.md")
