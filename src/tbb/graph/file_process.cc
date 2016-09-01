@@ -1,3 +1,9 @@
+// Example showing how to use a source node to read an input file
+// In this case we just use boost::to_upper to process the file
+// into an ALL CAPS version
+//
+// file_process [INPUT_FILE]
+
 #include <iostream>
 #include <fstream>
 
@@ -21,8 +27,20 @@ public:
   }
 };
 
-int main() {
-  std::ifstream input("file_process.cc", std::ifstream::in);
+int main(int argc, char* argv[]) {
+  std::string input_file{"file_process.cc"};
+  if (argc==2) {
+    input_file = argv[1];
+  } else if (argc > 2) {
+	std::cerr << "Usage: file_process [INPUT_FILE]" << std::endl;
+	exit(1);
+  }
+
+  std::ifstream input(input_file, std::ifstream::in);
+  if (!input.good()) {
+    std::cerr << "Problem with file " << input_file << " - aborting" << std::endl;
+    exit(2);
+  }
 
   tbb::flow::graph g;
 
