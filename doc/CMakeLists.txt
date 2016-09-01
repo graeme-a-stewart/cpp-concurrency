@@ -5,11 +5,15 @@ cmake_minimum_required(VERSION 3.0)
 function(md2html MD)
 	string(REPLACE ".md" ".html" HTML ${MD})
 	set(MD_SRC "${CMAKE_SOURCE_DIR}/${MD}")
-	message(STATUS "Make ${HTML} from ${MD_SRC}")
-	add_custom_target(
-		${HTML} ALL
+	add_custom_command(
+		OUTPUT ${HTML}
+		DEPENDS ${MD_SRC}
 		COMMAND pandoc --from markdown_github-hard_line_breaks --to html --standalone -o ${HTML} ${MD_SRC}
 		VERBATIM
+	)
+	add_custom_target(
+		"${HTML}.stamp" ALL
+		DEPENDS ${HTML}
 	)
 endfunction(md2html)
 
