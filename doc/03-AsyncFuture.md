@@ -52,9 +52,35 @@ If the async task results in an unhandled exception then the call to `get()` or 
 
 ## Packaged Tasks and Promises
 
-There are other ways to set the values associated with a `future`. One is to setup a `packaged_task` that allows a task to be tied to a `future` before it is sent off for dispatch - this is useful if you have a task queue, but need to make sure you can get a handle on the result of the function before it is sent to the queue.
+There are other ways to set the values associated with a `future`. One is to setup a `packaged_task` that allows a task to be tied to a `future` _before_ it is sent off for dispatch - this is useful if you have a task queue, but need to make sure you can get a handle on the result of the function before it is sent to the queue, which a `packaged_task` allows you to do with its `get_future()` method.
 
-The other is to extract a `promise` from an already created `future` and send it as a parameter elsewhere in the program. When the `promise` is set the value of the `future` it came from becomes available.
+For a packaged task, instead of passing arguments directly to the function (as with `async`), construct with just the callable entity. Then, later on, invoke the call method of the `packaged_task` itself (with any arguments) to start the task's execution:
+
+```cpp
+	double my_func(double) {
+	    ...
+    }
+    
+    // Construct the packaged task for function my_func
+    pt = std::packaged_task(my_func);
+    
+    ...
+    
+    // Associate the packaged task's shared state with a future
+    // (Note, get_future() can only be called once)
+    std::future<double> the_answer = pt.get_future();
+    
+    // Run the packaged task with this argument - also can be in a different thread
+    pt(3.1415)
+    
+    ...
+    
+    try{
+        double d = the_answer.get();
+    } catch (...) {
+        // Handle any exception
+    }
+``` 
 
 # Exercises
 

@@ -18,6 +18,7 @@ find_package(Threads REQUIRED)
 # If you add a new source file and executable target, then add it to this list
 simple_thread_exe(async-tasks-multi)
 simple_thread_exe(async-tasks)
+simple_thread_exe(packaged_task)
 simple_thread_exe(atomic-lock-free)
 simple_thread_exe(deadlock-fixed-using-lock-adoption)
 simple_thread_exe(deadlock-fixed)
