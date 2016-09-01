@@ -12,22 +12,22 @@ find_package(TBB)
 find_package(Threads)
 
 # Simple TBB stand alone graph examples
-simple_tbb_exe(data_flow)
-simple_tbb_exe(data_flow_basic)
-simple_tbb_exe(data_flow_ptr)
-simple_tbb_exe(data_flow_sharedptr)
+simple_tbb_exe(data-flow)
+simple_tbb_exe(data-flow-basic)
+simple_tbb_exe(data-flow-ptr)
+simple_tbb_exe(data-flow-sharedptr)
 
-simple_tbb_exe(single_node)
+simple_tbb_exe(single-node)
 
-simple_tbb_exe(multi_node)
-simple_tbb_exe(multi_node_reject)
+simple_tbb_exe(multi-node)
+simple_tbb_exe(multi-node-reject)
 
-simple_tbb_exe(dep_graph)
-simple_tbb_exe(file_process)
+simple_tbb_exe(dep-graph)
+simple_tbb_exe(file-process)
 
 # Utility program to generate simulated fooble data
-add_executable(det_rand_dump det_rand_dump.cc)
-set_property(TARGET det_rand_dump PROPERTY CXX_STANDARD 11)
+add_executable(det-rand-dump det-rand-dump.cc)
+set_property(TARGET det-rand-dump PROPERTY CXX_STANDARD 11)
 
 # Fooble detector code
-simple_tbb_exe(det_data_proc)
+simple_tbb_exe(det-data-proc)

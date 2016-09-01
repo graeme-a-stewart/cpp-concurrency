@@ -5,7 +5,7 @@
 #include <memory>
 #include <mutex>
 
-#include "strip_det.hpp"
+#include "stripdet.hpp"
 
 #include "tbb/tbb.h"
 #include "tbb/flow_graph.h"

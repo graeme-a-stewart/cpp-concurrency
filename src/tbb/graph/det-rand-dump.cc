@@ -3,7 +3,7 @@
 #include <random>
 #include <cmath>
 
-#include "strip_det.hpp"
+#include "stripdet.hpp"
 
 int main(int argc, char* argv[]) {
   unsigned int strips = 100;

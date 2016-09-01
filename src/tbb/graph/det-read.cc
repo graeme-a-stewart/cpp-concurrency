@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "strip_det.hpp"
+#include "stripdet.hpp"
 
 int main() {
   std::ifstream ifs("fooble.txt", std::ifstream::in);

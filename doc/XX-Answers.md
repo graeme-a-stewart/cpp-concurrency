@@ -6,8 +6,8 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency,
 
 ## 01 Basic Thread Management
 
-1. `start_threads.cc`
-    1. `start_threads.cc` (manual) and `start_threads_vec.cc` (using
+1. `start-threads.cc`
+    1. `start-threads.cc` (manual) and `start-threads-vec.cc` (using
        `std::vector`)
 
 2. `thread-arguments.cc`
@@ -33,37 +33,37 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency,
 
 ## 03 Async and Futures
 
-1. `async_tasks.cc`
+1. `async-tasks.cc`
 
-2. `async_tasks_multi.cc`
+2. `async-tasks-multi.cc`
 
 
 ## 04 TBB Loops
 
-1. `parallel_for_basic.cc`
+1. `parallel-for-basic.cc`
 
-2. `parallel_for_lambda.cc`
+2. `parallel-for-lambda.cc`
 
-3. `parallel_reduce.cc`
+3. `parallel-reduce.cc`
 
-4. `parallel_mandel.cc` (see `parallel_mandel_vector.cc` for the same donw with `std::vector` storage)
+4. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same donw with `std::vector` storage)
 
 ## 05 TBB Containers
 
-1. `concurrent_vector.cc` and `concurrent_vector_stdthread.cc` (see also `concurrent_vector_grow_by.cc`)
+1. `concurrent-vector.cc` and `concurrent-vector-stdthread.cc` (see also `concurrent-vector-grow-by.cc`)
 
-2. `generate_and_filter.cc`
+2. `generate-and-filter.cc`
 
 ## 06 TBB Pipelines
 
-1. `maths_pipeline.cc`
+1. `maths-pipeline.cc`
 
 ## 07 TBB Graphs
 
 N.B. These examples are in the `graph` subdirectory
 
-1. `data_flow.cc` and `data_flow_ptr.cc` (which uses `shared_ptr`).
+1. `data-flow.cc` and `data-flow-ptr.cc` (which uses `shared_ptr`).
 
-    * See `dep_graph.cc` and `dep_graph_broadcast.cc` for multiple data paths a la tee
+    * See `dep-graph.cc` and `dep-graph-broadcast.cc` for multiple data paths a la tee
 
-2. `det_data_proc.cc`.
+2. `det-data-proc.cc`.
