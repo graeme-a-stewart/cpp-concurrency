@@ -1,0 +1,3 @@
+# Allow wheel group to sudo without password
+# This is to allow the container "normal" user to sudo and fix things
+%wheel	ALL=(ALL)	NOPASSWD: ALL
