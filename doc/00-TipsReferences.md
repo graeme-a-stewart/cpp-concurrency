@@ -104,6 +104,11 @@ Note that it's important to time the interesting bit of the program only (which 
   detail is *The Little Book of Semaphones* by Allen B. Downie. It's
   available here: http://greenteapress.com/semaphores/. (Essential
   reading to know what the *Sleeping Barber* problem is!)
+* A highly practical example of concurrent data access is the
+  Read-Copy-Update pattern, https://lwn.net/Articles/573424/.
+* A modern book on parallel programming patterns and exploiting
+  concurrency is *Structured Parallel Programming* by Michael McCool,
+  James Reinders and Arch Robison (Elsevier, 2012).
 
 ### TBB
 
