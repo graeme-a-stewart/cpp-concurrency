@@ -6,7 +6,7 @@
 #include <tbb/tbb.h>
 
 const unsigned int max_iter=256;
-const size_t res=100;
+const size_t res=1000;
 const float box=2.0;
 
 bool in_mandel(std::complex<float> c) {

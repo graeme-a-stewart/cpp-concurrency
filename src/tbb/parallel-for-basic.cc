@@ -64,7 +64,8 @@ int main(int argc, char *argv[]) {
     // Do the parallel loop
     set_x(x, my_size);
     t0 = tbb::tick_count::now();
-    tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size), parallel_log(x));
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size),
+        parallel_log(x));
     t1 = tbb::tick_count::now();
     auto parallel_tick_interval = t1-t0;
     std::cout
