@@ -1,27 +1,38 @@
+// Simple maze solver demonstrating TBB task groups
 #include <string>
 #include <iostream>
 #include "tbb/tbb.h"
 
 const std::string solution{"LLRRLLRL"};
 
-int maze_try(std::string current_path) {
+std::string maze_try(std::string current_path) {
+  //std::cout << "Trying " << current_path << std::endl;
+
   if (current_path == solution) {
-    std::cout << "I found the way out: " << current_path << std::endl;
-    return 0;
+    return current_path;
   }
 
   if (current_path.size() == solution.size())
-    return -1;
+    return std::string{""};
 
   tbb::task_group g;
-  g.run([=]{maze_try(current_path+"L");});
-  g.run([=]{maze_try(current_path+"R");});
+  std::string left, right;
+  g.run([&]{left=maze_try(current_path+"L");});
+  g.run([&]{right=maze_try(current_path+"R");});
   g.wait();
-  return 1;
+
+  if (left.size() > 0)
+    return left;
+  if (right.size() > 0)
+    return right;
+
+  return std::string{""};
 }
 
 int main() {
-  maze_try("");
+  auto answer = maze_try("");
+
+  std::cout << "Escape route " << answer << std::endl;
 
   return 0;
 }
