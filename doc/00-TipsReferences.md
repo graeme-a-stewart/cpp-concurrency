@@ -2,17 +2,55 @@
 
 ## Tips
 
-### Setup
+### Respository
 
-This tutorial was written and originally tested on *CentOS 7* with
-gcc4.8. It works for on Mac OS 10.11
-using Apple's clang and with TBB installed
-([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)).
+All of the documentation for this tutorial and the example
+code is stored in 
+[GitHub](https://github.com/graeme-a-stewart/cpp-concurrency).
 
-In the past it has been tested on Ubuntu (use `apt-get -y install libtbb-dev`)
-and actually any modern Linux distribution should be functional as long
-as you have a reasonably modern C++11 compliant compiler (gcc4.7 and up,
-LLVM/Clang 3.3 and up).
+Just clone the repository in the normal way, e.g.,:
+
+```sh
+git clone https://github.com/graeme-a-stewart/cpp-concurrency.git
+```
+
+### Setup and Running
+
+The current version of this tutorial has been developed on 
+OS X 10.12 (with Threaded Building Blocks and Boost installed
+using [homebrew](https://brew.sh/) and also tested with Fedora 26
+(install TBB and Boost runtime and development RPMs).
+
+Most modern Linux distributions should work fine, as long as you
+have an up to date C++ compiler (C++11 support is absolutely
+needed) with TBB and Boost installed.
+
+A Dockerfile that sets up Fedora 26 correctly is in the repository
+(`docker/cpp-concurrency-fedora`); you can also use the docker image
+`graemeastewart/cpp-concurrency-fedora` from Docker Hub. If you use the
+docker image remember to use a bind mount to a persistent
+filesystem for your work!
+
+```sh
+docker run -it -v $HOME:/workspace graemeastewart/cpp-concurrency-fedora
+```
+
+Both the GridKA VMs and the docker container have a variety of 
+editors installed: `nano`, `jed`, `emacs`, `geany`, `vim`.
+The advantage of using the docker container is that you can use
+an editor or IDE on your host. To use
+an X editors, like geany, use the `-X` option to ssh (VM) or pass in the correct
+`DISPLAY` setting using `-e` (docker). e.g., for docker
+on the Mac:
+
+```sh
+docker run -it -e DISPLAY=$(ipconfig getifaddr en0):0 \
+-v $HOME:/workspace graemeastewart/cpp-concurrency-fedora
+```
+
+(you may need to run `xhost +$(ipconfig getifaddr en0`) on the Mac host;
+make sure that XQuartz allows network clients to connect in
+Preferences->Security).
 
 ### C++11 in General
 
@@ -22,20 +60,21 @@ To compile concurrent C++11 programs you'll need some compiler and linker flags:
   also works, if your compiler supports that)
 * `-lpthread` - Enable posix thread support, which is the underlying thread library used by libstdc++ on linux platforms
 
-You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/gridka16/src/cpp11/Makefile)
+You might well find the `Makefile` [here](https://github.com/graeme-a-stewart/cpp-concurrency/blob/master/src/cpp11/Makefile)
 useful. It will compile any `.cc` file into a like named executable with the correct compiler flags.
 
 #### TBB
 
 Depending on how TBB has been installed in your environment you make need to add
-correct include paths and link options to your compiler command.
+correct include paths and link options to your compiler command. In the school
+VMs and the Docker container no special options are needed beyond `-ltbb`.
 
 [Intel documentation](https://www.threadingbuildingblocks.org/) for TBB is
 very convenient.
 
 ### CMake
 
-If you know and like CMake, there is a `CMakeLists.txt` file provided that will
+If you know CMake, there is a `CMakeLists.txt` file provided that will
 compile all of the tutorial examples and solutions. As there is a pre-existing `Makefile` 
 in the source directory you must do an out of source build (which is best practice anyway).
 
@@ -56,7 +95,8 @@ So `top -H -u $USER` would probably be the most useful command to use.
 
 ### Timing
 
-To measure any performance boost from threading you need to take accurate timing measurements. The easiest way to do this is with the `chrono` library from C++11.
+To measure any performance boost from threading you need to take accurate timing measurements.
+The easiest way to do this is with the `chrono` library from C++11.
 
 ```cpp
 #include <chrono>
@@ -79,7 +119,9 @@ int main() {
 
 Note that it's important to time the interesting bit of the program only (which is why `time ./my_prog` isn't so useful).
 
-**Caveat Emptor** If you run on *virtual machines* (e.g., GridKA School machines or `lxplus` at CERN) there is the possibility of interference and jitter. So, always take a few timing measurements, just to check that things are stable.
+**Caveat Emptor** If you run on *virtual machines* (e.g., GridKA School machines or `lxplus` at CERN) 
+there is the possibility of interference and jitter. So, always take a few timing measurements, 
+just to check that things are stable.
 
 ## References
 
