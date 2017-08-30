@@ -1,6 +1,6 @@
-# Tips and References
+# Startup, Tips and References
 
-## Tips
+## Startup
 
 ### Respository
 
@@ -51,6 +51,8 @@ docker run -it -e DISPLAY=$(ipconfig getifaddr en0):0 \
 (you may need to run `xhost +$(ipconfig getifaddr en0`) on the Mac host;
 make sure that XQuartz allows network clients to connect in
 Preferences->Security).
+
+## Tips
 
 ### C++11 in General
 
