@@ -67,3 +67,12 @@ N.B. These examples are in the `graph` subdirectory
     * See `dep-graph.cc` and `dep-graph-broadcast.cc` for multiple data paths a la tee
 
 2. `det-data-proc.cc`.
+
+## 08 TBB Tasks
+
+N.B. These examples are in the `tasks` subdirectory
+
+1. `maze.cc`
+
+2. `cancel-sleep.cc`
+
