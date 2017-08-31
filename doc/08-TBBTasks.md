@@ -76,8 +76,9 @@ prevents queued tasks from starting.
 1. Write a recursive maze solver using task groups. The number
    of turns in the maze is known (say 10), and at each junction
    a left or a right turn can be take.
-2. Using a trivial operation that consumes time (even `sleep`), write a small
+2. Using a trivial operation that consumes time (even `sleep`
+   will do), write a small
    application that spawns more tasks than can start at once,
    then use `cancel()` before all the tasks have started.
-     1. Show that running tasks continue until they exit
-     2. 
+     1. Try to show that running tasks continue until they exit
+
