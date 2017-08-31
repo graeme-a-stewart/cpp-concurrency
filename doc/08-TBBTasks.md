@@ -70,12 +70,24 @@ Cancelling tasks that are actually running is not possible to do
 safely (state corruption could easily arise), so `cancel()` only
 prevents queued tasks from starting.
 
+## Low Level Task Manager Interface
+
+Task groups are relatively simple interface to the task manager,
+TBB also offers an API that allows for a much lower level
+interaction with the task manager, with fine control over the 
+per-thread and global task queues and the dependency relationships
+between tasks. However, using this interface is really for
+advanced or special use cases and beyond what we can cover
+in this tutorial. You may want to peruse the TBB
+[documentation](https://software.intel.com/en-us/node/506294)
+on this topic if you think it would be useful for you.
+
 
 # Exercises
 
 1. Write a recursive maze solver using task groups. The number
    of turns in the maze is known (say 10), and at each junction
-   a left or a right turn can be take.
+   a left or a right turn can be taken.
 2. Using a trivial operation that consumes time (even `sleep`
    will do), write a small
    application that spawns more tasks than can start at once,
