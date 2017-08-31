@@ -29,3 +29,4 @@ simple_tbb_exe(parallel-reduce)
 simple_tbb_exe(parallel-reduce-pi-estimation)
 simple_tbb_exe(version)
 
+simple_tbb_exe(parallel-for-mutex)
