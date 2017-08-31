@@ -23,6 +23,7 @@ simple_tbb_exe(multi-node)
 simple_tbb_exe(multi-node-reject)
 
 simple_tbb_exe(dep-graph)
+simple_tbb_exe(dep-graph-broadcast)
 simple_tbb_exe(file-process)
 
 # Utility program to generate simulated fooble data

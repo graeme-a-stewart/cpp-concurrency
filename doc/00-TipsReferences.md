@@ -80,7 +80,15 @@ If you know CMake, there is a `CMakeLists.txt` file provided that will
 compile all of the tutorial examples and solutions. As there is a pre-existing `Makefile` 
 in the source directory you must do an out of source build (which is best practice anyway).
 
-Using CMake is very easy:
+To prepare to run CMake you will need the `FindTBB` module, which is
+available as a submodule of this repo. To get it do:
+
+```sh
+git submodule init
+git submodule update
+```
+
+Then using CMake is very easy:
 
 1. Run `cmake ../path/to/the/source` in the place you want to build the examples
 2. Then just use `make` as normal

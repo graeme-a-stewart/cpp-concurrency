@@ -46,11 +46,11 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency,
 
 3. `parallel-reduce.cc`
 
-4. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same donw with `std::vector` storage)
+4. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same done with `std::vector` storage)
 
 ## 05 TBB Containers
 
-1. `concurrent-vector.cc` and `concurrent-vector-stdthread.cc` (see also `concurrent-vector-grow-by.cc`)
+1. `concurrent-vector.cc` and `concurrent-vector-stdthread.cc` (see also `concurrent-vector-grow-by.cc`); `concurrent-vector-stl.cc` is broken
 
 2. `generate-and-filter.cc`
 

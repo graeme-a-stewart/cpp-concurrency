@@ -15,6 +15,7 @@ find_package(Threads REQUIRED)
 
 # Add a CMake target for each of our examples
 simple_tbb_exe(concurrent-vector)
+simple_tbb_exe(concurrent-vector-stl)
 simple_tbb_exe(concurrent-vector-grow-by)
 simple_tbb_exe(concurrent-vector-stdthread)
 simple_tbb_exe(gen-input)
