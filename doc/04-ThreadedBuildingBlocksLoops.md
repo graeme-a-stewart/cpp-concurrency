@@ -227,13 +227,46 @@ std::cout << "Work took " << time_interval.seconds() << "s" << std::endl;
 
 # Exercises
 
-1. Write a TBB parallel for loop using a class which performs an operation on an array of 10^6 doubles. Take the `log` of the input as the work to be done. Also write a serial version of the same operation.
+## Tutorial Utils
+
+To properly show TBB at work it's important that what we parallelise
+contains some reasonable amount of CPU intensive calculations. You can
+either write your own *cpuburn* routine or you can use one
+found in `tutorialutils.cc`. The routines are:
+
+- `double burn(unsigned long i)` - Perform some useless maths for `i` 
+  loops and return an value 
+  (note that on a fast modern CPU, 1000 loops takes about 30 microseconds) 
+- `double burn_for(float interval)` - Perform some useless maths until 
+  `interval` milliseconds have passed and return a value
+
+The `burn.cc` code can be compiled to check your local performance.
+
+### Linking
+
+The CMake and Makefile build `libtutorialutils.a` and link their targets
+against it. This is the recommended way. However, you can also just 
+compile `tutorialutils.cc` directly with your code.
+
+```sh
+g++-7 -O2 my_code.cc tutorialutils.cc -std=c++14 -ltbb -lm
+```
+
+1. Write a TBB parallel for loop using a class supporting the 
+   call operator, which a parallel operation on a large array
+   of doubles. Also write a serial version of the same workload. 
     1. Is the TBB version faster?
     2. Investigate the effect of changing the array size -- use steps of 10 and see if you can find out the best speedup that TBB can give you and also the worst (i.e., what's the overhead of using TBB).
 
+   Hint: good numbers to try are around 30us per operation (e.g.,
+   `burn(1000)` from above) and an array size of 100000. To get 
+   really *bad* performance from TBB you can reduce the size
+   of the work unit and do it on a really small array. 
+
 2. Repeat the first part of the above exercise using a lambda.
 
-3. Write a TBB parallel reduction that calculates a simple reduced value from 10^6 doubles (sum or product will be fine). Also write a serial version.
+3. Write a TBB parallel reduction that calculates a simple reduced value
+   from the calculations you did in exercise 1 or 2.
     1. Investigate the scaling properties as above.
     2. Do you understand any differences from the first exercise?
 
