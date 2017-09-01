@@ -75,7 +75,7 @@ void serial_mandel(std::vector<std::vector<bool>>* set) {
 }
 
 int main(int argc, char* argv[]) {
-	bool do_serial = true;
+  bool do_serial = true;
   size_t res = default_resolution;
   if (argc>=2) {
     res = std::stoul(argv[1]);
@@ -99,11 +99,10 @@ int main(int argc, char* argv[]) {
     serial_mandel(&set);
     t1 = tbb::tick_count::now();
     serial_tick_interval = t1-t0;
-    std::cout
-    << "Serial mandel took "
-    << serial_tick_interval.seconds()
-    << "s"
-    << std::endl;
+    std::cout << "Serial mandel took "
+        << serial_tick_interval.seconds()
+        << "s"
+        << std::endl;
   } else {
     std::cout << "Skipping serial calculation" << std::endl;
   }
@@ -115,16 +114,14 @@ int main(int argc, char* argv[]) {
   );
   t1 = tbb::tick_count::now();
   parallel_tick_interval = t1-t0;
-  std::cout
-  << "Parallel mandel took "
-  << parallel_tick_interval.seconds()
-  << "s" << std::endl;
+  std::cout << "Parallel mandel took "
+      << parallel_tick_interval.seconds()
+      << "s" << std::endl;
 
   if (do_serial) {
-    std::cout
-    << "TBB Parallel speed-up: "
-    << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
-    << "s" << std::endl;
+    std::cout << "TBB Parallel speed-up: "
+        << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
+        << "s" << std::endl;
   }
 
   // Now print the map of points (if it's reasonable!)
@@ -142,4 +139,3 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-
