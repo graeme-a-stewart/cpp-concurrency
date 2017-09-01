@@ -6,34 +6,35 @@
 #include <chrono>
 
 #include "tbb/tbb.h"
+#include "tutorialutils.h"
 
-#define SIZE 100000000
+#define SIZE 100000
 
-// Fill our array with a set of numbers (in this exercise
-// there's no need for random values)
-void set_x(double x[], size_t const n) {
-    for (size_t i=0; i<n; ++i)
-        x[i] = i+0.5;
+// Work function - define the work to do here
+// so that it can be dropped into both the
+// serial and parallel codes
+inline double do_work(size_t i) {
+  return burn(100);
 }
 
 // Take the log of every value
-void serial_log(double x[], size_t n) {
+void serial_work(double x[], size_t n) {
     for (size_t i=0; i<n; ++i)
-        x[i]=log(x[i]);
+        x[i]=do_work(i);
 }
 
 // Class for TBB to take the log in parallel
-class parallel_log {
+class parallel_work {
     double *const my_x;
     public:
         void operator() (tbb::blocked_range<size_t>& r) const {
             double *x = my_x;
             for(size_t i=r.begin(); i!=r.end(); ++i) {
-                x[i] = log(x[i]);
+                x[i] = do_work(i);
             }
         }
 
-        parallel_log(double x[]):
+        parallel_work(double x[]):
             my_x{x}
         {}
 };
@@ -48,11 +49,10 @@ int main(int argc, char *argv[]) {
     std::cout << "Array size is " << my_size << std::endl;
 
     double *x = new double[my_size];
-    set_x(x, my_size);
 
     // Do the serial loop
     tbb::tick_count t0 = tbb::tick_count::now();
-    serial_log(x, my_size);
+    serial_work(x, my_size);
     tbb::tick_count t1 = tbb::tick_count::now();
     auto serial_tick_interval = t1-t0;
     std::cout
@@ -62,10 +62,9 @@ int main(int argc, char *argv[]) {
         << std::endl;
 
     // Do the parallel loop
-    set_x(x, my_size);
     t0 = tbb::tick_count::now();
     tbb::parallel_for(tbb::blocked_range<size_t>(0, my_size),
-        parallel_log(x));
+        parallel_work(x));
     t1 = tbb::tick_count::now();
     auto parallel_tick_interval = t1-t0;
     std::cout

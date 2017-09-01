@@ -13,6 +13,11 @@ include(cpp-concurrency)
 find_package(TBB REQUIRED)
 find_package(Threads REQUIRED)
 
+# Build the tutorial utilities library
+add_library(tutorialutils tutorialutils.cc)
+set_property(TARGET tutorialutils PROPERTY CXX_STANDARD 14)
+
+
 # Add a CMake target for each of our examples
 simple_tbb_exe(concurrent-vector)
 simple_tbb_exe(concurrent-vector-stl)
@@ -22,7 +27,7 @@ simple_tbb_exe(gen-input)
 simple_tbb_exe(generate-and-filter)
 simple_tbb_exe(maths-pipeline)
 simple_tbb_exe(number-of-threads)
-simple_tbb_exe(parallel-for-basic)
+utils_tbb_exe(parallel-for-basic)
 simple_tbb_exe(parallel-for-lambda)
 simple_tbb_exe(parallel-mandel)
 simple_tbb_exe(parallel-mandel-vector)
