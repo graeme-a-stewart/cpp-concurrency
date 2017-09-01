@@ -56,11 +56,10 @@ int main(int argc, char *argv[]) {
   serial_work(x, my_size);
   tbb::tick_count t1 = tbb::tick_count::now();
   auto serial_tick_interval = t1-t0;
-  std::cout
-  << "Serial loop took "
-  << serial_tick_interval.seconds()
-  << "s"
-  << std::endl;
+  std::cout << "Serial loop took "
+      << serial_tick_interval.seconds()
+      << "s"
+      << std::endl;
 
   // Do the parallel loop
   t0 = tbb::tick_count::now();
@@ -68,17 +67,15 @@ int main(int argc, char *argv[]) {
       parallel_work(x));
   t1 = tbb::tick_count::now();
   auto parallel_tick_interval = t1-t0;
-  std::cout
-  << "Parallel loop took "
-  << parallel_tick_interval.seconds()
-  << "s"
-  << std::endl;
+  std::cout << "Parallel loop took "
+      << parallel_tick_interval.seconds()
+      << "s"
+      << std::endl;
 
-  std::cout
-  << "Parallel speedup: "
-  << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
-  << "x"
-  << std::endl;
+  std::cout << "Parallel speedup: "
+      << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
+      << "x"
+      << std::endl;
 
   delete[] x;
 
