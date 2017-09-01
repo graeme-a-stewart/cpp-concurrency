@@ -14,7 +14,7 @@
 // so that it can be dropped into both the
 // serial and parallel codes
 inline double do_work(size_t i) {
-  return burn(100);
+  return burn(1000);
 }
 
 // Take the log of every value

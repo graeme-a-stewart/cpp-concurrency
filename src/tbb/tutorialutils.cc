@@ -6,7 +6,8 @@
 
 double burn(unsigned long iterations = 10'000'000lu) {
   // Perform a time wasting bit of maths
-  double volatile sum{0.0};
+  // Use volatile to prevent the compiler from optimising away
+  volatile double sum{0.0};
   double f;
   for (auto i = 0lu; i < iterations; ++i) {
     f = (double)(i+1) / iterations * 1.414;
@@ -15,10 +16,8 @@ double burn(unsigned long iterations = 10'000'000lu) {
   return sum;
 }
 
-double burn_for(float ms_interval) {
-  // The compiler is not usually able to optimise away this
-  // null-op calculation, but assigning the result to a
-  // volatile variable guarantees that.
+double burn_for(float ms_interval = 1.0) {
+  // Use volatile to prevent the compiler from optimising away
   volatile double burn_result{0.0};
   std::chrono::duration<float, std::milli> chrono_interval(ms_interval);
   auto start = std::chrono::system_clock::now();

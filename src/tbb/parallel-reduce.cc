@@ -8,13 +8,13 @@
 #include "tbb/tbb.h"
 #include "tutorialutils.h"
 
-#define SIZE 1000000
+#define SIZE 100000
 
 // Work function - define the work to do here
 // so that it can be dropped into both the
 // serial and parallel codes
 inline double do_work(size_t i) {
-  return burn(100);
+  return burn(1000);
 }
 
 // Sum up values in a serial way
