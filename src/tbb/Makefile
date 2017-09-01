@@ -4,6 +4,10 @@ CXXFLAGS ?= -std=c++14 -g -O2
 LDLIBS ?= -lpthread -ltbb -ltutorialutils -lm
 LDFLAGS ?= -L.
 
+ifdef DEBUG
+CXXFLAGS += -DDEBUG=1
+endif
+
 # This implicit rule copes with the situation where a .o file
 # has been left behind (e.g., by two step compile and link)
 % : %.o

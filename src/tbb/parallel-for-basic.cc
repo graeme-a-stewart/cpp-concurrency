@@ -1,6 +1,7 @@
 // Simple TBB parallel_for example, allowing for some scaling timing tests
 
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include <random>
 #include <chrono>
@@ -29,7 +30,12 @@ class parallel_work {
 public:
   void operator() (tbb::blocked_range<size_t>& r) const {
     double *x = my_x;
-    // std::cout << "Working on block of " << r.end() - r.begin() << std::endl;
+#ifdef DEBUG
+    std::ostringstream s;
+    s << "Working on block of " << r.end() - r.begin() << " ("
+        << r.begin() << ", " << r.end() << ")" << std::endl;
+    std::cout << s.str();
+#endif
     for(size_t i=r.begin(); i!=r.end(); ++i) {
       x[i] = do_work(i);
     }

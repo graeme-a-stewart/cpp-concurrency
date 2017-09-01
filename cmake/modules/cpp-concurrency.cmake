@@ -24,3 +24,4 @@ function(utils_tbb_exe TARGET)
 	target_link_libraries(${TARGET} tutorialutils)
 endfunction(utils_tbb_exe)
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1 -O2")
