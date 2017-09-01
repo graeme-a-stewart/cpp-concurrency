@@ -13,9 +13,13 @@ include(cpp-concurrency)
 find_package(TBB REQUIRED)
 find_package(Threads REQUIRED)
 
-# Build the tutorial utilities library
+# Build the tutorial utilities library and the cpuburn calbrator
 add_library(tutorialutils tutorialutils.cc)
 set_property(TARGET tutorialutils PROPERTY CXX_STANDARD 14)
+
+add_executable(burn burn.cc)
+target_link_libraries(burn tutorialutils)
+set_property(TARGET burn PROPERTY CXX_STANDARD 14)
 
 
 # Add a CMake target for each of our examples
