@@ -31,7 +31,7 @@ utils_tbb_exe(parallel-for-basic)
 simple_tbb_exe(parallel-for-lambda)
 simple_tbb_exe(parallel-mandel)
 simple_tbb_exe(parallel-mandel-vector)
-simple_tbb_exe(parallel-reduce)
+utils_tbb_exe(parallel-reduce)
 simple_tbb_exe(parallel-reduce-pi-estimation)
 simple_tbb_exe(version)
 
