@@ -32,7 +32,7 @@ public:
     double *x = my_x;
 #ifdef DEBUG
     std::ostringstream s;
-    s << "Working on block of " << r.end() - r.begin() << " ("
+    s << "Instance " << this << " working on block of " << r.end() - r.begin() << " ("
         << r.begin() << ", " << r.end() << ")" << std::endl;
     std::cout << s.str();
 #endif

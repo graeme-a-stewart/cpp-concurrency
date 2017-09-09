@@ -13,6 +13,8 @@ endif
 % : %.o
 	$(CXX) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -o $@
 
+# Delete the one step implicit rule because it adds
+# libtutorialutils.a to the command line
 % : %.cc
 
 # tutorialutils builds our utility library, not a binary
@@ -23,8 +25,6 @@ all: $(EXE)
 # Not all executables actually depend on this utilities library
 # but it's harmless to have make think they do
 $(EXE): libtutorialutils.a
-
-tutorialutils.o: tutorialutils.cc
 
 libtutorialutils.a: tutorialutils.o
 	ar rcs $@ $<
