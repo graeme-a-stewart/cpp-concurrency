@@ -6,7 +6,7 @@ function(simple_thread_exe TARGET)
 	set(CXX_STANDARD_REQUIRED ON)
 	add_executable(${TARGET} "${TARGET}.cc")
 	target_link_libraries(${TARGET} ${CMAKE_THREAD_LIBS_INIT})
-	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 11)
+	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 17)
 endfunction(simple_thread_exe)
 
 # Define the function used to build a simple TBB executable,

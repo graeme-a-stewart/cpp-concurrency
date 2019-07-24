@@ -2,26 +2,27 @@
 #include <mutex>
 #include <iostream>
 
-std::mutex kettle, tap;
-
 #define THREAD_POOL 80
 
-void kettle_tap() {
-  std::cout << "Locking kettle and tap in " << std::this_thread::get_id() << std::endl;
-  std::lock(kettle, tap);
-  std::lock_guard<std::mutex> kettle_lock(kettle, std::adopt_lock);
-  std::lock_guard<std::mutex> tap_lock(tap, std::adopt_lock);
+std::mutex kettle, tap;
 
-  std::cout << "Locked kettle and tap in " << std::this_thread::get_id() << std::endl;
+void kettle_tap() {
+  std::cout << "Locking kettle and tap in "
+      << std::this_thread::get_id() << std::endl;
+
+  std::scoped_lock lock_both{kettle, tap};
+
+  std::cout << "Locked kettle and tap in "
+      << std::this_thread::get_id() << std::endl;
   
-  std::cout << "Filling kettle in " << std::this_thread::get_id() << std::endl;
+  std::cout << "Filling kettle in "
+      << std::this_thread::get_id() << std::endl;
 }
 
 void tap_kettle() {
   std::cout << "Locking tap and kettle in " << std::this_thread::get_id() << std::endl;
-  std::lock(tap, kettle);
-  std::lock_guard<std::mutex> tap_lock(tap, std::adopt_lock);
-  std::lock_guard<std::mutex> kettle_lock(kettle, std::adopt_lock);
+
+  std::scoped_lock lock_both{kettle, tap};
 
   std::cout << "Locked tap and kettle in " << std::this_thread::get_id() << std::endl;
   
