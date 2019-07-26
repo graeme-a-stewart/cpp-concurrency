@@ -4,7 +4,7 @@ project(CppConcurrency)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_SOURCE_DIR}/cmake/FindTBB;${CMAKE_MODULE_PATH}")
 
-message(INFO "Module path: ${CMAKE_MODULE_PATH}")
+enable_testing()
 
 add_subdirectory("src/cpp11")
 add_subdirectory("src/tbb")

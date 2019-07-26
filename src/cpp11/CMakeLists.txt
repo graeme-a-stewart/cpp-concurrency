@@ -11,6 +11,8 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/modules;${CMAKE_MODULE_PATH}")
 include(cpp-concurrency)
 
+enable_testing()
+
 # Find the system's threading libraries
 find_package(Threads REQUIRED)
 
@@ -40,3 +42,7 @@ simple_thread_exe(thread-arguments-problems)
 simple_thread_exe(thread-arguments-problems2-fixed)
 simple_thread_exe(thread-arguments-problems2)
 simple_thread_exe(thread-arguments)
+
+# Tests
+add_test(hw-concurrency hw-concurrency)
+add_test(async-tasks async-tasks)
