@@ -8,14 +8,14 @@
 #include <tbb/parallel_for.h>
 
 class MySeries{
+private:
+  double my_sum;
 
 public:
-
-  double my_sum;
-  MySeries(MySeries &x, tbb::split): my_sum(0){
+  MySeries(): my_sum(0){
   }
 
-  MySeries(): my_sum(0){
+  MySeries(const MySeries &x, tbb::split): my_sum(0){
   }
 
   void operator()(const tbb::blocked_range<size_t>& r){
@@ -34,14 +34,14 @@ public:
   void join (MySeries& y){
     my_sum += y.my_sum;
   }
+
+  const double get_sum() {return my_sum;}
 };
 
 int main() {
-
   MySeries x;
   tbb::parallel_reduce(tbb::blocked_range<size_t>(0, 1000000000), x);
-  std::cout << std::setprecision(14) << 4 * x.my_sum << std::endl;
+  std::cout << std::setprecision(14) << 4 * x.get_sum() << std::endl;
   return 0;
-
 }
 
