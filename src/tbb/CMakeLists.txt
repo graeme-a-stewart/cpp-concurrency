@@ -38,6 +38,7 @@ simple_tbb_exe(parallel-mandel)
 simple_tbb_exe(parallel-mandel-vector)
 utils_tbb_exe(parallel-reduce)
 simple_tbb_exe(parallel-reduce-pi-estimation)
+simple_tbb_exe(parallel-minimisation)
 simple_tbb_exe(version)
 
 simple_tbb_exe(parallel-for-mutex)

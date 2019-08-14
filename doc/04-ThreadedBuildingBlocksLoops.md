@@ -264,10 +264,10 @@ either write your own *cpuburn* routine or you can use one
 found in `tutorialutils.cc`. The routines are:
 
 - `double burn(unsigned long i)` - Perform some useless maths for `i` 
-  loops and return an value 
+  loops and return an numerical value 
   (note that on a fast modern CPU, 1000 loops takes about 30 microseconds) 
 - `double burn_for(float interval)` - Perform some useless maths until 
-  `interval` milliseconds have passed and return a value
+  `interval` milliseconds have passed and return a numerical value
 
 The `burn.cc` code can be compiled to check your local performance.
 
@@ -295,10 +295,17 @@ g++-7 -O2 my_code.cc tutorialutils.cc -std=c++14 -ltbb -lm
 2. Repeat the first part of the above exercise using a lambda.
 
 3. Write a TBB parallel reduction that calculates a simple reduced value
-   from the calculations you did in exercise 1 or 2.
+   from the calculations you did in exercise 1 or 2, e.g., the sum of the
+   returned values.
     1. Investigate the scaling properties as above.
     2. Do you understand any differences from the first exercise?
 
-4. Using a `blocked_range2d`, write a `parallel_for` loop that calculates the set of points in the `(x,y)` range `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
+4. Find the minimum value of the function f(x)=exp(x)-x^3 in the range [-10,
+   +10]. Setup simple array of uniformly distributed values (say 100,000) in the
+   range and find the minimum value of f(x) and at which x it occurs, using
+   parallel_reduce to search in parallel. (The tricky bit is to handle the joins
+   between different seach pieces properly.)
+
+5. Using a `blocked_range2d`, write a `parallel_for` loop that calculates the set of points in the `(x,y)` range `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
 
 Recall that the Mandelbrot set is the set of points (`c`) where `z_i+1 = z_i^2 + c; z0 = 0` remains bounded for all `i`. *Tip:* A pointer to a 2D array of `Type` in C++ is `Type (*p)[SIZE]` where you *do* need to give the dimension of the last index explicitly (or you can use a `vector<vector<bool>>`).

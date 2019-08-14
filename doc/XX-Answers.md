@@ -46,7 +46,9 @@ You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency,
 
 3. `parallel-reduce.cc`
 
-4. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same done with `std::vector` storage)
+4. `parallel-minimisation.cc`
+
+5. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same done with `std::vector` storage)
 
 ## 05 TBB Containers
 
