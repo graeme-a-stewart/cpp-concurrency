@@ -61,6 +61,20 @@ int main(int argc, char *argv[]) {
       << "x"
       << std::endl;
 
+  // Slightly modified parallel loop, using the compact notation
+  t0 = tbb::tick_count::now();
+  // Here we just pass a lambda function that captures local variables by value: [=]
+  tbb::parallel_for(size_t(0), my_size, [=](size_t i) {x[i] = do_work(i);});
+  t1 = tbb::tick_count::now();
+  parallel_tick_interval = t1-t0;
+  std::cout << "Compact parallel loop took "
+      << parallel_tick_interval.seconds()
+      << "s"
+      << std::endl;
+  std::cout << "Compact parallel speedup: "
+      << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
+      << "x"
+      << std::endl;
   delete[] x;
 
   return 0;

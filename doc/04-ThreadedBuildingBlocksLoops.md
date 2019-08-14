@@ -23,7 +23,8 @@ With most installations of TBB the only include file needed is `tbb/tbb.h`. Depe
 
 As TBB uses libraries, the `-ltbb` option to the linker is needed and you might need a linker path option to find these libraries.
 
-TBB objects live in the `tbb` namespace, which here we will give explicitly. 
+TBB objects live in the `tbb` namespace, which here we will give explicitly (`using namespace tbb`
+would mean we did not need to do that).
 
 ## Parallel Loop Algorithms
 
@@ -32,8 +33,10 @@ TBB objects live in the `tbb` namespace, which here we will give explicitly.
 One of the simplest parallel constructs is one where we perform the same operation on an array of values and there is no dependencies between the operations. As a serial loop such an operation is just
 
 ```cpp
-for (size_t i=0; i<array_size; ++i) {
-    my_func(x[i]);
+void SerialApplyFoo( float a[], size_t n ) {
+    for (size_t i=0; i<array_size; ++i) {
+        my_func(x[i]);
+    }
 }
 ```
 
@@ -76,7 +79,9 @@ Note that `parallel_for` will take care of setting up the TBB thread pool for us
 
 #### Using a Lambda
 
-As the only requirements on the object passed to `tbb::parallel_for` are that it's copyable and callable, we can use a C++11 lambda function in place of writing a whole class. e.g.,
+As the only requirements on the object passed to `tbb::parallel_for` are 
+that it's copyable and callable, we can use a C++11 lambda function in 
+place of writing a whole class. e.g.,
 
 ```cpp
 #include "tbb/tbb.h"
@@ -90,11 +95,31 @@ void ParallelApplyFunc(double x[], size_t n) {
 }
 ```
 
+The lambda expression instructs the compiler to create the *functor* for us.
+
+(There are many good descriptions of lambda functions available, e.g., 
+[this one](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp) from Microsoft.)
+
 Using the lambda which copies by value `[=]` satisfies all the criteria needed by `parallel_for` and makes for a very succinct declaration.
+
+A further compactification of notation can be achieved like this:
+
+```cpp
+#include "tbb/tbb.h"
+
+void ParallelApplyFunc(double x[], size_t n) {
+    tbb::parallel_for(size_t(0), n, [=](size_t i){my_func(x[i]);});
+}
+```
+Here even the iteration on the range `[0,n)` is taken care of by TBB.
 
 ### Parallel Reduce
 
-A `parallel_for` is great when operations really are independent. However, sometimes we need to do some computation on the input data that produces an aggregated result that depends on all the input data. If the computation can be broken down into pieces we can still parallelise this operation, which is a *reduction*.
+A `parallel_for` is great when operations really are independent. However,
+sometimes we need to do some computation on the input data that produces an
+aggregated result that depends on all the input data. If the computation can be
+broken down into pieces we can still parallelise this operation, which is a
+*reduction*.
 
 Here's a simple example: if one needs to sum up 10 numbers one can do it
 like this
@@ -173,7 +198,7 @@ Note that because of the extra methods that are needed for
 `parallel_reduce` it's less easy to use a lambda
 here.
 
-## Blocked Range and Grain Size
+## Blocked Range, Grain Size and Partitioners
 
 When we used the `blocked_range` above we only specified the start and end values of the iteration. TBB tries to discover itself what the optimal way to divide the problem is. This division is called the *grain size*. The automatic grain size determination is now pretty good in TBB, but it is possible to pass a manual grain size that might eke out some more performance:
 
@@ -183,6 +208,10 @@ tbb::blocked_range<size_t>(0, n, grain_size);
 ```
 
 However, beware that the best grain size on one machine might not be the best on another, so use this option cautiously.
+
+Similarly, there are different partitioners that TBB can use, but again, the
+default `auto_partitioner` does well in most cases and it's only in special
+circumstances that one might want to use something different.
 
 ## Different Blocked Range Templates
 
