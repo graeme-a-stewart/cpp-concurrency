@@ -5,22 +5,32 @@
 
 int main() {
 
-  int sum = 0;
+  unsigned long sum = 0;
   tbb::flow::graph g;
 
-  tbb::flow::function_node< float, float > squarer( g, tbb::flow::unlimited, [](const float &v) { 
+  // Simple graph node that squares its argument; defined as a lambda
+  // There is no state here so we can execute in parallel as many times as needed
+  tbb::flow::function_node< unsigned long, unsigned long > squarer( g, tbb::flow::unlimited, [](const unsigned long &v) { 
       return v*v; 
     } );
-  tbb::flow::function_node< float, float > cuber( g, tbb::flow::unlimited, [](const float &v) { 
+
+  // Ditto for cubes
+  tbb::flow::function_node< unsigned long, unsigned long > cuber( g, tbb::flow::unlimited, [](const unsigned long &v) { 
       return v*v*v; 
     } );
-  tbb::flow::function_node< float, float > summer( g, 1, [&](const float &v ) -> float { 
+
+  // Add the input argument to the global sum - note here as their can be a
+  // race condition we limit to a single execution
+  tbb::flow::function_node< unsigned long, unsigned long > summer( g, 1, [&](const unsigned long &v ) -> unsigned long { 
       return sum += v; 
     } );
+
+  // Connect the graph
   tbb::flow::make_edge( squarer, summer );
   tbb::flow::make_edge( cuber, summer );
 
-  for (int i=1; i<=10; ++i) {
+  // Fire data into the graph
+  for (int i=1; i<=1000; ++i) {
     squarer.try_put(i);
     cuber.try_put(i);
   }
