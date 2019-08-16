@@ -10,3 +10,7 @@ add_subdirectory("src/cpp11")
 add_subdirectory("src/tbb")
 add_subdirectory("src/tbb/graph")
 add_subdirectory("src/tbb/tasks")
+
+# Note that the docs subdirectory is not added to the master CMakeFile as it
+# also requires pandoc to operate correctly, which may not be available in
+# all environments. Simply set this up as a separate project.

@@ -1,10 +1,16 @@
+/*
+    Fill a TBB concurrent vector using std::threads
+*/
+
 #include <iostream>
 #include <thread>
 #include <vector>
 #include <tbb/tbb.h>
 
-//typedef tbb::concurrent_vector<long> my_long_vector;
-typedef std::vector<long> my_long_vector;
+// If you use the STL definition the code will not work as STL containers
+// are not thread safe
+typedef tbb::concurrent_vector<long> my_long_vector;
+//typedef std::vector<long> my_long_vector;
 
 void filler(my_long_vector& v, long offset, long n) {
     for (long i=offset; i<offset+n; ++i) {
