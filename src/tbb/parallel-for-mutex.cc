@@ -33,7 +33,7 @@ void serial_log(double x[], size_t n, double &sum) {
 // Class for TBB to take the log in parallel
 class parallel_log {
     double *const my_x;
-    mutable double *my_sum; // Volate const for this exercise as we're
+    mutable double *my_sum; // Violate const for this exercise as we're
                             // really doing a parallel reduce (non-const)
     public:
         void operator() (tbb::blocked_range<size_t>& r) const {
@@ -95,9 +95,6 @@ int main(int argc, char *argv[]) {
         << serial_tick_interval.seconds()/parallel_tick_interval.seconds()
         << "x"
         << std::endl;
-
-    std::cout
-      << "Sum was " << sum << std::endl;
 
     delete[] x;
 
