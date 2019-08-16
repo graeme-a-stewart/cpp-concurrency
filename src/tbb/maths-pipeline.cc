@@ -90,7 +90,15 @@ int main(int argc, char* argv[]) {
   std::cout << "Running pipeline with " << ntoken << " tokens" << std::endl;
 
   FILE* in = fopen(in_file, "r");
+  if (!in) {
+    std::cerr << "Failed to open input file " << in_file << std::endl;
+    return 1;
+  }
   FILE* out = fopen(out_file, "w");
+  if (!out) {
+    std::cerr << "Failed to open input file " << in_file << std::endl;
+    return 1;
+  }
 
   auto t0 = tbb::tick_count::now();
 
