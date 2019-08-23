@@ -135,27 +135,22 @@ public:
 
   // This is the silly fooble detction calculation
   bool fooble() {
-    if (!m_done_dq)
-      return false;
+    if (!m_done_dq) return false;
     float fooble_trigger = 0.0;
-    for (auto& cell: m_cells) {
+    for (auto& cell : m_cells) {
       if (cell.good_cell() && cell.sensor() > cell.noise() * 3.0) {
-	float answer=cell.sensor() - cell.noise();
-	// Time wasting ;-)
-	for (int i=0; i<1000; ++i)
-	  answer += log(pow(answer+1.0, 2.5));
-	fooble_trigger += answer;
+        float answer = cell.sensor() - cell.noise();
+        // Time wasting ;-)
+        for (int i = 0; i < 1000; ++i) answer += log(pow(answer + 1.0, 2.5));
+        fooble_trigger += answer;
       }
     }
-    if (fooble_trigger > 3.0e+6)
-      return true;
+    if (fooble_trigger > 3.0e+6) return true;
     return false;
   }
-    
 
   void fill_random(float signal) {
-    for (auto& cell: m_cells)
-      cell.fill_random(signal);
+    for (auto& cell : m_cells) cell.fill_random(signal);
   }
 
   void dump_strip(std::ostream& ofs) {
