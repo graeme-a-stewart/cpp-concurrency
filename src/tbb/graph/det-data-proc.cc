@@ -115,9 +115,9 @@ public:
     for (size_t i=0; i<m_bins; ++i) {
       ofs << i << " ";
       if (m_counts[i] == 0) {
-	ofs << 0.0 << " " << 0.0 << endl;
+        ofs << 0.0 << " " << 0.0 << endl;
       } else {
-	ofs << m_dq[i]/m_counts[i] << " " << m_signal[i]/m_counts[i] << endl;
+        ofs << m_dq[i]/m_counts[i] << " " << m_signal[i]/m_counts[i] << endl;
       }
     }
   }
@@ -149,8 +149,8 @@ int main() {
   tbb::flow::function_node<shared_ptr<det_strip>, bool> get_fooble(g, tbb::flow::unlimited, [](const shared_ptr<det_strip> ds_p) {
       bool saw_fooble = ds_p->fooble();
       if (saw_fooble && ds_p->data_quality() > 0.9) {
-	cout << "Fooble: " << saw_fooble << " at " << ds_p->position() << endl;
-	return true;
+  cout << "Fooble: " << saw_fooble << " at " << ds_p->position() << endl;
+  return true;
       }
       return false;
     });

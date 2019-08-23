@@ -7,6 +7,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../../cmake/modules;${CMAKE_SOURCE
 
 include(cpp-concurrency)
 
+enable_testing()
+
 find_package(Boost)
 find_package(TBB)
 find_package(Threads)
@@ -15,6 +17,7 @@ find_package(Threads)
 simple_tbb_exe(data-flow)
 simple_tbb_exe(data-flow-basic)
 simple_tbb_exe(data-flow-ptr)
+simple_tbb_exe(data-flow-ptrsrc)
 simple_tbb_exe(data-flow-sharedptr)
 
 simple_tbb_exe(single-node)
@@ -32,3 +35,7 @@ set_property(TARGET det-rand-dump PROPERTY CXX_STANDARD 11)
 
 # Fooble detector code
 simple_tbb_exe(det-data-proc)
+
+
+# A few test cases
+add_test(data-flow-basic data-flow-basic)
