@@ -1,8 +1,8 @@
 # TBB Tutorial - Scientific Data Processing Exercise
 
-In this final part of the TBB tutorial we shall build up a simple,
-but realistic, example of scientific data processing. The exercise
-is the following:
+In this final part of the TBB tutorial we shall build up a simple, but failrly
+realistic, example of scientific data processing. The exercise is the
+following:
 
 - We have a detector that consists of a grid of pixels, 100x100.
  
@@ -16,3 +16,4 @@ available to us in which there might be a fooble.
 energy spike in a cluster of pixels, that should last for at least 3 seconds.
 
 ![The Fooble Detector](https://graemes.web.cern.ch/graemes/teaching/gridka/fooble-sketch.png)
+

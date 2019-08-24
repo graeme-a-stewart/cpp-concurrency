@@ -233,7 +233,9 @@ function_node< double *, double * > n1( g, unlimited, [&]( double *a ) -> double
     3. Instead of using `try_put` to inject data, write a simple `source_node` that injects some numbers.
     4. You might extend the example by adding multiple paths through the DAG (multiple output edges from a node).
 
-2. In file `strip_det.hpp` you'll find a class for a small *fooble* strip detector (`det_strip`) consisting of a vector of cells (`det_cell`). Various methods are defined to do noise suppression, calculate data quality, extract the signal and detect foobles. There is also a method to serialise the strip data from a file. In this exercise we'll use a TBB graph to do data preparation and see if we have found a fooble.
+
+
+3. In file `strip_det.hpp` you'll find a class for a small *fooble* strip detector (`det_strip`) consisting of a vector of cells (`det_cell`). Various methods are defined to do noise suppression, calculate data quality, extract the signal and detect foobles. There is also a method to serialise the strip data from a file. In this exercise we'll use a TBB graph to do data preparation and see if we have found a fooble.
     1. Write a `source_node` that will load the detector data from a file.
         1. You can use the `det-rand-dump.cc` code to generate data (it will write to `fooble.txt`).
         1. Just to test that the data is loaded correctly, attach a node to the source that prints some basic information on the strip, e.g., the number of cells.

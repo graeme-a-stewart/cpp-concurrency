@@ -2,7 +2,10 @@
 
 Listed here are programs that are solutions to the exercises posed in the other tutorial documents. You can compare your solution to them and also use them if you get stuck.
 
-You'll find the programs in https://github.com/graeme-a-stewart/cpp-concurrency, under `src/cpp11` for 01-03 and `src/tbb` for 04-09.
+You'll find the programs in
+https://github.com/graeme-a-stewart/cpp-concurrency, under `src/cpp11` for
+01-03 and `src/tbb` for 04-09. There is now a subdirectory for each section of
+the tutorial.
 
 ## 01 Basic Thread Management
 
