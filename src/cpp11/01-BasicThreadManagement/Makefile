@@ -1,6 +1,6 @@
 # Allow CXX and CXXFLAGS to be overridden from the environment
 CXX ?= g++
-CXXFLAGS ?= -pthread -std=c++11 -g -O2
+CXXFLAGS ?= -pthread -std=c++14 -g -O2
 LDLIBS ?= -lpthread
 
 # This implicit rule copes with the situation where a .o file

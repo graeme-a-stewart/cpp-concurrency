@@ -6,7 +6,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_SOURCE_DIR}/cma
 
 enable_testing()
 
-add_subdirectory("src/cpp11")
+add_subdirectory("src/cpp11/01-BasicThreadManagement")
+add_subdirectory("src/cpp11/02-MutexAndAtomics")
+add_subdirectory("src/cpp11/03-AsyncFuture")
 add_subdirectory("src/tbb")
 add_subdirectory("src/tbb/graph")
 add_subdirectory("src/tbb/tasks")
