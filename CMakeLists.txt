@@ -9,9 +9,12 @@ enable_testing()
 add_subdirectory("src/cpp11/01-BasicThreadManagement")
 add_subdirectory("src/cpp11/02-MutexAndAtomics")
 add_subdirectory("src/cpp11/03-AsyncFuture")
-add_subdirectory("src/tbb")
-add_subdirectory("src/tbb/graph")
-add_subdirectory("src/tbb/tasks")
+add_subdirectory("src/tbb/04-TBBLoops")
+add_subdirectory("src/tbb/05-TBBMutexAndAtomics")
+add_subdirectory("src/tbb/06-TBBContainers")
+add_subdirectory("src/tbb/07-TBBPipelines")
+add_subdirectory("src/tbb/08-TBBGraphs")
+add_subdirectory("src/tbb/09-TBBTasks")
 
 # Note that the docs subdirectory is not added to the master CMakeFile as it
 # also requires pandoc to operate correctly, which may not be available in

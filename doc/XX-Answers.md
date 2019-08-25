@@ -55,14 +55,15 @@ the tutorial.
 
 ## 05 Mutexes and Atomics (TBB Version)
 
-1. `thread-arguments-mutex.cc`
+1. `parallel-cout.cc` and `parallel-cout-mutex.cc`.
 
-2. `multithread-sum-fixed-atomic.cc` and 
-   `multithread-sum-fixed-mutex.cc`. 
+2. `multithread-tbb-sum-fixed-atomic.cc` and 
+   `multithread-tbb-sum-fixed-mutex.cc`. 
 
-3. See `multithread-sum-fixed-atomic-efficient.cc` and
-   `multithread-sum-fixed-mutex-efficient.cc` and compare with the
-   versions above.
+3. See `multithread-sum-tbb-fixed-mutex-efficient.cc` and
+   and compare with the version above. (The atomic efficient
+   answer is basically the same idea, using a local counter and
+   adding to the atomic only once.)
    
 4. `deadlock-fixed.cc` and
    `deadlock-fixed-using-lock-adoption.cc`

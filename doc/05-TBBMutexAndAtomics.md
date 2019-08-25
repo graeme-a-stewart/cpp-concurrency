@@ -258,19 +258,19 @@ busy for as much of the time as possible.
 
 # Exercises
 
-1. Take the program you wrote in the previous practical (Basic Thread Management) and get many threads to print to `std::cout`. You should find that the output is muddled up between the threads.
+1. Take the program `parallel-cout.cc`, compile it and run it. Is the result what you expect?
     1. Now use a `mutex` to protect the access to `stdout` and ensure that all threads print their *hello*.
-    2. Use 50 threads and run the program a few times. Is the order of the output constant? Is this expected?
+    2. Run the program a few times. Is the order of the output constant? Is this expected?
 
-2. Start from the program `multithread-sum.cc`. Take a look at it and see how it calculates an *occupancy* for a 1-D detector in a serial
+2. Start from the program `multithread-tbb-sum.cc`. Take a look at it and see how it calculates an *occupancy* for a 1-D detector in a serial
    and multi-threaded way.
     1. Compile and run the program a few times. Does it give the correct answer? Does it give a consistent answer?
     2. Use a `mutex` to fix the program.
     3. Can you use an `std::atomic` to fix the problem?
 
-3. Taking the two fixed versions of the `multithread-sum.cc` from the previous exercise, investigate if there is a performance benefit to using `atomic` over `mutex`. (Increase the number of iterations if needed, to get good timing measurements.)
+3. Taking the two fixed versions of the `multithread-tbb-sum.cc` from the previous exercise, investigate if there is a performance benefit to using `atomic` over `mutex`.
     1. For both solutions consider how to reduce the contention between threads to a minimum. (Try a few different strategies and take timing measurements.)
 
-4. Run the program `deadlock.cc`.
+4. Run the program `deadlock-tbb.cc`.
     1. Can you see why it hangs?
-    2. Fix it.
+    2. Fix it (you can try `scoped_lock`).

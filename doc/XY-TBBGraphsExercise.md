@@ -17,3 +17,15 @@ energy spike in a cluster of pixels, that should last for at least 3 seconds.
 
 ![The Fooble Detector](https://graemes.web.cern.ch/graemes/teaching/gridka/fooble-sketch.png)
 
+## Fooble Detector Data Processing
+
+- Read RAW data from `data-input.dat`
+  - The data is written in an extremely simple way, equivalent to
+```cpp
+struct {
+    float timestamp;
+    float std:array cells[100][100];
+}
+```
+  i.e. a series of 10001 float values written in little endian binary.
+  

@@ -13,4 +13,3 @@ all: $(EXE)
 
 clean:
 	rm -fr $(EXE) *.dSYM *.o
-

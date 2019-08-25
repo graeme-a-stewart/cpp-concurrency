@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.6)
 
-project(CppConcurrency-TBB)
+project(CppConcurrency-TBB-Loops)
 
 if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   message(FATAL_ERROR "This project cannot build in the source directory. "
@@ -8,7 +8,7 @@ if(${PROJECT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
 endif()
 
 # Add our CMake module paths and find the modules we need
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../cmake/modules;${CMAKE_SOURCE_DIR}/../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../../../cmake/modules;${CMAKE_SOURCE_DIR}/../../../cmake/FindTBB;${CMAKE_MODULE_PATH}")
 include(cpp-concurrency)
 find_package(TBB REQUIRED)
 find_package(Threads REQUIRED)
@@ -22,7 +22,6 @@ add_executable(burn burn.cc)
 target_link_libraries(burn tutorialutils)
 set_property(TARGET burn PROPERTY CXX_STANDARD 14)
 
-
 ## Add a CMake target for each of our examples
 # Parallel for
 utils_tbb_exe(parallel-for-basic)
@@ -35,16 +34,6 @@ simple_tbb_exe(parallel-for-mutex)
 utils_tbb_exe(parallel-reduce)
 simple_tbb_exe(parallel-reduce-pi-estimation)
 simple_tbb_exe(parallel-minimisation)
-
-# Concurrent containers
-simple_tbb_exe(concurrent-vector)
-simple_tbb_exe(concurrent-vector-grow-by)
-simple_tbb_exe(concurrent-vector-stdthread)
-simple_tbb_exe(generate-and-filter)
-
-# Pipelines
-simple_tbb_exe(gen-input)
-simple_tbb_exe(maths-pipeline)
 
 # Misc
 simple_tbb_exe(number-of-threads)
@@ -62,12 +51,6 @@ add_test(parallel-mandel-vector parallel-mandel-vector)
 add_test(parallel-reduce parallel-reduce)
 add_test(parallel-reduce-pi-estimation parallel-reduce-pi-estimation)
 add_test(parallel-minimisation parallel-minimisation)
-
-# Concurrent containers, N.B. stl and stdthread will fail by design 
-add_test(concurrent-vector concurrent-vector)
-add_test(concurrent-vector-stdthread concurrent-vector-stdthread)
-add_test(concurrent-vector-grow-by concurrent-vector-grow-by)
-add_test(generate-and-filter generate-and-filter)
 
 # Misc
 add_test(version version)
