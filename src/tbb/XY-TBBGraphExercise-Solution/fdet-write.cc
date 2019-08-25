@@ -15,7 +15,9 @@
 void averages(std::vector<f_det> &fdet_data) {
     std::cout << "Calculating averages of " << fdet_data.size() << " frames" << std::endl;
     for(size_t t=0; t<fdet_data.size(); ++t) {
-        std::cout << "Timeframe " << t << "; average values " << fdet_data[t].average() << std::endl;
+        std::cout << "Timeframe " << t << ": average values "
+            << fdet_data[t].average() << " " << fdet_data[t].s_average()
+            << std::endl;
     }
 }
 
@@ -49,9 +51,7 @@ int main(int argn, char* argv[]) {
     // different seed within each frame, and access in a consistent
     // order (given that frames >> cores this is pretty much ok)
     std::cout << "Filling detector with noise" << std::endl;
-    std::mutex m_out;
     tbb::parallel_for(0, frames, 1, [&, base_seed](int t){
-        double avg{0.0};
         std::mt19937 generator;
         generator.seed(base_seed+t);
         std::normal_distribution<float> noise{10,4};
@@ -59,14 +59,9 @@ int main(int argn, char* argv[]) {
         for (size_t i=0; i<DETSIZE; ++i) {
             for (size_t j=0; j < DETSIZE; ++j) {
                 fdet_data[t].cells[i][j] = noise(generator);
-                avg += fdet_data[t].cells[i][j];
             }
         }
-        avg /= DETSIZE*DETSIZE;
-        std::lock_guard<std::mutex> lck(m_out);
-        std::cout << "Timeframe " << t << "; average noise " << avg << std::endl;
     });
-    std::cout << fdet_data.size() << std::endl;
     averages(fdet_data);
 
     // Now add pedastal values to each cell

@@ -7,16 +7,49 @@
 f_det::f_det(float t, float v): timestamp{t} {
     tbb:parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE),
     [&](tbb::blocked_range2d<size_t>& r) {
-        for (size_t i=r.rows().begin(); i!=r.rows().end(); ++i) {
-            for (size_t j=r.cols().begin(); j!=r.cols().end(); ++j) {
-                cells[i][j] = v;
+        for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
+            for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
+                cells[x][y] = v;
             }
         }
     });
 }
 
 // Average value
+// Define a class to take advantage of parallel_reduce
+class fdet_sum {
+private:
+    float my_sum;
+    f_det *my_det;
+
+public:
+    fdet_sum(f_det *fdet_p): my_sum(0.0f), my_det(fdet_p) {}
+    fdet_sum(const fdet_sum &x, tbb::split): my_sum(0.0f), my_det(x.my_det) {}
+
+    void operator()(const tbb::blocked_range2d<size_t>& r){
+        for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
+            for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
+                my_sum += my_det->cells[x][y];
+            }
+        }
+    }
+
+    void join (fdet_sum& o){
+        my_sum += o.my_sum;
+    }
+
+    const float sum() {
+        return my_sum;
+    }
+};
+
 float f_det::average() {
+    fdet_sum tmp_sum(this);
+    tbb::parallel_reduce(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE), tmp_sum);
+    return tmp_sum.sum() / (DETSIZE * DETSIZE);
+}
+
+float f_det::s_average() {
     float total{0.0f};
     for (size_t x=0; x<DETSIZE; ++x) {
         for (size_t y=0; y<DETSIZE; ++y) {
