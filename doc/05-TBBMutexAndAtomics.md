@@ -258,6 +258,32 @@ busy for as much of the time as possible.
 
 # Exercises
 
+## Tip
+
+For parallelising some generic workloads using TBB the following construction
+can be used:
+
+```cpp
+    tbb::parallel_for(0, SIZE, 1, [](int i){
+        // In the lambda i is set to the values
+        // 0, 1, 2, 3, ..., SIZE-1
+        // and suitable workload can be executed
+    });
+```
+
+generalising to
+
+```cpp
+    tbb::parallel_for(0, SIZE, CHUNK, [](int i){
+        // In this case lambda i is set to the values
+        // 0, CHUNK, CHUNK*2, CHUNK*3, ..., SIZE-CHUNK
+        // and suitable workload can be executed
+    });
+```
+
+cf. direct invocation of `std::thread`s shown in the C++ concurrency part of
+the tutorial.
+
 1. Take the program `parallel-cout.cc`, compile it and run it. Is the result what you expect?
     1. Now use a `mutex` to protect the access to `stdout` and ensure that all threads print their *hello*.
     2. Run the program a few times. Is the order of the output constant? Is this expected?
