@@ -95,16 +95,15 @@ namespace fdet {
     }
 
 
-    double burn(unsigned long iterations = 10'000'000lu) {
-    // Perform a time wasting bit of maths
-    // Use volatile to prevent the compiler from optimising away
-    volatile double sum{0.0};
-    double f;
-    for (auto i = 0lu; i < iterations; ++i) {
-        f = (double)(i+1) / iterations * 1.414;
-        sum += std::sin(std::log(f));
-    }
-    return std::log(std::abs(sum));
+    double calc(unsigned long iterations = 10'000'000lu) {
+        // Extra calculations simulating more significant workload
+        volatile double sum{0.0};
+        double f;
+        for (auto i = 0lu; i < iterations; ++i) {
+            f = (double)(i+1) / iterations * 1.414;
+            sum += std::sin(std::log(f));
+        }
+        return std::abs(std::log(std::abs(sum)));
     }
 
 
@@ -115,7 +114,8 @@ namespace fdet {
         float pedastal_value{5.0f};
         float edge_distance = std::sqrt(std::pow(float(x) - DETSIZE/2.0, 2) 
             + std::pow(float(y) - DETSIZE/2.0, 2));
-        pedastal_value += edge_distance + burn(100);
+        // Call to calc is to utilise more CPU
+        pedastal_value += edge_distance + calc(100);
         // std::cout << pedastal_value << std::endl;
         return pedastal_value;
     }
@@ -127,8 +127,9 @@ namespace fdet {
         {{20, 40}, {20, 41}, {21, 41}, {34, 90}, {77, 67}};
 
     bool cell_mask(size_t x, size_t y) {
-        for (auto c: hot_cells) {
-            if (c.first==x && c.second==y) {
+        for (auto& c: hot_cells) {
+            // Call to calc is to utilise more CPU
+            if (calc(100) > 0.0 && c.first==x && c.second==y) {
                 return false;
             }
         }

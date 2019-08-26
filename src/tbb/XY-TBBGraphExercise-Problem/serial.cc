@@ -86,7 +86,10 @@ int signal_search(det_signal& signals, size_t frame_no, fdet::f_det& frame) {
             }
             if (sum > count*fdet::signal_threshold) {
                 signals.count[x][y].push_back(frame_no);
-                std::cout << "Signal " << sum/count << " " << count << std::endl;
+                if (DEBUG) {
+                    std::cout << "Signal " << sum/count << " " << count 
+                        << " in frame " << frame_no << std::endl;
+                }
             }
         }
     }
@@ -134,8 +137,6 @@ std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
             last_value = cell_signal[i];
             duration = 1;
         }
-        std::cout << i << " " << test_value << " " << last_value << " "
-            << duration << std::endl;
     }
     // Have to handle properly the end of the window
     if (duration >= fdet::fooble_det_time) {

@@ -120,7 +120,7 @@ int main(int argn, char* argv[]) {
     averages(fdet_data);
 
     // Now add a few spurious signals to each timeframe
-    for (auto f: fdet_data) {
+    for (auto& f: fdet_data) {
         std::poisson_distribution<int> p(8);
         int count = p(generator);
         for (int i=0; i<count; ++i) {
