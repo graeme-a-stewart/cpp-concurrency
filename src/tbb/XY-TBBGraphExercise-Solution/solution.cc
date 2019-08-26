@@ -15,7 +15,7 @@
 // Define our detector data vector type here
 // This allows us to see what might go wrong is we were to use an std::vector
 // (could it be corrected?)
-typedef tbb::concurrent_vector<f_det> f_det_vec;
+using f_det_vec = tbb::concurrent_vector<f_det>;
 
 // Read input data from a file
 class frame_loader {
@@ -45,10 +45,10 @@ public:
 // of the data item added
 class add_frame_data {
 private:
-    std::vector<f_det>& m_fdet_data;
+    f_det_vec& m_fdet_data;
 
 public:
-    add_frame_data(std::vector<f_det>& fdet_data):
+    add_frame_data(f_det_vec& fdet_data):
         m_fdet_data{fdet_data} {};
 
     size_t operator()(f_det fdet) {
@@ -61,10 +61,10 @@ public:
 // Subtract the pedastal values from a frame
 class subtract_pedastal {
 private:
-    std::vector<f_det>& m_fdet_data;
+    f_det_vec& m_fdet_data;
 
 public:
-    subtract_pedastal(std::vector<f_det>& fdet_data):
+    subtract_pedastal(f_det_vec& fdet_data):
         m_fdet_data{fdet_data} {};
 
     size_t operator()(size_t t) {
@@ -94,7 +94,7 @@ int main(int argn, char* argv[]) {
 
     // Setup a big vector where we will add all the data
     // Assume in this case it fits in memory!
-    std::vector<f_det> fdet_data;
+    f_det_vec fdet_data;
     frame_loader data_loader(det_in);
     add_frame_data frame_aggregator(fdet_data);
     subtract_pedastal sub_pedastal(fdet_data);
