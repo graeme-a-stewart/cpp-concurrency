@@ -12,20 +12,20 @@ int main(int argn, char* argv[]) {
         return 1;
     }
 
-    std::vector<f_det> fdet_data;
+    std::vector<fdet::f_det> fdet_data;
 
     std::ifstream det_in(argv[1], std::ios::binary);
-    size_t frame{0};
+    size_t frame_counter{0};
     int read_error{0};
     while(det_in.good()) {
-        f_det fdet;
+        fdet::f_det fdet;
         read_error = fdet.read(det_in);
         if (!read_error) {
-            std::cout << "Read frame " << frame << ": Average, " << fdet.average() << std::endl;
+            std::cout << "Read frame " << frame_counter << ": Average, " << fdet.average() << std::endl;
             fdet_data.push_back(fdet);
-            ++frame;
+            ++frame_counter;
         }
-        if (frame==12) fdet.dump_csv("test.csv");
+        if (frame_counter==12) fdet.dump_csv("test.csv");
     }
 
     return 0;

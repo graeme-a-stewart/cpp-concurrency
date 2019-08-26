@@ -19,7 +19,7 @@
 // Define our detector data vector type here
 // In this solution we're going to be a bit lazy and
 // assume we can hold all of the data in memory
-using f_det_vec = std::vector<f_det>;
+using f_det_vec = std::vector<fdet::f_det>;
 
 // This is the "datatype" we shall use to gather the
 // signals, which will be an array of vectors, the
@@ -40,28 +40,28 @@ struct fooble {
 };
 
 // Read input data from a file
-int loader(std::ifstream& in_fp, f_det& frame) {
+int loader(std::ifstream& in_fp, fdet::f_det& frame) {
     int rerr = frame.read(in_fp);
     return rerr;
 }
 
 
 // Subtract the pedastal values from a frame
-int pedastal_subtract(f_det& frame) {
+int pedastal_subtract(fdet::f_det& frame) {
     for (size_t x=0; x<DETSIZE; ++x) {
         for (size_t y=0; y<DETSIZE; ++y) {
-            frame.cells[x][y] -= pedastal(x, y);
+            frame.cells[x][y] -= fdet::pedastal(x, y);
         }
     }
     return 0;
 }
 
 // Data quality, apply mask to bad cells
-int mask_bad_cells(f_det& frame) {
+int mask_bad_cells(fdet::f_det& frame) {
     // Loop over cells and set any bad cells to -1.0
     for (size_t x=0; x<DETSIZE; ++x) {
         for (size_t y=0; y<DETSIZE; ++y) {
-            if (!cell_mask(x, y)) frame.cells[x][y] = -1.0f;
+            if (!fdet::cell_mask(x, y)) frame.cells[x][y] = -1.0f;
         }
     }
     return 0;
@@ -70,7 +70,7 @@ int mask_bad_cells(f_det& frame) {
 
 // Signal search in a frame, looking for 3x3 clusters
 // which are above our threshold
-int signal_search(det_signal& signals, size_t frame_no, f_det& frame) {
+int signal_search(det_signal& signals, size_t frame_no, fdet::f_det& frame) {
     for (size_t x=0; x<DETSIZE; ++x) {
         for (size_t y=0; y<DETSIZE; ++y) {
             float sum = 0.0f;
@@ -84,7 +84,7 @@ int signal_search(det_signal& signals, size_t frame_no, f_det& frame) {
                     }
                 }
             }
-            if (sum > count*signal_threshold) {
+            if (sum > count*fdet::signal_threshold) {
                 signals.count[x][y].push_back(frame_no);
                 std::cout << "Signal " << sum/count << " " << count << std::endl;
             }
@@ -97,7 +97,7 @@ int signal_search(det_signal& signals, size_t frame_no, f_det& frame) {
 // Fooble detector code
 std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
     // Give up on hopeless cases...
-    if (cell_signal.size() < fooble_det_time) return std::pair<int, int>(-1, -1);
+    if (cell_signal.size() < fdet::fooble_det_time) return std::pair<int, int>(-1, -1);
 
     if (DEBUG) {
         std::cout << "Attempting fooble detection on " << cell_signal.size() 
@@ -126,7 +126,7 @@ std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
             last_value=cell_signal[i];
             ++duration;
         } else {
-            if (duration >= fooble_det_time) {
+            if (duration >= fdet::fooble_det_time) {
                 detection = test_value;
                 detection_duration = duration;
             }
@@ -138,7 +138,7 @@ std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
             << duration << std::endl;
     }
     // Have to handle properly the end of the window
-    if (duration >= fooble_det_time) {
+    if (duration >= fdet::fooble_det_time) {
         detection = test_value;
         detection_duration = duration; 
     }
@@ -167,7 +167,7 @@ int main(int argn, char* argv[]) {
 
     while(det_in.good()) {
         // Try to load the next data frame
-        f_det new_frame;
+        fdet::f_det new_frame;
         auto rerr = loader(det_in, new_frame);
         if (!rerr) {
             // Do pedastal subtraction

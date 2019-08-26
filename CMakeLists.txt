@@ -16,6 +16,7 @@ add_subdirectory("src/tbb/07-TBBPipelines")
 add_subdirectory("src/tbb/08-TBBGraphs")
 add_subdirectory("src/tbb/09-TBBTasks")
 
+add_subdirectory("src/tbb/XY-TBBGraphExercise-Problem")
 add_subdirectory("src/tbb/XY-TBBGraphExercise-Solution")
 
 # Note that the docs subdirectory is not added to the master CMakeFile as it

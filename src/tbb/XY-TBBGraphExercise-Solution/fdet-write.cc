@@ -12,7 +12,7 @@
 
 #include "fdet.hpp"
 
-void averages(std::vector<f_det> &fdet_data) {
+void averages(std::vector<fdet::f_det> &fdet_data) {
     std::cout << "Calculating averages of " << fdet_data.size() << " frames" << std::endl;
     for(size_t t=0; t<fdet_data.size(); ++t) {
         std::cout << "Timeframe " << t << ": average values "
@@ -21,7 +21,7 @@ void averages(std::vector<f_det> &fdet_data) {
     }
 }
 
-void signal_place(f_det &frame, size_t x, size_t y) {
+void signal_place(fdet::f_det &frame, size_t x, size_t y) {
     for (size_t dx=x-1; dx<x+2; ++dx) {
         for (size_t dy=y-1; dy<y+2; ++dy) {
             if (dx>=0 && dx<DETSIZE && dy>=0 && dy<DETSIZE) {
@@ -49,10 +49,10 @@ int main(int argn, char* argv[]) {
         return 1;
     }
 
-    std::vector<f_det> fdet_data;
+    std::vector<fdet::f_det> fdet_data;
     fdet_data.reserve(frames);
     for (size_t t=0; t<frames; ++t) {
-        fdet_data.push_back(f_det());
+        fdet_data.push_back(fdet::f_det());
     }
 
 
@@ -86,8 +86,8 @@ int main(int argn, char* argv[]) {
             for (size_t t=r.pages().begin(); t!=r.pages().end(); ++t) {
                 for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                     for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
-                        fdet_data[t].cells[x][y] += pedastal(x, y);
-                        if (cell_mask(x, y) == false) fdet_data[t].cells[x][y] += 6666.0f;
+                        fdet_data[t].cells[x][y] += fdet::pedastal(x, y);
+                        if (fdet::cell_mask(x, y) == false) fdet_data[t].cells[x][y] += 6666.0f;
                     }
                 }
             }

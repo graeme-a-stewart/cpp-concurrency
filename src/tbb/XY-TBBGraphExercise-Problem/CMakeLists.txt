@@ -16,17 +16,17 @@ find_package(Threads)
 function(tbb_graph_exe TARGET)
 	set(CXX_STANDARD_REQUIRED ON)
 	add_executable(${TARGET} "${TARGET}.cc")
-	target_link_libraries(${TARGET} fdet ${CMAKE_THREAD_LIBS_INIT} tbb)
+	target_link_libraries(${TARGET} fdet-serial ${CMAKE_THREAD_LIBS_INIT} tbb)
 	set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 17)
 endfunction(tbb_graph_exe)
 
 ## Build the detector description library
-add_library(fdet fdet.cc)
-target_link_libraries(fdet ${CMAKE_THREAD_LIBS_INIT} tbb)
-set_property(TARGET fdet PROPERTY CXX_STANDARD 17)
+add_library(fdet-serial fdet.cc)
+target_link_libraries(fdet-serial ${CMAKE_THREAD_LIBS_INIT} tbb)
+set_property(TARGET fdet-serial PROPERTY CXX_STANDARD 17)
 
 # Serial Solution
 tbb_graph_exe(serial)
 
 # Parallel Solution
-tbb_graph_exe(solution)
+tbb_graph_exe(parallel-solution)

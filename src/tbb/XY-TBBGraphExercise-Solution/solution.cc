@@ -18,7 +18,7 @@
 // Define our detector data vector type here
 // This allows us to see what might go wrong is we were to use an std::vector
 // (could it be corrected?)
-using f_det_vec = tbb::concurrent_vector<f_det>;
+using f_det_vec = tbb::concurrent_vector<fdet::f_det>;
 
 // This is the "datatype" we shall use to gather the
 // signals, which will be an array of vectors, the
@@ -47,7 +47,7 @@ public:
   frame_loader(std::ifstream &ifs_p):
     m_frame_counter{0}, m_input_stream_p(ifs_p) {};
 
-  bool operator() (f_det& fdet) {
+  bool operator() (fdet::f_det& fdet) {
     int read_err;
     read_err = fdet.read(m_input_stream_p);
     if (read_err) {
@@ -75,7 +75,7 @@ public:
     add_frame_data(f_det_vec& fdet_data):
         m_fdet_data{fdet_data} {};
 
-    size_t operator()(f_det fdet) {
+    size_t operator()(fdet::f_det fdet) {
         m_fdet_data.push_back(fdet);
         if (DEBUG) {
             std::cout << "Added new frame, average " << fdet.average() << std::endl;
@@ -102,7 +102,7 @@ public:
         [&, t](tbb::blocked_range2d<size_t>& r){
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
-                    m_fdet_data[t].cells[x][y] -= pedastal(x, y);
+                    m_fdet_data[t].cells[x][y] -= fdet::pedastal(x, y);
                 }
             }
         });
@@ -131,7 +131,7 @@ public:
                     // N.B. This could be parallelised with pedastal subtraction
                     // if we decide that value<0 indicates a bad cell (this means
                     // the race condition does not matter)
-                    if (!cell_mask(x, y)) m_fdet_data[t].cells[x][y] = -1.0f;
+                    if (!fdet::cell_mask(x, y)) m_fdet_data[t].cells[x][y] = -1.0f;
                 }
             }
         });
@@ -169,7 +169,7 @@ public:
                             }
                         }
                     }
-                    if (sum > signal_threshold*count) {
+                    if (sum > fdet::signal_threshold*count) {
                         if (DEBUG) {
                             std::cout << "Signal " << sum/count << 
                             " at (" << t << ", " << x << ", " << y << ")" << std::endl;
@@ -187,7 +187,7 @@ public:
 // Fooble detector code
 std::pair<int, int> detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_signal) {
     // Give up on hopeless cases...
-    if (cell_signal.size() < fooble_det_time) return std::pair<int, int>(-1, -1);
+    if (cell_signal.size() < fdet::fooble_det_time) return std::pair<int, int>(-1, -1);
 
     if (DEBUG) {
         std::cout << "Attempting fooble detection on " << cell_signal.size() 
@@ -216,7 +216,7 @@ std::pair<int, int> detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_si
             last_value=cell_signal[i];
             ++duration;
         } else {
-            if (duration >= fooble_det_time) {
+            if (duration >= fdet::fooble_det_time) {
                 detection = test_value;
                 detection_duration = duration;
             }
@@ -226,7 +226,7 @@ std::pair<int, int> detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_si
         }
     }
     // Have to handle properly the end of the window
-    if (duration >= fooble_det_time) {
+    if (duration >= fdet::fooble_det_time) {
         detection = test_value;
         detection_duration = duration; 
     }
@@ -261,8 +261,8 @@ int main(int argn, char* argv[]) {
     signal_search sig_search(fdet_data, fdet_signal);
 
     tbb::flow::graph data_process;
-    tbb::flow::source_node<f_det> loader(data_process, data_loader, false);
-    tbb::flow::function_node<f_det, size_t> aggregate(data_process, 1, frame_aggregator);
+    tbb::flow::source_node<fdet::f_det> loader(data_process, data_loader, false);
+    tbb::flow::function_node<fdet::f_det, size_t> aggregate(data_process, 1, frame_aggregator);
     tbb::flow::function_node<size_t, size_t> pedastal(data_process, tbb::flow::unlimited, sub_pedastal);
     tbb::flow::function_node<size_t, size_t> mask(data_process, tbb::flow::unlimited, dq_cell_mask);
     tbb::flow::function_node<size_t, size_t> search(data_process, tbb::flow::unlimited, sig_search);
