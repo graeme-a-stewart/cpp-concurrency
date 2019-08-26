@@ -21,8 +21,20 @@ void averages(std::vector<f_det> &fdet_data) {
     }
 }
 
+void signal_place(f_det &frame, size_t x, size_t y) {
+    for (size_t dx=x-1; dx<x+2; ++dx) {
+        for (size_t dy=y-1; dy<y+2; ++dy) {
+            if (dx>=0 && dx<DETSIZE && dy>=0 && dy<DETSIZE) {
+                    frame.cells[dx][dy] += 200.0f;
+                }
+        }
+    }
+    // Centre boost
+    frame.cells[x][y] += 50.0f;
+}
+
 int main(int argn, char* argv[]) {
-    int frames{20};
+    int frames{50};
     int foobles{1};
     unsigned long base_seed{0};
     std::string outfile{"input-data.bin"};
@@ -95,22 +107,28 @@ int main(int argn, char* argv[]) {
     for (int i=0; i<foobles; ++i) {
         size_t fooble_x = 1 + (DETSIZE-1) * rdist(generator);
         size_t fooble_y = 1 + (DETSIZE-1) * rdist(generator);
-        size_t fooble_t = (frames-5) * rdist(generator);
-        size_t fooble_duration = 5;
+        size_t fooble_t = (frames-10) * rdist(generator);
+        size_t fooble_duration = 5 + 5.0 * rdist(generator);
         std::cout << "Placing fooble at (" << fooble_t << ", " << fooble_x <<
-            ", " << fooble_y << ")"  << std::endl;
-        for (size_t t=fooble_t; t<fooble_t+5; ++t) {
-            for (size_t x=fooble_x-1; x<fooble_x+2; ++x) {
-                for (size_t y=fooble_y-1; y<fooble_y+2; ++y) {
-                    fdet_data[t].cells[x][y] += 200.0f + 20.0f*rdist(generator);
-                }
-            }
-            // Centre boost
-            fdet_data[t].cells[fooble_x][fooble_y] += 150.0f + 30.0f*rdist(generator);
+            ", " << fooble_y << ")"  << 
+            "for " << fooble_duration << " frames" << std::endl;
+        for (size_t t=fooble_t; t<fooble_t+fooble_duration; ++t) {
+            signal_place(fdet_data[t], fooble_x, fooble_y);
         }
 
     }
     averages(fdet_data);
+
+    // Now add a few spurious signals to each timeframe
+    for (auto f: fdet_data) {
+        std::poisson_distribution<int> p(8);
+        int count = p(generator);
+        for (int i=0; i<count; ++i) {
+            size_t noise_x = 1 + (DETSIZE-1) * rdist(generator);
+            size_t noise_y = 1 + (DETSIZE-1) * rdist(generator);
+            signal_place(f, noise_x, noise_y);
+        }
+    }
 
 
     // Now write out the detector

@@ -224,8 +224,6 @@ std::pair<int, int> detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_si
             last_value = cell_signal[i];
             duration = 1;
         }
-        std::cout << i << " " << test_value << " " << last_value << " "
-            << duration << std::endl;
     }
     // Have to handle properly the end of the window
     if (duration >= fooble_det_time) {

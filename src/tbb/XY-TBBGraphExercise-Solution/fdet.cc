@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #include "fdet.hpp"
 
@@ -92,15 +93,28 @@ int f_det::dump_csv(const char fname[]) {
 }
 
 
+double burn(unsigned long iterations = 10'000'000lu) {
+  // Perform a time wasting bit of maths
+  // Use volatile to prevent the compiler from optimising away
+  volatile double sum{0.0};
+  double f;
+  for (auto i = 0lu; i < iterations; ++i) {
+    f = (double)(i+1) / iterations * 1.414;
+    sum += std::sin(std::log(f));
+  }
+  return std::log(std::abs(sum));
+}
+
+
 // Pedastal values
 // Pedastal is ~bowl shaped, low in the centre cells, but 
 // higher at the edges
 float pedastal(size_t x, size_t y) {
     float pedastal_value{5.0f};
-    size_t edge_distance = std::min(std::min(x, DETSIZE-x), std::min(y, DETSIZE-y));
-    if (edge_distance < 5) {
-        pedastal_value += (5 - edge_distance) * (5 - edge_distance);
-    }
+    float edge_distance = std::sqrt(std::pow(float(x) - DETSIZE/2.0, 2) 
+        + std::pow(float(y) - DETSIZE/2.0, 2));
+    pedastal_value += edge_distance + burn(100);
+    // std::cout << pedastal_value << std::endl;
     return pedastal_value;
 }
 
