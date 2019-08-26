@@ -31,6 +31,14 @@ struct det_signal {
     std::array<tbb::concurrent_vector<size_t>, DETSIZE> count[DETSIZE];
 };
 
+// Foobles are detected as a struct with t, x, y and duration
+struct fooble {
+    size_t x, y, t, d;
+
+    fooble(size_t _x, size_t _y, size_t _t, size_t _d): 
+        x{_x}, y{_y}, t{_t}, d{_d} {};
+};
+
 // Read input data from a file
 class frame_loader {
 private:
@@ -162,9 +170,10 @@ public:
                             }
                         }
                     }
-                    if (sum > 150.0*count) {
+                    if (sum > signal_threshold*count) {
                         if (DEBUG) {
-                            std::cout << "Signal at (" << t << ", " << x << ", " << y << ")" << std::endl;
+                            std::cout << "Signal " << sum/count << 
+                            " at (" << t << ", " << x << ", " << y << ")" << std::endl;
                         }
                         m_fdet_signal.count[x][y].push_back(t);
                     }
@@ -177,8 +186,55 @@ public:
 
 
 // Fooble detector code
-bool detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_signal) {
-    return false;
+std::pair<int, int> detect_fooble_in_cell(tbb::concurrent_vector<size_t> cell_signal) {
+    // Give up on hopeless cases...
+    if (cell_signal.size() < fooble_det_time) return std::pair<int, int>(-1, -1);
+
+    if (DEBUG) {
+        std::cout << "Attempting fooble detection on " << cell_signal.size() 
+            << " signals" << std::endl;
+    }
+
+    // Ensure that signals are time ordered
+    std::sort(cell_signal.begin(), cell_signal.end(), std::less<size_t>());
+    if (DEBUG) {
+        for (auto t: cell_signal) {
+            std::cout << t << " ";
+        }
+        std::cout << std::endl;
+    }
+    int test_value = -1;
+    int last_value = -1;
+    int duration = 1;
+    int detection = -1;
+    int detection_duration = -1;
+    for (size_t i=0; i<cell_signal.size(); ++i) {
+        if (test_value<0) {
+            test_value = cell_signal[i];
+            last_value = cell_signal[i];
+            duration = 1;
+        } else if (cell_signal[i]==last_value+1) {
+            last_value=cell_signal[i];
+            ++duration;
+        } else {
+            if (duration >= fooble_det_time) {
+                detection = test_value;
+                detection_duration = duration;
+            }
+            test_value = cell_signal[i];
+            last_value = cell_signal[i];
+            duration = 1;
+        }
+        std::cout << i << " " << test_value << " " << last_value << " "
+            << duration << std::endl;
+    }
+    // Have to handle properly the end of the window
+    if (duration >= fooble_det_time) {
+        detection = test_value;
+        detection_duration = duration; 
+    }
+
+    return std::pair<int, int>(detection, detection_duration);
 }
 
 
@@ -225,8 +281,30 @@ int main(int argn, char* argv[]) {
     // Now we found all of the signals, but we need to detect foobles
     // by looking at consecutive timeframes
     // We can't really do this with the above flow graph as it was processing
-    // at the single timeframe granularity
+    // at the single timeframe granularity, but we can now do this
+    // concurrently across all cells
+    tbb::concurrent_vector<fooble> detected_foobles;
+    tbb::parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE), 
+        [&](tbb::blocked_range2d<size_t> r){
+            for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
+                for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
+                    auto detect = detect_fooble_in_cell(fdet_signal.count[x][y]);
+                    if (detect.first >= 0) {
+                        detected_foobles.push_back(fooble(x, y, detect.first, detect.second));
+                    }
+                }
+            }
+        }
+    );
 
+    // Finally...
+    std::cout << "Fooble detection report" << std::endl 
+              << "-----------------------" << std::endl;
+    std::cout << detected_foobles.size() << " were found" << std::endl;
+    for (auto f: detected_foobles) {
+        std::cout << "Frame " << f.t << ", duration " << f.d <<
+            " at (" << f.x << ", " << f.y << ")" << std::endl;
+    }
 
     return 0;
 }

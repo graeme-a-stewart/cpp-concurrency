@@ -5,7 +5,11 @@
 #include <array>
 #include <fstream>
 
+// Define a few constants here that we shall use in the 
+// exercise
 #define DETSIZE 100
+static const float signal_threshold=200.0f;
+static const int fooble_det_time=5;
 
 // Structure for holding detector data
 struct f_det {
