@@ -48,6 +48,59 @@ The goal is always to exploit parallelism at multiple levels!
 ## Designing A Data Flow Pipeline
 
 Once parallel opportunities have been identified, think about how these could
-be expressed in TBB.
+be expressed in TBB, using what you learned so far in the tutorial.
 
-### Detector definition 
+## Solution
+
+### Serial Solution
+
+In the directory `XY-TBBGraphsExercise-Problem` you will find code that solves
+the fooble detection problem in serial mode.
+
+While in general serial code is not the correct place to start to think about
+parallelism, this code will show solutions to many of the technical issues
+you'll face in implementing a parallel solution, so it is useful from that 
+point of view.
+
+There is a header file `fdet.hpp` and some library code `fdet.cc` that will
+define the basic classes and helper functions you will need to write your solution
+(N.B. you should not change this code - take it as a given).
+
+### Parallel Solution
+
+The file `parallel-solution.cc` can be developed into your parallel solution.
+
+The recommendation is to proceed via baby steps - implement the solution gradually
+and check it's reasonable at each point.
+
+In the tutorial we may take breaks to stop and discuss how we are going.
+
+### Testing
+
+Develop your solution on the following data file:
+
+<https://graemes.web.cern.ch/graemes/teaching/gridka/dat-50.bin>
+
+It has 50 time frames. You should find a single fooble there.
+
+Test your solution on:
+
+<https://graemes.web.cern.ch/graemes/teaching/gridka/dat-1000.bin>
+
+Here there are 1000 time frames. How many foobles can you find there?
+
+---
+
+*Hints* (Look away now if you don't want to see these!)
+
+- It will be easier to manage a parallel solution if you assume that you can
+load all of the data into memory.
+
+- Likewise, build up the signals into an in-memory data structure, similar to that
+used in the serial case.
+
+- Most of the `flow::graph` can be directed without copying whole frames of data
+around, as long as you can pass a way to indicate the correct data into the nodes.
+
+- Using a `flow::graph`, acting on single time frames you will be able to do
+most, but not quite all of the work you need to do.
