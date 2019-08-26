@@ -117,9 +117,12 @@ int main(int argn, char* argv[]) {
     std::cout << "Writing out detector data to " << outfile <<
         " (" << frames << " frames)" << std::endl;
     std::ofstream det_out("input-data.bin", std::ios::out | std::ios::binary);
+    int write_err{0};
     for (size_t t=0; t<frames; ++t) {
-        det_out.write(reinterpret_cast<char*>(&fdet_data[t].timestamp), sizeof(float));
-        det_out.write(reinterpret_cast<char*>(&fdet_data[t].cells), sizeof(float)*DETSIZE*DETSIZE);
+        write_err = fdet_data[t].write(det_out);
+        if (write_err) {
+            std::cerr << "Error writing frame " << t << std::endl;
+        }
     }
 
     std::cout << "End of writer" << std::endl;

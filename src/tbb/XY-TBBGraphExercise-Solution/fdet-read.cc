@@ -25,6 +25,7 @@ int main(int argn, char* argv[]) {
             fdet_data.push_back(fdet);
             ++frame;
         }
+        if (frame==12) fdet.dump_csv("test.csv");
     }
 
     return 0;

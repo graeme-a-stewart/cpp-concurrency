@@ -1,6 +1,8 @@
 #include <tbb/tbb.h>
 #include <algorithm>
 #include <fstream>
+#include <iostream>
+#include <iomanip>
 
 #include "fdet.hpp"
 
@@ -64,6 +66,28 @@ int f_det::read(std::ifstream &input_fp) {
     input_fp.read(reinterpret_cast<char*>(&timestamp), sizeof(float));
     input_fp.read(reinterpret_cast<char*>(&cells), sizeof(float)*DETSIZE*DETSIZE);
     if (!input_fp.good()) return 1;
+    return 0;
+}
+
+
+int f_det::write(std::ofstream &output_fp) {
+    output_fp.write(reinterpret_cast<char*>(&timestamp), sizeof(float));
+    output_fp.write(reinterpret_cast<char*>(&cells), sizeof(float)*DETSIZE*DETSIZE);
+    if (!output_fp.good()) return 1;
+    return 0;
+}
+
+
+int f_det::dump_csv(const char fname[]) {
+    std::ofstream out_fp(fname, std::ios::out);
+    if (!out_fp.good()) return 1;
+    for (size_t x=0; x<DETSIZE; ++x) {
+        for(size_t y=0; y<DETSIZE; ++y) {
+            out_fp << std::setw(10) << cells[x][y];
+            if (y!=DETSIZE-1) out_fp << ","; else out_fp << std::endl;
+        }
+    }
+    if (!out_fp.good()) return 2;
     return 0;
 }
 
