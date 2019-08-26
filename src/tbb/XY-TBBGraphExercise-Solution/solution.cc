@@ -11,7 +11,6 @@
 #include <array>
 #include <tbb/tbb.h>
 
-
 #include "fdet.hpp"
 
 #define DEBUG 1

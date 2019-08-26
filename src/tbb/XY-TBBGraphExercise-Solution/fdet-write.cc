@@ -116,7 +116,7 @@ int main(int argn, char* argv[]) {
     // Now write out the detector
     std::cout << "Writing out detector data to " << outfile <<
         " (" << frames << " frames)" << std::endl;
-    std::ofstream det_out("input-data.bin", std::ios::out | std::ios::binary);
+    std::ofstream det_out(outfile, std::ios::out | std::ios::binary);
     int write_err{0};
     for (size_t t=0; t<frames; ++t) {
         write_err = fdet_data[t].write(det_out);
