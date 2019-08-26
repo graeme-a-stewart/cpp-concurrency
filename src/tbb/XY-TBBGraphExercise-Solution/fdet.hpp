@@ -19,6 +19,9 @@ struct f_det {
     // (average uses TBB, s_average is a serial version)
     float average();
     float s_average();
+
+    // Read data from a file handle
+    int read(std::ifstream &input_fp);
 };
 
 // Pedastal function, returns the pedastal value at cell coordinates (x,y)

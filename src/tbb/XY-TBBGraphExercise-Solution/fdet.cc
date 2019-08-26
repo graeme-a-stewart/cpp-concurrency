@@ -1,5 +1,6 @@
 #include <tbb/tbb.h>
 #include <algorithm>
+#include <fstream>
 
 #include "fdet.hpp"
 
@@ -16,7 +17,7 @@ f_det::f_det(float t, float v): timestamp{t} {
 }
 
 // Average value
-// Define a class to take advantage of parallel_reduce
+// Define a helper class to take advantage of parallel_reduce
 class fdet_sum {
 private:
     float my_sum;
@@ -58,6 +59,14 @@ float f_det::s_average() {
     }
     return total / (DETSIZE * DETSIZE);
 }
+
+int f_det::read(std::ifstream &input_fp) {
+    input_fp.read(reinterpret_cast<char*>(&timestamp), sizeof(float));
+    input_fp.read(reinterpret_cast<char*>(&cells), sizeof(float)*DETSIZE*DETSIZE);
+    if (!input_fp.good()) return 1;
+    return 0;
+}
+
 
 // Pedastal values
 // Pedastal is ~bowl shaped, low in the centre cells, but 
