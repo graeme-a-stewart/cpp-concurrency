@@ -70,6 +70,15 @@ define the basic classes and helper functions you will need to write your soluti
 
 The file `parallel-solution.cc` can be developed into your parallel solution.
 
+N.B. to avoid issues with compilation here using `cmake` is strongly
+recommended. 
+
+```sh
+mkdir build && cd build
+cmake [PATH_TO]/cpp-concurrency/src/tbb/XY-TBBGraphExercise-Problem
+make
+```
+
 The recommendation is to proceed via baby steps - implement the solution gradually
 and check it's reasonable at each point.
 
