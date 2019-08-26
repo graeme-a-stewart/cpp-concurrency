@@ -33,3 +33,6 @@ tbb_graph_exe(fdet-write)
 
 # Data reader
 tbb_graph_exe(fdet-read)
+
+# Solution
+tbb_graph_exe(solution)
