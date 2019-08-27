@@ -53,6 +53,9 @@ int pedastal_subtract(fdet::f_det& frame) {
             frame.cells[x][y] -= fdet::pedastal(x, y);
         }
     }
+    if (DEBUG) {
+        std::cout << "Subtracted pedastal values" << std::endl;
+    }
     return 0;
 }
 
@@ -63,6 +66,9 @@ int mask_bad_cells(fdet::f_det& frame) {
         for (size_t y=0; y<fdet::detsize; ++y) {
             if (!fdet::cell_mask(x, y)) frame.cells[x][y] = -1.0f;
         }
+    }
+    if (DEBUG) {
+        std::cout << "Masked bad cells" << std::endl;
     }
     return 0;
 }
@@ -87,7 +93,7 @@ int signal_search(det_signal& signals, size_t frame_no, fdet::f_det& frame) {
             if (sum > count*fdet::signal_threshold) {
                 signals.count[x][y].push_back(frame_no);
                 if (DEBUG) {
-                    std::cout << "Signal " << sum/count << " " << count 
+                    std::cout << "Found signal " << sum/count << " " << count 
                         << " in frame " << frame_no << std::endl;
                 }
             }
@@ -100,7 +106,7 @@ int signal_search(det_signal& signals, size_t frame_no, fdet::f_det& frame) {
 // Fooble detector code
 std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
     // Give up on hopeless cases...
-    if (cell_signal.size() < fdet::fooble_det_time) return std::pair<int, int>(-1, -1);
+    if (cell_signal.size() == 0) return std::pair<int, int>(-1, -1);
 
     if (DEBUG) {
         std::cout << "Attempting fooble detection on " << cell_signal.size() 
@@ -109,12 +115,6 @@ std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
 
     // Ensure that signals are time ordered
     std::sort(cell_signal.begin(), cell_signal.end(), std::less<size_t>());
-    if (DEBUG) {
-        for (auto t: cell_signal) {
-            std::cout << t << " ";
-        }
-        std::cout << std::endl;
-    }
     int test_value = -1;
     int last_value = -1;
     int duration = 1;
@@ -142,6 +142,9 @@ std::pair<int, int> detect_fooble_in_cell(std::vector<size_t> cell_signal) {
     if (duration >= fdet::fooble_det_time) {
         detection = test_value;
         detection_duration = duration; 
+    }
+    if (DEBUG && detection != -1) {
+        std::cout << "Found a fooble!" << std::endl;
     }
 
     return std::pair<int, int>(detection, detection_duration);
@@ -171,6 +174,9 @@ int main(int argn, char* argv[]) {
         fdet::f_det new_frame;
         auto rerr = loader(det_in, new_frame);
         if (!rerr) {
+            if (DEBUG) {
+                std::cout << "Loaded new detector frame " << fdet_data.size() << std::endl;
+            }
             // Do pedastal subtraction
             pedastal_subtract(new_frame);
 
