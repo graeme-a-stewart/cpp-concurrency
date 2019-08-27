@@ -287,7 +287,7 @@ against it. This is the recommended way. However, you can also just
 compile `tutorialutils.cc` directly with your code.
 
 ```sh
-g++-7 -O2 my_code.cc tutorialutils.cc -std=c++14 -ltbb -lm
+g++- -O2 my_code.cc tutorialutils.cc -std=c++17 -ltbb -lm
 ```
 
 1. Write a TBB parallel for loop using a class supporting the 
@@ -315,6 +315,11 @@ g++-7 -O2 my_code.cc tutorialutils.cc -std=c++14 -ltbb -lm
    parallel_reduce to search in parallel. (The tricky bit is to handle the joins
    between different seach pieces properly.)
 
-5. Using a `blocked_range2d`, write a `parallel_for` loop that calculates the set of points in the `(x,y)` range `[-2,+2)` that are in the [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set).
+5. Using a `blocked_range2d`, write a `parallel_for` loop that calculates the
+set of points in the `(x,y)` range `[-2,+2)` that are in the [Mandelbrot
+set](http://en.wikipedia.org/wiki/Mandelbrot_set).
 
-Recall that the Mandelbrot set is the set of points (`c`) where `z_i+1 = z_i^2 + c; z0 = 0` remains bounded for all `i`. *Tip:* A pointer to a 2D array of `Type` in C++ is `Type (*p)[SIZE]` where you *do* need to give the dimension of the last index explicitly (or you can use a `vector<vector<bool>>`).
+Recall that the Mandelbrot set is the set of points (`c`) where `z_i+1 = z_i^2
++ c; z0 = 0` remains bounded for all `i`. *Tip:* A pointer to a 2D array of
+`Type` in C++ is `Type (*p)[SIZE]` where you *do* need to give the dimension of
+the last index explicitly (or you can use a `vector<vector<bool>>`).
