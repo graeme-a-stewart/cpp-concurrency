@@ -100,6 +100,8 @@ Here there are 1000 time frames. How many foobles can you find there?
 
 ---
 
+---
+
 *Hints* (Look away now if you don't want to see these!)
 
 - It will be easier to manage a parallel solution if you assume that you can
@@ -113,3 +115,8 @@ around, as long as you can pass a way to indicate the correct data into the node
 
 - Using a `flow::graph`, acting on single time frames you will be able to do
 most, but not quite all of the work you need to do.
+
+- *Penultimate hint:* Ask for help :-).
+
+- *Ultimate hint*: There is a solution in the directory `XY-TBBGraphExercise-Solution`
+that you can use if you really get stuck...
