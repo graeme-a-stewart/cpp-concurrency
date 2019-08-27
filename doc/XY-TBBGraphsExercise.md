@@ -34,6 +34,11 @@ the average signal strength:
 The potential fooble clusters then need to be searched in different time
 frames to see if they appear in 5 consecutive frames.
 
+![A typical timeframe from the fooble detector](https://graemes.web.cern.ch/graemes/teaching/gridka/frame-4.png)
+
+> A typical uncalibrated timeframe output from the fooble detector,
+`log10(signal)` is plotted vs. cell coordinate.
+
 ## Thinking About Parallelism
 
 The first step in designing our data processing pipeline is to think about
