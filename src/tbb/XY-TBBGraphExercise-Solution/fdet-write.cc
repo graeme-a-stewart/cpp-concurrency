@@ -24,7 +24,7 @@ void averages(std::vector<fdet::f_det> &fdet_data) {
 void signal_place(fdet::f_det &frame, size_t x, size_t y) {
     for (size_t dx=x-1; dx<x+2; ++dx) {
         for (size_t dy=y-1; dy<y+2; ++dy) {
-            if (dx>=0 && dx<DETSIZE && dy>=0 && dy<DETSIZE) {
+            if (dx>=0 && dx<fdet::detsize && dy>=0 && dy<fdet::detsize) {
                     frame.cells[dx][dy] += 200.0f;
                 }
         }
@@ -68,8 +68,8 @@ int main(int argn, char* argv[]) {
         generator.seed(base_seed+t);
         std::normal_distribution<float> noise{10,4};
         fdet_data[t].timestamp = float(t);
-        for (size_t i=0; i<DETSIZE; ++i) {
-            for (size_t j=0; j < DETSIZE; ++j) {
+        for (size_t i=0; i<fdet::detsize; ++i) {
+            for (size_t j=0; j < fdet::detsize; ++j) {
                 fdet_data[t].cells[i][j] = noise(generator);
             }
         }
@@ -81,7 +81,7 @@ int main(int argn, char* argv[]) {
     // To avoid repeating the loop we also blow up
     // hot cell values here
     std::cout << "Adding pedastal values and hot cells" << std::endl;
-    tbb::parallel_for(tbb::blocked_range3d<size_t>(0, frames, 0, DETSIZE, 0, DETSIZE), 
+    tbb::parallel_for(tbb::blocked_range3d<size_t>(0, frames, 0, fdet::detsize, 0, fdet::detsize), 
         [&](tbb::blocked_range3d<size_t>& r){
             for (size_t t=r.pages().begin(); t!=r.pages().end(); ++t) {
                 for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
@@ -105,8 +105,8 @@ int main(int argn, char* argv[]) {
     generator.seed(base_seed+666000);
     std::uniform_real_distribution<float> rdist(0.0, 1.0);
     for (int i=0; i<foobles; ++i) {
-        size_t fooble_x = 1 + (DETSIZE-1) * rdist(generator);
-        size_t fooble_y = 1 + (DETSIZE-1) * rdist(generator);
+        size_t fooble_x = 1 + (fdet::detsize-1) * rdist(generator);
+        size_t fooble_y = 1 + (fdet::detsize-1) * rdist(generator);
         size_t fooble_t = (frames-10) * rdist(generator);
         size_t fooble_duration = 5 + 5.0 * rdist(generator);
         std::cout << "Placing fooble at (" << fooble_t << ", " << fooble_x <<
@@ -124,8 +124,8 @@ int main(int argn, char* argv[]) {
         std::poisson_distribution<int> p(8);
         int count = p(generator);
         for (int i=0; i<count; ++i) {
-            size_t noise_x = 1 + (DETSIZE-1) * rdist(generator);
-            size_t noise_y = 1 + (DETSIZE-1) * rdist(generator);
+            size_t noise_x = 1 + (fdet::detsize-1) * rdist(generator);
+            size_t noise_y = 1 + (fdet::detsize-1) * rdist(generator);
             signal_place(f, noise_x, noise_y);
         }
     }

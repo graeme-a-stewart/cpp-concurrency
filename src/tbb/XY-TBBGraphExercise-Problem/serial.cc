@@ -28,7 +28,7 @@ using f_det_vec = std::vector<fdet::f_det>;
 // where that cell saw a signal.
 // In this case it's really more convenient to use a struct
 struct det_signal {
-    std::array<std::vector<size_t>, DETSIZE> count[DETSIZE];
+    std::array<std::vector<size_t>, fdet::detsize> count[fdet::detsize];
 };
 
 // Foobles are detected as a struct with t, x, y and duration
@@ -48,8 +48,8 @@ int loader(std::ifstream& in_fp, fdet::f_det& frame) {
 
 // Subtract the pedastal values from a frame
 int pedastal_subtract(fdet::f_det& frame) {
-    for (size_t x=0; x<DETSIZE; ++x) {
-        for (size_t y=0; y<DETSIZE; ++y) {
+    for (size_t x=0; x<fdet::detsize; ++x) {
+        for (size_t y=0; y<fdet::detsize; ++y) {
             frame.cells[x][y] -= fdet::pedastal(x, y);
         }
     }
@@ -59,8 +59,8 @@ int pedastal_subtract(fdet::f_det& frame) {
 // Data quality, apply mask to bad cells
 int mask_bad_cells(fdet::f_det& frame) {
     // Loop over cells and set any bad cells to -1.0
-    for (size_t x=0; x<DETSIZE; ++x) {
-        for (size_t y=0; y<DETSIZE; ++y) {
+    for (size_t x=0; x<fdet::detsize; ++x) {
+        for (size_t y=0; y<fdet::detsize; ++y) {
             if (!fdet::cell_mask(x, y)) frame.cells[x][y] = -1.0f;
         }
     }
@@ -71,13 +71,13 @@ int mask_bad_cells(fdet::f_det& frame) {
 // Signal search in a frame, looking for 3x3 clusters
 // which are above our threshold
 int signal_search(det_signal& signals, size_t frame_no, fdet::f_det& frame) {
-    for (size_t x=0; x<DETSIZE; ++x) {
-        for (size_t y=0; y<DETSIZE; ++y) {
+    for (size_t x=0; x<fdet::detsize; ++x) {
+        for (size_t y=0; y<fdet::detsize; ++y) {
             float sum = 0.0f;
             int count = 0;
             for (auto dx=x-1; dx<x+2; ++dx) {
                 for (auto dy=y-1; dy<y+2; ++dy) {
-                    if (dx>=0 && dx<DETSIZE && dy>=0 && dy<DETSIZE && 
+                    if (dx>=0 && dx<fdet::detsize && dy>=0 && dy<fdet::detsize && 
                         frame.cells[dx][dy]>0.0) {
                         ++count;
                         sum += frame.cells[dx][dy];
@@ -191,8 +191,8 @@ int main(int argn, char* argv[]) {
     // To look for foobles we need to look at the clusters
     // through time
     std::vector<fooble> detected_foobles;
-    for (size_t x=0; x<DETSIZE; ++x) {
-        for (size_t y=0; y<DETSIZE; ++y) {
+    for (size_t x=0; x<fdet::detsize; ++x) {
+        for (size_t y=0; y<fdet::detsize; ++y) {
             std::pair<int, int> detect = detect_fooble_in_cell(fdet_signal.count[x][y]);
             if (detect.first >= 0) {
                 detected_foobles.push_back(

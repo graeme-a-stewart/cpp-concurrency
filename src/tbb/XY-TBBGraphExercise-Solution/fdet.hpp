@@ -9,9 +9,9 @@ namespace fdet {
 
     // Define a few constants here that we shall use in the 
     // exercise
-    #define DETSIZE 100
-    static const float signal_threshold=200.0f;
-    static const int fooble_det_time=5;
+    const static size_t detsize = 100;
+    const static float signal_threshold=200.0f;
+    const static int fooble_det_time=5;
 
     // Structure for holding detector data
     struct f_det {
@@ -19,7 +19,7 @@ namespace fdet {
         // with one float for the timestamp and then a simple
         // array of data for the detector cells (x,y) layout
         float timestamp;
-        std::array<float, DETSIZE> cells[DETSIZE];
+        std::array<float, detsize> cells[detsize];
 
         // Constructors
         f_det() {};

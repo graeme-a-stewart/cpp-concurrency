@@ -27,7 +27,7 @@ using f_det_vec = tbb::concurrent_vector<fdet::f_det>;
 // where that cell saw a signal
 // In this case it's really more convenient to use a struct
 struct det_signal {
-    std::array<tbb::concurrent_vector<size_t>, DETSIZE> count[DETSIZE];
+    std::array<tbb::concurrent_vector<size_t>, fdet::detsize> count[fdet::detsize];
 };
 
 // Foobles are detected as a struct with t, x, y and duration
@@ -98,7 +98,7 @@ public:
         if (DEBUG) {
             std::cout << "Substracting pedastal for " << t << " " <<  &m_fdet_data[t] <<  std::endl;
         }
-        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE),
+        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, fdet::detsize, 0, fdet::detsize),
         [&, t](tbb::blocked_range2d<size_t>& r){
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
@@ -124,7 +124,7 @@ public:
         if (DEBUG) {
             std::cout << "Applying DQ mask for " << t << " " << &m_fdet_data[t] << std::endl;
         }
-        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE),
+        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, fdet::detsize, 0, fdet::detsize),
         [&, t](tbb::blocked_range2d<size_t>& r){
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
@@ -154,7 +154,7 @@ public:
         if (DEBUG) {
             std::cout << "Signal search for " << t << " " << &m_fdet_data[t] << std::endl;
         }
-        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE),
+        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, fdet::detsize, 0, fdet::detsize),
         [&, t](tbb::blocked_range2d<size_t>& r){
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
@@ -162,7 +162,7 @@ public:
                     int count = 0;
                     for (auto dx=x-1; dx<x+2; ++dx) {
                         for (auto dy=y-1; dy<y+2; ++dy) {
-                            if (dx>=0 && dx<DETSIZE && dy>=0 && dy<DETSIZE && 
+                            if (dx>=0 && dx<fdet::detsize && dy>=0 && dy<fdet::detsize && 
                                 m_fdet_data[t].cells[dx][dy]>0.0) {
                                 ++count;
                                 sum += m_fdet_data[t].cells[dx][dy];
@@ -281,7 +281,7 @@ int main(int argn, char* argv[]) {
     // at the single timeframe granularity, but we can now do this
     // concurrently across all cells
     tbb::concurrent_vector<fooble> detected_foobles;
-    tbb::parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE), 
+    tbb::parallel_for(tbb::blocked_range2d<size_t>(0, fdet::detsize, 0, fdet::detsize), 
         [&](tbb::blocked_range2d<size_t> r){
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {

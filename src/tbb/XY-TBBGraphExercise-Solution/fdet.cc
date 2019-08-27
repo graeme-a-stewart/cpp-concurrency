@@ -11,7 +11,7 @@ namespace fdet {
 
     // Constructor that sets cell values
     f_det::f_det(float t, float v): timestamp{t} {
-        tbb:parallel_for(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE),
+        tbb:parallel_for(tbb::blocked_range2d<size_t>(0, detsize, 0, detsize),
         [&](tbb::blocked_range2d<size_t>& r) {
             for (size_t x=r.rows().begin(); x!=r.rows().end(); ++x) {
                 for (size_t y=r.cols().begin(); y!=r.cols().end(); ++y) {
@@ -51,23 +51,23 @@ namespace fdet {
 
     float f_det::average() {
         fdet_sum tmp_sum(this);
-        tbb::parallel_reduce(tbb::blocked_range2d<size_t>(0, DETSIZE, 0, DETSIZE), tmp_sum);
-        return tmp_sum.sum() / (DETSIZE * DETSIZE);
+        tbb::parallel_reduce(tbb::blocked_range2d<size_t>(0, detsize, 0, detsize), tmp_sum);
+        return tmp_sum.sum() / (detsize * detsize);
     }
 
     float f_det::s_average() {
         float total{0.0f};
-        for (size_t x=0; x<DETSIZE; ++x) {
-            for (size_t y=0; y<DETSIZE; ++y) {
+        for (size_t x=0; x<detsize; ++x) {
+            for (size_t y=0; y<detsize; ++y) {
                 total+=cells[x][y];
             }
         }
-        return total / (DETSIZE * DETSIZE);
+        return total / (detsize * detsize);
     }
 
     int f_det::read(std::ifstream &input_fp) {
         input_fp.read(reinterpret_cast<char*>(&timestamp), sizeof(float));
-        input_fp.read(reinterpret_cast<char*>(&cells), sizeof(float)*DETSIZE*DETSIZE);
+        input_fp.read(reinterpret_cast<char*>(&cells), sizeof(float)*detsize*detsize);
         if (!input_fp.good()) return 1;
         return 0;
     }
@@ -75,7 +75,7 @@ namespace fdet {
 
     int f_det::write(std::ofstream &output_fp) {
         output_fp.write(reinterpret_cast<char*>(&timestamp), sizeof(float));
-        output_fp.write(reinterpret_cast<char*>(&cells), sizeof(float)*DETSIZE*DETSIZE);
+        output_fp.write(reinterpret_cast<char*>(&cells), sizeof(float)*detsize*detsize);
         if (!output_fp.good()) return 1;
         return 0;
     }
@@ -84,10 +84,10 @@ namespace fdet {
     int f_det::dump_csv(const char fname[]) {
         std::ofstream out_fp(fname, std::ios::out);
         if (!out_fp.good()) return 1;
-        for (size_t x=0; x<DETSIZE; ++x) {
-            for(size_t y=0; y<DETSIZE; ++y) {
+        for (size_t x=0; x<detsize; ++x) {
+            for(size_t y=0; y<detsize; ++y) {
                 out_fp << std::setw(10) << cells[x][y];
-                if (y!=DETSIZE-1) out_fp << ","; else out_fp << std::endl;
+                if (y!=detsize-1) out_fp << ","; else out_fp << std::endl;
             }
         }
         if (!out_fp.good()) return 2;
@@ -112,8 +112,8 @@ namespace fdet {
     // higher at the edges
     float pedastal(size_t x, size_t y) {
         float pedastal_value{5.0f};
-        float edge_distance = std::sqrt(std::pow(float(x) - DETSIZE/2.0, 2) 
-            + std::pow(float(y) - DETSIZE/2.0, 2));
+        float edge_distance = std::sqrt(std::pow(float(x) - detsize/2.0, 2) 
+            + std::pow(float(y) - detsize/2.0, 2));
         // Call to calc is to utilise more CPU
         pedastal_value += edge_distance + calc(100);
         // std::cout << pedastal_value << std::endl;
@@ -135,5 +135,4 @@ namespace fdet {
         }
         return true;
     }
-
 }
