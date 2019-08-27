@@ -13,7 +13,7 @@ following:
 available to us in which there might be a fooble.
 
 - Foobles are slow moving and the expected signal from a fooble is a large
-energy spike in a cluster of pixels, that should last for 5 seconds.
+energy spike in a cluster of pixels, that should last for at least 5 frames.
 
 ![The Fooble Detector](https://graemes.web.cern.ch/graemes/teaching/gridka/fooble-sketch.png)
 
@@ -29,7 +29,7 @@ a constant value per cell, but varies across the detector).
 these pixels are fixed for the whole dataset).
 4. Search for a possible fooble signal in a 3x3 subset of cells by calculating
 the average signal strength:
-    1. If the average signal in this cluster exceeds 150 this could be a fooble.
+    1. If the average signal in this cluster exceeds 200 this could be a fooble.
 
 The potential fooble clusters then need to be searched in different time
 frames to see if they appear in 5 consecutive frames.

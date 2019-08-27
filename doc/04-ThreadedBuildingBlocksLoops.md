@@ -2,20 +2,29 @@
 
 ## Introduction
 
-Intel Threaded Building Blocks (TBB) is an open source toolkit for supporting scalable parallel programming in C++. It is a higher level toolkit than C++11 threads and, if it's suitable for your problem, it's almost certainly a better choice.
+Intel Threaded Building Blocks (TBB) is an [open
+source](https://github.com/intel/tbb) toolkit for supporting scalable parallel
+programming in C++. It is a higher level toolkit than C++11 threads and, if
+it's suitable for your problem, it's almost certainly a better choice.
 
-TBB supports common programming patterns for loops: `parallel_for` for independent computations on arrays and containers, `parallel_reduce` for a series of computations across an array and `parallel_scan` for more general parallel prefix calculations. (See [the documentation](https://software.intel.com/en-us/node/506140) for a complete list.)
+TBB supports common programming patterns for loops: `parallel_for` for
+independent computations on arrays and containers, `parallel_reduce` for a
+series of computations across an array and `parallel_scan` for more general
+parallel prefix calculations. (See [the
+documentation](https://software.intel.com/en-us/node/506140) for a complete
+list.)
 
-TBB also includes additional support for multi-threaded programming, including thread safe containers, a performant thread safe memory allocator and timing primitives.
+TBB also includes additional support for multi-threaded programming, including
+thread safe containers, a performant thread safe memory allocator and timing
+primitives.
 
-TBB also allows the construction of graphs describing the relationship
-between different parts of a program's execution and the TBB scheduler
-can exploit concurrency where different parts of the workflow are
-independent.
+TBB also allows the construction of graphs describing the relationship between
+different parts of a program's execution and the TBB scheduler can exploit
+concurrency where different parts of the workflow are independent.
 
-Further, for task based workflows, TBB allows lower level interaction
-with its task scheduler, enabling it to be used as an execution engine
-for a higher level workflow generator.
+Further, for task based workflows, TBB allows lower level interaction with its
+task scheduler, enabling it to be used as an execution engine for a higher
+level workflow generator.
 
 ### Using TBB
 
