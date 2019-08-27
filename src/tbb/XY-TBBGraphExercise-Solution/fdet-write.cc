@@ -120,13 +120,16 @@ int main(int argn, char* argv[]) {
     averages(fdet_data);
 
     // Now add a few spurious signals to each timeframe
-    for (auto& f: fdet_data) {
+    std::cout << "Adding spurious signals..." << std::endl;
+    for (size_t f=0; f<fdet_data.size(); ++f) {
         std::poisson_distribution<int> p(8);
+        generator.seed(base_seed+666006+f);
         int count = p(generator);
         for (int i=0; i<count; ++i) {
             size_t noise_x = 1 + (fdet::detsize-1) * rdist(generator);
             size_t noise_y = 1 + (fdet::detsize-1) * rdist(generator);
-            signal_place(f, noise_x, noise_y);
+            std::cout << "Noise - " << noise_x << ", " << noise_y << std::endl;
+            signal_place(fdet_data[f], noise_x, noise_y);
         }
     }
 
