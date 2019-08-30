@@ -28,25 +28,18 @@ struct mytask {
 };
 
 int main(int argn, char* argv[]){
-    int threads = 0;
+    int threads = tbb::task_scheduler_init::default_num_threads();
     if (argn==2) {
         threads = std::atoi(argv[1]);
     }
 
-    if (!threads) {
-        // Automatic number of threads:
-        auto n = tbb::task_scheduler_init::default_num_threads();
-        std::cout << "Default initialised TBB with " << n << " threads" << std::endl;
-    } else {
-        tbb::task_scheduler_init init(threads);
-        std::cout << "Initialised TBB with " << threads << " threads" << std::endl;
-    }
+    tbb::task_scheduler_init init(threads);
+    std::cout << "Initialised TBB with " << threads << " threads" << std::endl;
 
     std::vector<mytask> tasks;
     for (int i=0; i < 1000;++i){
         tasks.push_back(mytask(i));
     }
-
 
     tbb::tick_count t0 = tbb::tick_count::now();
 
@@ -57,10 +50,6 @@ int main(int argn, char* argv[]){
             for (size_t i = r.begin(); i < r.end(); ++i) {
                 total += tasks[i]();
             }
-            std::cout << total << std::endl;
-            // std::lock_guard<std::mutex> lck(mtx);
-            // std::cerr << "Ran tasks " << r.begin() << " to " << r.end() << " ("
-            //     << r.end() - r.begin() << ")" << std::endl;
         }
     );
     tbb::tick_count t1 = tbb::tick_count::now();
