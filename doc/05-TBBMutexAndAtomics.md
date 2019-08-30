@@ -153,6 +153,12 @@ void some_thread () {
 }
 ```
 
+There are a few different types of locks suppored in C++, each targeting a
+different use case, e.g. `std::shared_mutex` allows implemenation of multiple
+readers, but only one writer; `std::recursive_mutex` allows the same thread to
+lock a mutex multiple times, used for recursive coes. See the library
+documentation for all the options.
+
 ## Atomics
 
 Mutexes are the most general way of protecting data, but C++11 has another

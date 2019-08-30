@@ -6,7 +6,7 @@
 #include <cmath>
 
 double the_frobincator(double d) {
-	if (d == 0.0) {
+	if (d <= 0.0) {
 		throw std::runtime_error("illegal frobincation");
 	}
 	return std::log10(std::abs(d));

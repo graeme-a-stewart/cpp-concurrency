@@ -35,8 +35,7 @@ int main(int argn, char* argv[]) {
             if (do_dump && frame_counter==dump_frame) {
                 std::ostringstream fname;
                 fname << "dump-" << dump_frame << ".csv" << std::ends;
-                std::string s = fname.str();
-                fdet.dump_csv(s.c_str());
+                fdet.dump_csv(fname.str().c_str());
                 std::cout << "Dumped frame " << dump_frame << std::endl;
             }
             ++frame_counter;

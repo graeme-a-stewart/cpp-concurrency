@@ -9,6 +9,21 @@ Multiple threads all have separate stack memory, which is what gives them their 
 
 In general, simultaneous read access to resources is not a problem - as data is only read then there's no conflict in multiple threads retrieving a value at once. However, write access is an issue. If two threads write to a value in an uncontrolled way we have a *data race*, where the final value will depend on the timing of the execution of the two threads (this is usually undesirable behaviour, though there are exceptions). Worse, if the object being written to is more complex than a simple type, then the state of the object may be left invalid by the race condition between the two threads. e.g., a linked list consists of some data object and pointers to the previous data item and the next data item; simultaneous insertion of two elements can easily lead to corruption of the list. This problem with data being left in a partially updated state means that write access to data can also lead to problems when reading the object while it's in an invalid intermediate state. So, we need to be careful of data races between read and write threads as well.
 
+```
++--------------------+--------------------+
+| Thread 1 x=x+1     | Thread 2 x=x+1     |
++--------------------+--------------------+
+|                    | Get current x      |
+| Get current x      |                    |
+| Increment by 1     |                    |
+|                    | Increment by 1     |
+| Store back to x    |                    |
+|                    | Store back to x    |
++--------------------+--------------------+
+```
+
+*A typical data race, where x is incremented by only 1 instead of 2.*
+
 ## Mutexes and Data Races
 
 Control of access to critical parts of the code, where races can occur, is usually achieved with a *mutex*, which gives mutually exclusive access to some section of the code. The different threads share the mutex object, but only one of them can lock it at any one time.
@@ -89,6 +104,12 @@ void some_thread () {
 }
 ```
 
+There are a few different types of locks suppored in C++, each targeting a
+different use case, e.g. `std::shared_mutex` allows implemenation of multiple
+readers, but only one writer; `std::recursive_mutex` allows the same thread to
+lock a mutex multiple times, used for recursive coes. See the library
+documentation for all the options.
+
 ## Atomics
 
 Mutexes are the most general way of protecting data, but C++11 has another means, which can be used for simple data types. This is the concept of an `atomic` variable. Changes to such a variable are guaranteed to happen in an atomic way - nothing in the program can see an intermediate or partial updated version of the variable.
@@ -139,14 +160,13 @@ std::mutex n;
 
 
 void some_func() {
-    std::lock(m, n);
-    std::lock_guard<std::mutex> lock_m(m, std::adopt_lock);
-    std::lock_guard<std::mutex> lock_n(n, std::adopt_lock);
+    std::scoped_lock lock_both{m, n};
 
     // Now I can work safely with both mutexes
 ```
 
-Calling `std::lock(m,n)` locks both mutexes at the same time. Then lock guards are constructed, where the special argument `std::adopt_lock` tells the lock guard the mutex is already locked and it should just take ownership of that lock.
+The `std::scoped_lock` was added to the standard in C++17 and provides the
+equiavlent of `std::lock_guard`, but for multiple locks.
 
 ### Some General Points on Locks and Lock-free designs
 

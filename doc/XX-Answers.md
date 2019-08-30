@@ -31,8 +31,9 @@ the tutorial.
    `multithread-sum-fixed-mutex-efficient.cc` and compare with the
    versions above.
    
-4. `deadlock-fixed.cc` and
-   `deadlock-fixed-using-lock-adoption.cc`
+4. `deadlock-fixed.cc`;
+   `deadlock-fixed-using-lock-adoption.cc` is a pre C++17 solution using
+   lock adoption.
 
 ## 03 Async and Futures
 
@@ -53,6 +54,9 @@ the tutorial.
 
 5. `parallel-mandel.cc` (see `parallel-mandel-vector.cc` for the same done with `std::vector` storage)
 
+`number-of-threads.cc` and `version.cc` are small examples illustrating some
+additional TBB features.
+
 ## 05 Mutexes and Atomics (TBB Version)
 
 1. `parallel-cout.cc` and `parallel-cout-mutex.cc`.
@@ -70,7 +74,8 @@ the tutorial.
 
 ## 06 TBB Containers
 
-1. `concurrent-vector.cc` and `concurrent-vector-stdthread.cc` (see also `concurrent-vector-grow-by.cc`); `concurrent-vector-stl.cc` is broken
+1. `concurrent-vector.cc` and `concurrent-vector-stdthread.cc` (see also `concurrent-vector-grow-by.cc`).
+Try changing the typedef to `std::vector` to see what happens.
 
 2. `generate-and-filter.cc`
 
