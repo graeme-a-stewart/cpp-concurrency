@@ -36,7 +36,7 @@ simple_tbb_exe(parallel-reduce-pi-estimation)
 simple_tbb_exe(parallel-minimisation)
 
 # Misc
-simple_tbb_exe(number-of-threads)
+utils_tbb_exe(number-of-threads)
 simple_tbb_exe(version)
 
 ## Now add tests
