@@ -5,41 +5,72 @@ opposed to function-based tasks)
 
 #include <vector>
 #include <iostream>
-#include "tbb/parallel_for.h"
-#include "tbb/task_scheduler_init.h"
+#include <mutex>
+#include <chrono>
+#include <thread>
+
+#include "tbb/tbb.h"
+#include "tutorialutils.h"
+
+std::mutex mtx;
 
 struct mytask {
 
     mytask(size_t n): _n(n){
     }
 
-    void operator()(){
-        for (int i = 0; i < 1000000; ++i){}
-        std::cerr << "[" << _n << "]";
+    double operator()(){
+        return burn(5000000);
     }
 
     size_t _n;
 
 };
 
-int main(int, char**){
+int main(int argn, char* argv[]){
+    int threads = 0;
+    if (argn==2) {
+        threads = std::atoi(argv[1]);
+    }
 
-    // automatic number of threads:
-    //tbb::task_scheduler_init init;
-    // explicit number of threads:
-    tbb::task_scheduler_init init(
-        tbb::task_scheduler_init::default_num_threads()
-    );
+    if (!threads) {
+        // Automatic number of threads:
+        auto n = tbb::task_scheduler_init::default_num_threads();
+        std::cout << "Default initialised TBB with " << n << " threads" << std::endl;
+    } else {
+        tbb::task_scheduler_init init(threads);
+        std::cout << "Initialised TBB with " << threads << " threads" << std::endl;
+    }
+
     std::vector<mytask> tasks;
     for (int i=0; i < 1000;++i){
         tasks.push_back(mytask(i));
     }
+
+
+    tbb::tick_count t0 = tbb::tick_count::now();
+
     tbb::parallel_for(
         tbb::blocked_range<size_t>(0, tasks.size()),
         [&tasks](const tbb::blocked_range<size_t>& r){
-        for (size_t i = r.begin(); i < r.end(); ++i) tasks[i]();
+            double total=0.0;
+            for (size_t i = r.begin(); i < r.end(); ++i) {
+                total += tasks[i]();
+            }
+            std::cout << total << std::endl;
+            // std::lock_guard<std::mutex> lck(mtx);
+            // std::cerr << "Ran tasks " << r.begin() << " to " << r.end() << " ("
+            //     << r.end() - r.begin() << ")" << std::endl;
         }
     );
+    tbb::tick_count t1 = tbb::tick_count::now();
+    auto tick_interval = t1-t0;
+    std::cout << "Execution took "
+      << tick_interval.seconds()
+      << "s"
+      << std::endl;
+
+
     std::cerr << std::endl;
     return 0;
 
